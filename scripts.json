@@ -1,84 +1,62 @@
-{
-  "profiles": [
+[
     {
-      "id": "sys-health-001",
-      "name": "System Health Check",
-      "description": "Quick system diagnostic with CPU, memory, and disk info",
-      "platform": "all",
-      "requires_admin": false,
-      "code": "# System Health Check\n# Use {{THRESHOLD}} to set warning threshold (default: 80%)\n\n$threshold = {{THRESHOLD}}\nif (-not $threshold) { $threshold = 80 }\n\nWrite-Host \"=== System Health Check ===\" -ForegroundColor Cyan\n\n# CPU\n$cpu = Get-WmiObject Win32_Processor | Measure-Object -Property LoadPercentage -Average\nWrite-Host \"CPU Usage: $($cpu.Average)%\" -ForegroundColor $(if ($cpu.Average -gt $threshold) { \"Red\" } else { \"Green\" })\n\n# Memory\n$mem = Get-WmiObject Win32_OperatingSystem\n$used = [math]::Round(($mem.TotalVisibleMemorySize - $mem.FreePhysicalMemory) / 1MB, 2)\n$total = [math]::Round($mem.TotalVisibleMemorySize / 1MB, 2)\n$percent = [math]::Round(($used / $total) * 100, 2)\nWrite-Host \"Memory: $percent% ($used/$total GB)\" -ForegroundColor $(if ($percent -gt $threshold) { \"Red\" } else { \"Green\" })\n\n# Disk\nGet-WmiObject Win32_LogicalDisk -Filter \"DriveType=3\" | ForEach-Object {\n    $free = [math]::Round($_.FreeSpace / 1GB, 2)\n    $size = [math]::Round($_.Size / 1GB, 2)\n    $pct = [math]::Round(($free / $size) * 100, 2)\n    Write-Host \"Disk $($_.DeviceID): $pct% free ($free/$size GB)\" -ForegroundColor $(if ($pct -lt 20) { \"Red\" } else { \"Green\" })\n}\n\nWrite-Host \"\\nCheck complete!\" -ForegroundColor Green"
+        "id": "550e8400-e29b-41d4-a716-446655440000",
+        "name": "Windows IP Configuration",
+        "description": "Displays detailed IP configuration for all network adapters.",
+        "author": "NetAdmin_01",
+        "version": "1.0.2",
+        "platform": "windows",
+        "requires_admin": false,
+        "code": "Write-Host 'Fetching Network Info...' -ForegroundColor Cyan\nGet-NetIPConfiguration | Format-Table InterfaceAlias, IPv4Address, DNSServer -AutoSize"
     },
     {
-      "id": "clean-temp-002",
-      "name": "Clean Temp Files",
-      "description": "Remove temporary files to free up disk space",
-      "platform": "windows",
-      "requires_admin": true,
-      "code": "# Clean Temporary Files\n# Use {{DRIVE_LETTER}} to specify drive (default: C)\n\n$drive = {{DRIVE_LETTER}}\nif (-not $drive) { $drive = \"C\" }\n\nWrite-Host \"Cleaning temporary files on drive $drive\" -ForegroundColor Yellow\n\n$paths = @(\n    \"$env:TEMP\\*\",\n    \"$drive`:\\Windows\\Temp\\*\",\n    \"$env:LOCALAPPDATA\\Temp\\*\",\n    \"$env:WINDIR\\Prefetch\\*\"\n)\n\n$totalFreed = 0\n\nforeach ($path in $paths) {\n    if (Test-Path $path) {\n        $items = Get-ChildItem $path -ErrorAction SilentlyContinue\n        foreach ($item in $items) {\n            try {\n                $size = if ($item.PSIsContainer) {\n                    (Get-ChildItem $item.FullName -Recurse -File -ErrorAction SilentlyContinue | \n                     Measure-Object -Property Length -Sum).Sum\n                } else {\n                    $item.Length\n                }\n                Remove-Item $item.FullName -Recurse -Force -ErrorAction Stop\n                $totalFreed += $size\n                Write-Host \"Removed: $($item.Name)\" -ForegroundColor Gray\n            } catch {\n                Write-Host \"Skipped (in use): $($item.Name)\" -ForegroundColor Yellow\n            }\n        }\n    }\n}\n\n$freedGB = [math]::Round($totalFreed / 1GB, 2)\nWrite-Host \"\\nFreed $freedGB GB of disk space!\" -ForegroundColor Green"
+        "id": "6ba7b810-9dad-11d1-80b4-00c04fd430c8",
+        "name": "Linux System Upgrade",
+        "description": "Updates package lists and upgrades all installed packages. Requires Root.",
+        "author": "PenguinMaster",
+        "version": "2.1.0",
+        "platform": "linux",
+        "requires_admin": true,
+        "code": "echo 'Starting System Update...'\napt-get update\napt-get upgrade -y\necho 'Update Complete.'"
     },
     {
-      "id": "network-info-003",
-      "name": "Network Info",
-      "description": "Display network configuration and active connections",
-      "platform": "all",
-      "requires_admin": false,
-      "code": "# Network Information Script\n\nWrite-Host \"=== Network Information ===\" -ForegroundColor Cyan\n\n# IP Configuration\nWrite-Host \"\\nIP Configuration:\" -ForegroundColor Yellow\nGet-NetIPConfiguration | ForEach-Object {\n    Write-Host \"Interface: $($_.InterfaceAlias)\"\n    Write-Host \"  IP: $($_.IPv4Address.IPAddress)\"\n    Write-Host \"  Gateway: $($_.IPv4DefaultGateway.NextHop)\"\n    Write-Host \"  DNS: $($_.DNSServer.ServerAddresses -join ', ')\"\n}\n\n# Active Connections\nWrite-Host \"\\nActive Connections:\" -ForegroundColor Yellow\nGet-NetTCPConnection -State Established | \n    Select-Object -First 10 | \n    ForEach-Object {\n        Write-Host \"  $($_.LocalAddress):$($_.LocalPort) -> $($_.RemoteAddress):$($_.RemotePort)\"\n    }\n\n# Network Adapters\nWrite-Host \"\\nNetwork Adapters:\" -ForegroundColor Yellow\nGet-NetAdapter | Where-Object { $_.Status -eq \"Up\" } | ForEach-Object {\n    Write-Host \"  $($_.Name): $($_.InterfaceDescription) ($($_.LinkSpeed))\"\n}\n\nWrite-Host \"\\nDone!\" -ForegroundColor Green"
+        "id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+        "name": "Ping Target Host",
+        "description": "Pings a specific target. Uses the {{target}} variable for input.",
+        "author": "OpsTeam",
+        "version": "1.5.0",
+        "platform": "all",
+        "requires_admin": false,
+        "code": "# Generic Ping wrapper\n# Input variable: {{target}}\necho \"Pinging {{target}}...\"\nping {{target}}"
     },
     {
-      "id": "process-monitor-004",
-      "name": "Process Monitor",
-      "description": "Monitor running processes with CPU and memory usage",
-      "platform": "all",
-      "requires_admin": false,
-      "code": "# Process Monitor\n# Use {{MAX_PROCESSES}} to limit displayed processes (default: 20)\n\n$max = {{MAX_PROCESSES}}\nif (-not $max) { $max = 20 }\n\nWrite-Host \"=== Process Monitor ===\" -ForegroundColor Cyan\nWrite-Host \"Showing top $max processes by CPU usage\\n\"\n\n$processes = Get-Process | \n    Sort-Object CPU -Descending | \n    Select-Object -First $max |\n    Select-Object Name, @{Name=\"PID\";Expression={$_.Id}}, \n                  @{Name=\"CPU(%)\";Expression={[math]::Round($_.CPU, 2)}},\n                  @{Name=\"Memory(MB)\";Expression={[math]::Round($_.WorkingSet64 / 1MB, 2)}},\n                  @{Name=\"Threads\";Expression={$_.Threads.Count}}\n\n# Display table\nWrite-Host (\"{0,-25} {1,8} {2,10} {3,12} {4,8}\" -f \"Name\", \"PID\", \"CPU(%)\", \"Memory(MB)\", \"Threads\")\nWrite-Host (\"-\" * 70)\n\nforeach ($p in $processes) {\n    Write-Host (\"{0,-25} {1,8} {2,10} {3,12} {4,8}\" -f \n        $p.Name, $p.PID, $p.\"CPU(%)\", $p.\"Memory(MB)\", $p.Threads)\n}\n\n$totalMemory = ($processes | Measure-Object -Property \"Memory(MB)\" -Sum).Sum\nWrite-Host \"\\nTotal memory used: $totalMemory MB\" -ForegroundColor Yellow"
+        "id": "d9429214-768a-4462-8113-259279184511",
+        "name": "Clean Temp Files (Win)",
+        "description": "Removes temporary files from the user profile to free up space.",
+        "author": "CleanerBot",
+        "version": "3.0.1",
+        "platform": "windows",
+        "requires_admin": false,
+        "code": "$path = $env:TEMP\nWrite-Host \"Cleaning $path\" -ForegroundColor Yellow\nRemove-Item \"$path\\*\" -Recurse -Force -ErrorAction SilentlyContinue\nWrite-Host \"Cleanup Finished\" -ForegroundColor Green"
     },
     {
-      "id": "file-search-005",
-      "name": "File Search",
-      "description": "Search for files by name or extension",
-      "platform": "all",
-      "requires_admin": false,
-      "code": "# File Search Tool\n# Use {{SEARCH_PATH}} and {{SEARCH_PATTERN}} variables\n\n$searchPath = \"{{SEARCH_PATH}}\"\n$pattern = \"{{SEARCH_PATTERN}}\"\n\nif (-not $searchPath) { $searchPath = \".\" }\nif (-not $pattern) { $pattern = \"*.*\" }\n\nWrite-Host \"Searching for '$pattern' in '$searchPath'\" -ForegroundColor Yellow\n\n$files = Get-ChildItem -Path $searchPath -Recurse -Filter $pattern -ErrorAction SilentlyContinue |\n    Where-Object { -not $_.PSIsContainer }\n\nif ($files.Count -eq 0) {\n    Write-Host \"No files found!\" -ForegroundColor Red\n    exit\n}\n\nWrite-Host \"\\nFound $($files.Count) files:\\n\" -ForegroundColor Green\n\nforeach ($file in $files | Select-Object -First 50) {\n    $sizeKB = [math]::Round($file.Length / 1KB, 2)\n    Write-Host \"  $($file.Name)\"\n    Write-Host \"    Path: $($file.FullName)\" -ForegroundColor Gray\n    Write-Host \"    Size: $sizeKB KB, Modified: $($file.LastWriteTime)\" -ForegroundColor Gray\n}\n\nif ($files.Count -gt 50) {\n    Write-Host \"\\n... and $($files.Count - 50) more files\" -ForegroundColor Yellow\n}"
+        "id": "123e4567-e89b-12d3-a456-426614174000",
+        "name": "Create User Backup",
+        "description": "Creates a backup of a directory defined in Global Variables via {{BACKUP_PATH}}.",
+        "author": "SysOps",
+        "version": "1.1.5",
+        "platform": "linux",
+        "requires_admin": false,
+        "code": "# Ensure you have set the global variable BACKUP_PATH in settings\nTARGET=\"{{BACKUP_PATH}}\"\nTS=$(date +%Y%m%d_%H%M%S)\n\nif [ -d \"$TARGET\" ]; then\n  tar -czf \"backup_$TS.tar.gz\" \"$TARGET\"\n  echo \"Backup created for $TARGET\"\nelse\n  echo \"Error: Directory {{BACKUP_PATH}} not found.\"\nfi"
     },
     {
-      "id": "service-manager-006",
-      "name": "Service Manager",
-      "description": "Manage Windows services (start, stop, list)",
-      "platform": "windows",
-      "requires_admin": true,
-      "code": "# Windows Service Manager\n# Use {{ACTION}}=list|start|stop and {{SERVICE_NAME}}\n\n$action = \"{{ACTION}}\"\n$serviceName = \"{{SERVICE_NAME}}\"\n\nif (-not $action) { $action = \"list\" }\n\nWrite-Host \"Service Manager\" -ForegroundColor Cyan\n\nswitch ($action.ToLower()) {\n    \"list\" {\n        Write-Host \"\\nRunning Services:\" -ForegroundColor Yellow\n        Get-Service | Where-Object { $_.Status -eq \"Running\" } | \n            Select-Object -First 20 | \n            ForEach-Object {\n                Write-Host \"  $($_.DisplayName) ($($_.Name))\" -ForegroundColor Green\n            }\n        \n        Write-Host \"\\nStopped Services:\" -ForegroundColor Yellow\n        Get-Service | Where-Object { $_.Status -eq \"Stopped\" } | \n            Select-Object -First 20 | \n            ForEach-Object {\n                Write-Host \"  $($_.DisplayName) ($($_.Name))\" -ForegroundColor Gray\n            }\n    }\n    \n    \"start\" {\n        if (-not $serviceName) {\n            Write-Host \"Please specify service name using {{SERVICE_NAME}}\" -ForegroundColor Red\n            exit\n        }\n        \n        Write-Host \"Starting service: $serviceName\" -ForegroundColor Yellow\n        Start-Service -Name $serviceName -ErrorAction Stop\n        Write-Host \"Service started successfully!\" -ForegroundColor Green\n    }\n    \n    \"stop\" {\n        if (-not $serviceName) {\n            Write-Host \"Please specify service name using {{SERVICE_NAME}}\" -ForegroundColor Red\n            exit\n        }\n        \n        Write-Host \"Stopping service: $serviceName\" -ForegroundColor Yellow\n        Stop-Service -Name $serviceName -ErrorAction Stop\n        Write-Host \"Service stopped successfully!\" -ForegroundColor Green\n    }\n    \n    default {\n        Write-Host \"Invalid action. Use: list, start, or stop\" -ForegroundColor Red\n    }\n}"
-    },
-    {
-      "id": "disk-usage-007",
-      "name": "Disk Usage Analyzer",
-      "description": "Analyze disk usage by folder",
-      "platform": "all",
-      "requires_admin": false,
-      "code": "# Disk Usage Analyzer\n# Use {{ANALYZE_PATH}} to specify directory (default: current)\n\n$path = \"{{ANALYZE_PATH}}\"\nif (-not $path) { $path = \".\" }\nif (-not (Test-Path $path)) {\n    Write-Host \"Path does not exist: $path\" -ForegroundColor Red\n    exit\n}\n\nWrite-Host \"Analyzing disk usage for: $path\" -ForegroundColor Yellow\n\n$items = Get-ChildItem -Path $path -Directory -ErrorAction SilentlyContinue | \n    ForEach-Object {\n        $size = (Get-ChildItem $_.FullName -Recurse -File -ErrorAction SilentlyContinue | \n                Measure-Object -Property Length -Sum).Sum\n        [PSCustomObject]@{\n            Name = $_.Name\n            SizeMB = [math]::Round($size / 1MB, 2)\n            SizeGB = [math]::Round($size / 1GB, 2)\n            ItemCount = (Get-ChildItem $_.FullName -Recurse -File -ErrorAction SilentlyContinue).Count\n        }\n    } | \n    Sort-Object SizeMB -Descending | \n    Select-Object -First 10\n\nWrite-Host \"\\nTop 10 largest directories:\\n\" -ForegroundColor Green\n\nforeach ($item in $items) {\n    $barLength = [math]::Min(50, [math]::Round($item.SizeMB / 10))\n    $bar = \"=\" * $barLength\n    Write-Host (\"{0,-30} {1,8} MB {2,6} GB {3,8} files\" -f \n        $item.Name, $item.SizeMB, $item.SizeGB, $item.ItemCount)\n    Write-Host (\"  [{0}]\" -f $bar) -ForegroundColor Cyan\n}\n\n$totalSize = ($items | Measure-Object -Property SizeMB -Sum).Sum\nWrite-Host \"\\nTotal size shown: $totalSize MB\" -ForegroundColor Yellow"
-    },
-    {
-      "id": "user-info-008",
-      "name": "User Information",
-      "description": "Display current user and system information",
-      "platform": "all",
-      "requires_admin": false,
-      "code": "# User Information Script\n\nWrite-Host \"=== User Information ===\" -ForegroundColor Cyan\n\n# Current User\n$currentUser = [System.Security.Principal.WindowsIdentity]::GetCurrent()\nWrite-Host \"Username: $($currentUser.Name)\"\nWrite-Host \"Authentication Type: $($currentUser.AuthenticationType)\"\n\n# User Groups\nWrite-Host \"\\nUser Groups:\" -ForegroundColor Yellow\n$groups = $currentUser.Groups | ForEach-Object {\n    $_.Translate([System.Security.Principal.NTAccount])\n}\nforeach ($group in $groups | Select-Object -First 10) {\n    Write-Host \"  $group\"\n}\nif ($groups.Count -gt 10) {\n    Write-Host \"  ... and $($groups.Count - 10) more\" -ForegroundColor Gray\n}\n\n# System Info\nWrite-Host \"\\nSystem Information:\" -ForegroundColor Yellow\nWrite-Host \"Computer: $env:COMPUTERNAME\"\nWrite-Host \"Domain: $env:USERDOMAIN\"\nWrite-Host \"OS: $([System.Environment]::OSVersion.VersionString)\"\nWrite-Host \"64-bit OS: $([System.Environment]::Is64BitOperatingSystem)\"\nWrite-Host \"64-bit Process: $([System.Environment]::Is64BitProcess)\"\n\n# Environment Variables\nWrite-Host \"\\nImportant Environment Variables:\" -ForegroundColor Yellow\nWrite-Host \"  TEMP: $env:TEMP\"\nWrite-Host \"  Program Files: $env:ProgramFiles\"\nWrite-Host \"  User Profile: $env:USERPROFILE\"\n\nWrite-Host \"\\nInformation displayed!\" -ForegroundColor Green"
-    },
-    {
-      "id": "ping-test-009",
-      "name": "Network Ping Test",
-      "description": "Test network connectivity to hosts",
-      "platform": "all",
-      "requires_admin": false,
-      "code": "# Network Ping Test\n# Use {{TARGET_HOSTS}} as comma-separated list\n\n$hostsInput = \"{{TARGET_HOSTS}}\"\nif (-not $hostsInput) { $hostsInput = \"google.com,8.8.8.8,localhost\" }\n\n$hosts = $hostsInput.Split(',') | ForEach-Object { $_.Trim() }\n\nWrite-Host \"=== Network Ping Test ===\" -ForegroundColor Cyan\nWrite-Host \"Testing connectivity to $($hosts.Count) hosts\\n\"\n\nforeach ($host in $hosts) {\n    Write-Host \"Testing: $host\" -ForegroundColor Yellow\n    \n    try {\n        $ping = Test-Connection -ComputerName $host -Count 2 -Quiet -ErrorAction Stop\n        \n        if ($ping) {\n            Write-Host \"  ✓ Reachable\" -ForegroundColor Green\n            \n            # Get detailed ping info\n            $details = Test-Connection -ComputerName $host -Count 1 -ErrorAction SilentlyContinue\n            if ($details) {\n                Write-Host \"  Response time: $($details.ResponseTime) ms\" -ForegroundColor Gray\n                Write-Host \"  From IP: $($details.Address.IPAddressToString)\" -ForegroundColor Gray\n            }\n        } else {\n            Write-Host \"  ✗ Unreachable\" -ForegroundColor Red\n        }\n        \n    } catch {\n        Write-Host \"  ✗ Error: $_\" -ForegroundColor Red\n    }\n    \n    Write-Host \"\"\n}\n\nWrite-Host \"Ping test completed!\" -ForegroundColor Green"
-    },
-    {
-      "id": "basic-hello-010",
-      "name": "Hello World Example",
-      "description": "Simple example script showing variable usage",
-      "platform": "all",
-      "requires_admin": false,
-      "code": "# Hello World Example\n# Demonstrates variable substitution: {{NAME}}, {{TIMES}}\n\n$name = \"{{NAME}}\"\n$times = {{TIMES}}\n\nif (-not $name) { $name = \"World\" }\nif (-not $times) { $times = 1 }\n\nWrite-Host \"=== Hello World Example ===\" -ForegroundColor Cyan\n\nfor ($i = 1; $i -le $times; $i++) {\n    Write-Host \"Hello, $name! (Message #$i)\" -ForegroundColor Green\n}\n\nWrite-Host \"\\nScript completed successfully!\"\nWrite-Host \"Name used: $name\"\nWrite-Host \"Times repeated: $times\""
+        "id": "987fcdeb-51a2-43d1-a456-987654321012",
+        "name": "Restart Service",
+        "description": "Restarts a specific Windows service provided by user input.",
+        "author": "WinAdmin",
+        "version": "4.2.0",
+        "platform": "windows",
+        "requires_admin": true,
+        "code": "$svc = \"{{service_name}}\"\nWrite-Host \"Attempting to restart $svc...\"\nRestart-Service -Name $svc -Force\nGet-Service -Name $svc | Select-Object Name, Status"
     }
-  ]
-}
+]
