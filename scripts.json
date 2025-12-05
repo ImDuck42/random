@@ -1,0 +1,23 @@
+[
+    {
+        "id": "win_flush_dns",
+        "name": "Windows: Flush DNS",
+        "platform": "windows",
+        "code": "ipconfig /flushdns\necho Done!",
+        "description": "Clears the DNS cache on Windows."
+    },
+    {
+        "id": "linux_update",
+        "name": "Linux: Update System",
+        "platform": "linux",
+        "code": "apt-get update && apt-get upgrade -y",
+        "description": "Updates apt repositories."
+    },
+    {
+        "id": "universal_hello",
+        "name": "Universal Python Hello",
+        "platform": "all",
+        "code": "python -c \"print('Hello from the script manager!')\"",
+        "description": "Runs a quick python command."
+    }
+]
