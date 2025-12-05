@@ -1,23 +1,30 @@
 [
-    {
-        "id": "win_flush_dns",
-        "name": "Windows: Flush DNS",
-        "platform": "windows",
-        "code": "ipconfig /flushdns\necho Done!",
-        "description": "Clears the DNS cache on Windows."
-    },
-    {
-        "id": "linux_update",
-        "name": "Linux: Update System",
-        "platform": "linux",
-        "code": "apt-get update && apt-get upgrade -y",
-        "description": "Updates apt repositories."
-    },
-    {
-        "id": "universal_hello",
-        "name": "Universal Python Hello",
-        "platform": "all",
-        "code": "python -c \"print('Hello from the script manager!')\"",
-        "description": "Runs a quick python command."
-    }
+  {
+    "id": "1",
+    "name": "Network Ping Test",
+    "description": "Pings Google DNS 5 times",
+    "platform": "all",
+    "code": "ping 8.8.8.8 -c 5"
+  },
+  {
+    "id": "2",
+    "name": "Python Calculation",
+    "description": "Does math in Python",
+    "platform": "all",
+    "code": "python -c \"import time; print('Starting...'); time.sleep(1); print(f'Calculated: {1024 * 1024}')\""
+  },
+  {
+    "id": "3",
+    "name": "Windows Directory",
+    "description": "Lists files on C Drive",
+    "platform": "windows",
+    "code": "dir C:\\"
+  },
+  {
+    "id": "4",
+    "name": "Linux List Home",
+    "description": "Lists home directory details",
+    "platform": "linux",
+    "code": "ls -la ~"
+  }
 ]
