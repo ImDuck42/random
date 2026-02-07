@@ -1,4 +1,4 @@
-# <img src="assets/icon.svg" width="32" height="32" alt="Site Icon" style="vertical-align: text-bottom;"> Live2D Viewer <sub style="font-size: small;"><span style="color: #8c5eff;">v</span>5.0</sub>  
+# <img src="assets/icon.svg" width="32" height="32" alt="Site Icon"> Live2D Viewer <sub>v5.0</sub>  
 
 [![MIT License](https://img.shields.io/badge/License-MIT-blue.svg?logo=opensourceinitiative&logoColor=white)](LICENSE)
 [![GitHub Pages](https://img.shields.io/github/deployments/ImDuck42/Live2D-Viewer/github-pages?label=Live%20Preview&logo=github)](https://imduck42.github.io/Live2D-Viewer)
