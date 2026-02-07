@@ -2,7 +2,7 @@
     <summary><strong>Screenshots</strong></summary>
     <div>
         <img src="assets/screenshots/PreviewPC.png" width="50%" alt="Preview on Desktop">
-        <img src="assets/screenshots/PreviewMobile.png" height="300" alt="Preview on Mobile">
+        <img src="assets/screenshots/PreviewMobile.png" height="300px" alt="Preview on Mobile">
     </div>
     <br>
     <div>
