@@ -1,6 +1,6 @@
 <details>
     <summary><strong>Screenshots</strong></summary>
-    <div style="display: flex;">
+    <div>
         <img src="assets/screenshots/PreviewPC.png" width="49%" alt="Preview on Desktop">
         <img src="assets/screenshots/PreviewMobile.png" height="220px" alt="Preview on Mobile">
     </div>
