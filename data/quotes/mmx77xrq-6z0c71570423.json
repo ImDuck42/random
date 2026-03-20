@@ -1,0 +1,8 @@
+{
+  "id": "mmx77xrq-6z0c71570423",
+  "text": "Proof that there are infinitely many prime numbers:\n\nAssume there are finitely many primes:\np1, p2, p3, ..., pn\n\nConsider the number:\nN = p1 * p2 * p3 * ... * pn + 1\n\nNow, for every prime pi:\nN mod pi = 1\n\nThus, N is not divisible by any of the known primes.\n\nTherefore, either:\n1) N is itself prime, or\n2) N has a prime factor not in the list\n\nIn both cases, a new prime exists.\n\nContradiction.\n\n⇒ There are infinitely many prime numbers.",
+  "author": "euklid",
+  "postedBy": "bob",
+  "createdAt": "2026-03-19T08:18:52.982Z",
+  "updatedAt": "2026-03-19T08:18:52.982Z"
+}
