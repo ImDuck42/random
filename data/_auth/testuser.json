@@ -1,0 +1,9 @@
+{
+  "id": "mn1vv2uu-1m5w2h046z6m",
+  "username": "testuser",
+  "passwordHash": "a91f89ae9208f3ab899f8c1e2bae9a36:0b5643d9665dd3435bf49e72662607349ed12ca9bf93e23e6a0b3934ff432cd3",
+  "createdAt": "2026-03-22T14:59:48.299Z",
+  "roles": [
+    "admin"
+  ]
+}
