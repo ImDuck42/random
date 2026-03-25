@@ -1,0 +1,20 @@
+{
+  "id": "mn6ck5m9-5o5w012s2p39",
+  "name": "Hoster",
+  "description": "This very website that hosts them Websites",
+  "author": "ImDuck42",
+  "slug": "hoster-mn6ck3hb",
+  "entryPath": "Hoster/sites/hoster-mn6ck3hb/index.html",
+  "files": [
+    {
+      "name": "github-db.js",
+      "size": 79729
+    },
+    {
+      "name": "index.html",
+      "size": 6415
+    }
+  ],
+  "createdAt": "2026-03-25T17:58:16.689Z",
+  "updatedAt": "2026-03-25T17:58:16.689Z"
+}
