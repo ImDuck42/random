@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta property="og:title" content="Quotipedia">
+    <meta property="og:description" content="A quote sharing site with an unsecure account system">
+    <meta property="og:image" content="https://raw.githubusercontent.com/ImDuck42/Quotipedia/refs/heads/main/image/image.png">
+    <meta property="og:image:width" content="1920">
+    <meta property="og:image:height" content="1080">
+    <title>Quotipedia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+
+    <header>
+        <a class="logo" href="#">Quotipedia</a>
+        <nav id="navArea">
+            <button class="btn" id="loginBtn">Sign in</button>
+            <button class="btn btn-primary" id="registerBtn">Join free</button>
+        </nav>
+    </header>
+
+    <main>
+
+        <div class="top-section">
+
+            <div class="hero">
+                <h1>A place for <em>quotes</em><br />that matter</h1>
+                <p class="hero-sub">Share the words that moved you. Curated by the community, for the community.</p>
+                <p class="hero-sub">It's that deep bro \[°_°]/</p>
+            </div>
+
+            <div id="submitPanel">
+                <h3>Share a quote</h3>
+                <div class="field">
+                    <label for="qText">The quote</label>
+                    <textarea id="qText" placeholder="The words themselves…"></textarea>
+                </div>
+                <div class="field">
+                    <label for="qAuthor">Attributed to <span class="optional">(optional)</span></label>
+                    <input type="text" id="qAuthor" placeholder="e.g. Marcus Aurelius" />
+                </div>
+                <div class="submit-row">
+                    <span id="submitMsg"></span>
+                    <button class="btn btn-primary" id="submitQuoteBtn">Publish quote</button>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="feed-header">
+            <h2>Latest quotes</h2>
+            <span class="feed-count" id="feedCount"></span>
+        </div>
+        <div id="feed" class="quotes-grid">
+            <div class="loading">Loading quotes</div>
+        </div>
+
+    </main>
+
+    <!-- Auth modal -->
+    <div class="modal-backdrop" id="authModal">
+        <div class="modal">
+            <button class="modal-close" id="modalCloseBtn">✕</button>
+            <h2 id="modalTitle">Welcome back</h2>
+            <div class="field">
+                <label for="authUser">Username</label>
+                <input type="text" id="authUser" placeholder="your_username" autocomplete="username" />
+            </div>
+            <div class="field">
+                <label for="authPass">Password</label>
+                <input type="password" id="authPass" placeholder="••••••••" autocomplete="current-password" />
+            </div>
+            <div id="authError"></div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="authSubmitBtn">Sign in</button>
+                <p class="modal-switch" id="modalSwitch">
+                    No account? <a id="modalToggleLink">Create one</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile view (full-screen overlay) -->
+    <div id="profileView">
+        <div class="pv-inner">
+            <button class="pv-close" id="pvCloseBtn">✕</button>
+            <div class="pv-loading">Loading profile</div>
+        </div>
+    </div>
+
+    <!-- Edit profile modal -->
+    <div class="modal-backdrop" id="editProfileModal">
+        <div class="modal modal-wide">
+            <button class="modal-close" id="epCloseBtn" onclick="document.getElementById('editProfileModal').classList.remove('open')">✕</button>
+            <h2>Edit profile</h2>
+
+            <div class="ep-grid">
+                <div class="field">
+                    <label for="epAvatar">Avatar URL</label>
+                    <input type="text" id="epAvatar" placeholder="https://…" />
+                </div>
+                <div class="field">
+                    <label for="epBanner">Banner URL</label>
+                    <input type="text" id="epBanner" placeholder="https://…" />
+                </div>
+            </div>
+
+            <div class="field">
+                <label for="epBio">Bio <span class="optional">(max 200 chars)</span></label>
+                <textarea id="epBio" placeholder="A few words about yourself…" rows="3"></textarea>
+            </div>
+
+            <div class="ep-socials-label">Socials</div>
+            <div class="ep-socials-grid">
+                <div class="field ep-social-field">
+                    <label>Twitter / X</label>
+                    <input type="text" id="epTwitter" placeholder="https://x.com/…" />
+                </div>
+                <div class="field ep-social-field">
+                    <label>GitHub</label>
+                    <input type="text" id="epGithub" placeholder="https://github.com/…" />
+                </div>
+                <div class="field ep-social-field">
+                    <label>Instagram</label>
+                    <input type="text" id="epInstagram" placeholder="https://instagram.com/…" />
+                </div>
+                <div class="field ep-social-field">
+                    <label>YouTube</label>
+                    <input type="text" id="epYoutube" placeholder="https://youtube.com/…" />
+                </div>
+                <div class="field ep-social-field">
+                    <label>Website</label>
+                    <input type="text" id="epWebsite" placeholder="https://…" />
+                </div>
+            </div>
+
+            <div id="epError"></div>
+            <div class="modal-footer ep-footer">
+                <button class="btn" id="epCancelBtn">Cancel</button>
+                <button class="btn btn-primary" id="epSaveBtn">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast"></div>
+
+    <script type="module" src="app.js"></script>
+</body>
+
+</html>
