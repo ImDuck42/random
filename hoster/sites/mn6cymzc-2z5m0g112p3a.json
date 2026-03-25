@@ -1,0 +1,20 @@
+{
+  "id": "mn6cymzc-2z5m0g112p3a",
+  "name": "Hoster",
+  "description": "This very website that hosts them Websites 2",
+  "author": "ImDuck42",
+  "slug": "hoster-mn6cykl7",
+  "entryPath": "Hoster/sites/hoster-mn6cykl7/test.html",
+  "files": [
+    {
+      "name": "github-db.js",
+      "size": 79729
+    },
+    {
+      "name": "test.html",
+      "size": 37194
+    }
+  ],
+  "createdAt": "2026-03-25T18:09:32.376Z",
+  "updatedAt": "2026-03-25T18:09:32.376Z"
+}
