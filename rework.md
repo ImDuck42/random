@@ -111,12 +111,6 @@
   background: linear-gradient(rgb(32 113 196 / 50%), rgb(6 200 242 / 50%));
 }
 
-.MaterialIcon[data-rarity="x"] {
-  position: relative;
-  border: 2px solid #00f0ff;
-  background: linear-gradient(rgb(32 113 196 / 50%), rgb(6 200 242 / 50%));
-}
-
 /* Stripe behind the image */
 .MaterialIcon::before {
   inset: 0;
@@ -140,108 +134,78 @@
 
 ## Section IV: Battlesuit levels
 ### EXP patterns
-| Level range      | EXP increase   |   | Level range      | EXP increase    |   | Level range      | EXP increase    |   | Level range      | EXP increase    |
-|:-----------------|:---------------|:-:|:-----------------|:----------------|:-:|:-----------------|:----------------|:-:|:-----------------|:----------------|
-| **lvl 0  -> 19** | `+15  EXP/lvl` |   | **lvl 34 -> 39** | `+300 EXP/lvl`  |   | **lvl 49 -> 54** | `+600  EXP/lvl` |   | **lvl 69 -> 74** | `+1600 EXP/lvl` |
-| **lvl 19 -> 24** | `+120 EXP/lvl` |   | **lvl 39 -> 44** | `+380  EXP/lvl` |   | **lvl 54 -> 64** | `+800  EXP/lvl` |   | **lvl 74 -> 79** | `+1800 EXP/lvl` |
-| **lvl 24 -> 29** | `+150 EXP/lvl` |   | **lvl 44 -> 49** | `+500  EXP/lvl` |   | **lvl 64 -> 69** | `+1000 EXP/lvl` |   | **lvl 79 -> 80** | `+2000 EXP/lvl` |
-| **lvl 29 -> 34** | `+200 EXP/lvl` |   |                  |                 |   |                  |                 |   |                  |                 |
 
+| Level range      | EXP increase   |   | Level range      | EXP increase   |   | Level range      | EXP increase    |   | Level range      | EXP increase    |
+|:-----------------|:---------------|:-:|:-----------------|:---------------|:-:|:-----------------|:----------------|:-:|:-----------------|:----------------|
+| **lvl 1  -> 9**  | `+10  EXP/lvl` |   | **lvl 24 -> 29** | `+150 EXP/lvl` |   | **lvl 44 -> 49** | `+500  EXP/lvl` |   | **lvl 69 -> 74** | `+1600 EXP/lvl` |
+| **lvl 9  -> 14** | `+15  EXP/lvl` |   | **lvl 29 -> 34** | `+200 EXP/lvl` |   | **lvl 49 -> 54** | `+600  EXP/lvl` |   | **lvl 74 -> 79** | `+1800 EXP/lvl` |
+| **lvl 14 -> 19** | `+90  EXP/lvl` |   | **lvl 34 -> 39** | `+300 EXP/lvl` |   | **lvl 54 -> 64** | `+800  EXP/lvl` |   | **lvl 79 -> 80** | `+2000 EXP/lvl` |
+| **lvl 19 -> 24** | `+120 EXP/lvl` |   | **lvl 39 -> 44** | `+380 EXP/lvl` |   | **lvl 64 -> 69** | `+1000 EXP/lvl` |   | -                | -               |
 
+<details>
+<summary><strong style="font-size:1.17em;">Levels 0 -> 9</strong></summary>
 
+| From      | To        | EXP needed | Notes                     |   | From      | To        | EXP needed | Notes                    |   | From      | To        | EXP needed | Notes                     |
+|:----------|:----------|:---------|:----------------------------|:-:|:----------|:----------|:---------|:---------------------------|:-:|:----------|:----------|:---------|:----------------------------|
+| **lvl 0** | **lvl 1** | `0  EXP` | `Base level`                |   | **lvl 3** | **lvl 4** | `35 EXP` | -                          |   | **lvl 6** | **lvl 7** | `65 EXP` | -                           |
+| **lvl 1** | **lvl 2** | `15 EXP` | `+ 1 BLC => Lvl 3 + 20 EXP` |   | **lvl 4** | **lvl 5** | `45 EXP` | `+ 1 BLC => Lvl 6 + 5 EXP` |   | **lvl 7** | **lvl 8** | `75 EXP` | `+ 2 BLC => Lvl 8 + 45 EXP` |
+| **lvl 2** | **lvl 3** | `25 EXP` | `+ 1 BLC => Lvl 5 + 0 EXP`  |   | **lvl 5** | **lvl 6** | `55 EXP` | `+ 1 BLC => Lvl 7 + 0 EXP` |   | **lvl 8** | **lvl 9** | `85 EXP` | -                           |
+</details>
 
+<details>
+<summary><strong style="font-size:1.17em;">Levels 9 -> 24</strong></summary>
 
-- Level 0  -> 1:  0   EXP ( Starting Level )
-- Level 1  -> 2:  15  EXP || + 1 BLC => Level 3 + 20 EXP
-- Level 2  -> 3:  25  EXP || + 1 BLC => Level 5 + 0  EXP
-- Level 3  -> 4:  35  EXP
-- Level 4  -> 5:  45  EXP || + 1 BLC => Level 6 + 5  EXP
-- Level 5  -> 6:  55  EXP || + 1 BLC => Level 7 + 0  EXP
-- Level 6  -> 7:  65  EXP
-- Level 7  -> 8:  75  EXP || + 2 BLC => Level 8 + 45 EXP
-- Level 8  -> 9:  85  EXP
-- Level 9  -> 10: 100 EXP
-- Level 10 -> 11: 115 EXP
-- Level 11 -> 12: 130 EXP
-- Level 12 -> 13: 145 EXP
-- Level 13 -> 14: 160 EXP
-- Level 14 -> 15: 250 EXP
-- Level 15 -> 16: 340 EXP
-- Level 16 -> 17: 430 EXP
-- Level 17 -> 18: 520 EXP
-- Level 18 -> 19: 610 EXP
+| From       | To         | EXP needed | Jump |   | From       | To         | EXP needed | Jump |   | From       | To         | EXP needed | Jump   |
+|:-----------|:-----------|:----------|:------|:-:|:-----------|:-----------|:----------|:------|:-:|:-----------|:-----------|:-----------|:-------|
+| **lvl 9**  | **lvl 10** | `100 EXP` | `+15` |   | **lvl 14** | **lvl 15** | `250 EXP` | `+90` |   | **lvl 19** | **lvl 20** | `730 EXP`  | `+120` |
+| **lvl 10** | **lvl 11** | `115 EXP` | `+15` |   | **lvl 15** | **lvl 16** | `340 EXP` | `+90` |   | **lvl 20** | **lvl 21** | `850 EXP`  | `+120` |
+| **lvl 11** | **lvl 12** | `130 EXP` | `+15` |   | **lvl 16** | **lvl 17** | `430 EXP` | `+90` |   | **lvl 21** | **lvl 22** | `970 EXP`  | `+120` |
+| **lvl 12** | **lvl 13** | `145 EXP` | `+15` |   | **lvl 17** | **lvl 18** | `520 EXP` | `+90` |   | **lvl 22** | **lvl 23** | `1090 EXP` | `+120` |
+| **lvl 13** | **lvl 14** | `160 EXP` | `+15` |   | **lvl 18** | **lvl 19** | `610 EXP` | `+90` |   | **lvl 23** | **lvl 24** | `1210 EXP` | `+120` |
+</details>
 
-- Level 19 -> 20: 730  EXP
-- Level 20 -> 21: 850  EXP
-- Level 21 -> 22: 970  EXP
-- Level 22 -> 23: 1090 EXP
-- Level 23 -> 24: 1210 EXP
+<details>
+<summary><strong style="font-size:1.17em;">Levels 24 -> 44</strong></summary>
 
-- Level 24 -> 25: 1360 EXP
-- Level 25 -> 26: 1510 EXP
-- Level 26 -> 27: 1660 EXP
-- Level 27 -> 28: 1810 EXP
-- Level 28 -> 29: 1960 EXP
+| From       | To         | EXP needed | Jump   |   | From       | To         | EXP needed | Jump   |   | From       | To         | EXP needed | Jump   |
+|:-----------|:-----------|:-----------|:-------|:-:|:-----------|:-----------|:-----------|:-------|:-:|:-----------|:-----------|:-----------|:-------|
+| **lvl 24** | **lvl 25** | `1360 EXP` | `+150` |   | **lvl 31** | **lvl 32** | `2560 EXP` | `+200` |   | **lvl 38** | **lvl 39** | `4460 EXP` | `+300` |
+| **lvl 25** | **lvl 26** | `1510 EXP` | `+150` |   | **lvl 32** | **lvl 33** | `2760 EXP` | `+200` |   | **lvl 39** | **lvl 40** | `4840 EXP` | `+380` |
+| **lvl 26** | **lvl 27** | `1660 EXP` | `+150` |   | **lvl 33** | **lvl 34** | `2960 EXP` | `+200` |   | **lvl 40** | **lvl 41** | `5220 EXP` | `+380` |
+| **lvl 27** | **lvl 28** | `1810 EXP` | `+150` |   | **lvl 34** | **lvl 35** | `3260 EXP` | `+300` |   | **lvl 41** | **lvl 42** | `5600 EXP` | `+380` |
+| **lvl 28** | **lvl 29** | `1960 EXP` | `+150` |   | **lvl 35** | **lvl 36** | `3560 EXP` | `+300` |   | **lvl 42** | **lvl 43** | `5980 EXP` | `+380` |
+| **lvl 29** | **lvl 30** | `2160 EXP` | `+200` |   | **lvl 36** | **lvl 37** | `3860 EXP` | `+300` |   | **lvl 43** | **lvl 44** | `6360 EXP` | `+380` |
+| **lvl 30** | **lvl 31** | `2360 EXP` | `+200` |   | **lvl 37** | **lvl 38** | `4160 EXP` | `+300` |   | -          | -          | -          | -      |
+</details>
 
-- Level 29 -> 30: 2160 EXP
-- Level 30 -> 31: 2360 EXP
-- Level 31 -> 32: 2560 EXP
-- Level 32 -> 33: 2760 EXP
-- Level 33 -> 34: 2960 EXP
+<details>
+<summary><strong style="font-size:1.17em;">Levels 44 -> 64</strong></summary>
 
-- level 34 -> 35: 3260 EXP
-- Level 35 -> 36: 3560 EXP
-- Level 36 -> 37: 3860 EXP
-- Level 37 -> 38: 4160 EXP
-- Level 38 -> 39: 4460 EXP
+| From       | To         | EXP needed  | Jump   |   | From       | To         | EXP needed  | Jump   |   | From       | To         | EXP needed  | Jump   |
+|:-----------|:-----------|:------------|:-------|:-:|:-----------|:-----------|:------------|:-------|:-:|:-----------|:-----------|:------------|:-------|
+| **lvl 44** | **lvl 45** | `6860  EXP` | `+500` |   | **lvl 51** | **lvl 52** | `10660 EXP` | `+600` |   | **lvl 58** | **lvl 59** | `15860 EXP` | `+800` |
+| **lvl 45** | **lvl 46** | `7360  EXP` | `+500` |   | **lvl 52** | **lvl 53** | `11260 EXP` | `+600` |   | **lvl 59** | **lvl 60** | `16660 EXP` | `+800` |
+| **lvl 46** | **lvl 47** | `7860  EXP` | `+500` |   | **lvl 53** | **lvl 54** | `11860 EXP` | `+600` |   | **lvl 60** | **lvl 61** | `17460 EXP` | `+800` |
+| **lvl 47** | **lvl 48** | `8360  EXP` | `+500` |   | **lvl 54** | **lvl 55** | `12660 EXP` | `+800` |   | **lvl 61** | **lvl 62** | `18260 EXP` | `+800` |
+| **lvl 48** | **lvl 49** | `8860  EXP` | `+500` |   | **lvl 55** | **lvl 56** | `13460 EXP` | `+800` |   | **lvl 62** | **lvl 63** | `19060 EXP` | `+800` |
+| **lvl 49** | **lvl 50** | `9460  EXP` | `+600` |   | **lvl 56** | **lvl 57** | `14260 EXP` | `+800` |   | **lvl 63** | **lvl 64** | `19860 EXP` | `+800` |
+| **lvl 50** | **lvl 51** | `10060 EXP` | `+600` |   | **lvl 57** | **lvl 58** | `15060 EXP` | `+800` |   | -          | -          | -           | -      |
+</details>
 
-- Level 39 -> 40: 4840 EXP
-- Level 40 -> 41: 5220 EXP
-- Level 41 -> 42: 5600 EXP
-- Level 42 -> 43: 5980 EXP
-- Level 43 -> 44: 6360 EXP
+<details>
+<summary><strong style="font-size:1.17em;">Levels 64 -> 80</strong></summary>
 
-- Level 44 -> 45: 6860 EXP
-- Level 45 -> 46: 7360 EXP
-- Level 46 -> 47: 7860 EXP
-- Level 47 -> 48: 8360 EXP
-- Level 48 -> 49: 8860 EXP
-
-- Level 49 -> 50: 9460  EXP
-- Level 50 -> 51: 10060 EXP
-- Level 51 -> 52: 10660 EXP
-- Level 52 -> 53: 11260 EXP
-- Level 53 -> 54: 11860 EXP
-
-- Level 54 -> 55: 12660 EXP
-- Level 55 -> 56: 13460 EXP
-- Level 56 -> 57: 14260 EXP
-- Level 57 -> 58: 15060 EXP
-- Level 58 -> 59: 15860 EXP
-- Level 59 -> 60: 16660 EXP
-- Level 60 -> 61: 17460 EXP
-- Level 61 -> 62: 18260 EXP
-- Level 62 -> 63: 19060 EXP
-- Level 63 -> 64: 19860 EXP
-
-- Level 64 -> 65: 20860 EXP
-- Level 65 -> 66: 21860 EXP
-- Level 66 -> 67: 22860 EXP
-- Level 67 -> 68: 23860 EXP
-- Level 68 -> 69: 24860 EXP
-
-- Level 69 -> 70: 26460 EXP
-- Level 70 -> 71: 28060 EXP
-- Level 71 -> 72: 29660 EXP
-- Level 72 -> 73: 31260 EXP
-- Level 73 -> 74: 32860 EXP
-
-- Level 74 -> 75: 34660 EXP
-- Level 75 -> 76: 36460 EXP
-- Level 76 -> 77: 38260 EXP
-- Level 77 -> 78: 40060 EXP
-- Level 78 -> 79: 41860 EXP
-
-- Level 79 -> 80: 43860 EXP
+| From | To | EXP needed | Jump |   | From | To | EXP needed | Jump |   | From | To | EXP needed | Jump |
+|:-----------|:-----------|:------------|:-------|:-:|:-----------|:-----------|:------------|:-------|:-:|:-----------|:-----------|:------------|:--------|
+| **lvl 64** | **lvl 65** | `20860 EXP` | `+1000`|   | **lvl 70** | **lvl 71** | `28060 EXP` | `+1600`|   | **lvl 76** | **lvl 77** | `38260 EXP` | `+1800` |
+| **lvl 65** | **lvl 66** | `21860 EXP` | `+1000`|   | **lvl 71** | **lvl 72** | `29660 EXP` | `+1600`|   | **lvl 77** | **lvl 78** | `40060 EXP` | `+1800` |
+| **lvl 66** | **lvl 67** | `22860 EXP` | `+1000`|   | **lvl 72** | **lvl 73** | `31260 EXP` | `+1600`|   | **lvl 78** | **lvl 79** | `41860 EXP` | `+1800` |
+| **lvl 67** | **lvl 68** | `23860 EXP` | `+1000`|   | **lvl 73** | **lvl 74** | `32860 EXP` | `+1600`|   | **lvl 79** | **lvl 80** | `43860 EXP` | `+2000` |
+| **lvl 68** | **lvl 69** | `24860 EXP` | `+1000`|   | **lvl 74** | **lvl 75** | `34660 EXP` | `+1800`|   | -          | -          | -           | -       |
+| **lvl 69** | **lvl 70** | `26460 EXP` | `+1600`|   | **lvl 75** | **lvl 76** | `36460 EXP` | `+1800`|   | -          | -          | -           | -       |
+</details>
 
 ---
+
+## Section V: Eqipment levels
+#### ToDo
