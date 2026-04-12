@@ -3,18 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="./styles.css">
+  <link rel="icon" type="image/svg+xml" href="./contents/religion-svgrepo.svg">
   <title>θεός δίκη – Theodizee</title>
 </head>
 <body>
   <div class="app-container">
+
+    <!-- Seitenleiste -->
     <nav class="nav-bar">
       <div class="nav-top">
-        <i class="fa-solid fa-house active" data-tab="home"       title="Startseite"></i>
-        <i class="fa-solid fa-book-bible"   data-tab="bibel"      title="Biblische Perspektive auf Leid"></i>
-        <i class="fa-solid fa-users"        data-tab="theologien" title="Theologische Ansätze"></i>
-        <i class="fa-solid fa-link"         data-tab="sources"    title="Quellenangaben"></i>
+        <i class="fa-solid fa-house active"       data-tab="home"       title="Startseite"></i>
+        <i class="fa-solid fa-book-bible"         data-tab="bibel"      title="Biblische Perspektive auf Leid"></i>
+        <i class="fa-solid fa-users"              data-tab="theologien" title="Theologische Ansätze"></i>
+        <i class="fa-solid fa-flask"              data-tab="umgang"     title="Umgang mit Leid"></i>
+        <i class="fa-solid fa-hand-holding-heart" data-tab="hilfe"      title="Hilfsangebote"></i>
+        <i class="fa-solid fa-link"               data-tab="quellen"    title="Quellenangaben"></i>
       </div>
       <div class="nav-bottom"></div>
     </nav>
@@ -23,59 +28,77 @@
 
       <!-- Startseite -->
       <section class="content-section active" id="home">
-        <h1 class="header">θεός δίκη</h1>
-        <h2 class="subheader">Die Gerechtigkeit Gottes</h2>
+        <h1 class="section-title">θεός δίκη</h1>
+        <p class="section-subtitle">Die Gerechtigkeit Gottes</p>
+
         <div class="card">
           <p>
-            Egal ob Mobbing, Armut, Krieg oder Naturkatastrophen – die Welt ist voller Leid, und es kann jeden treffen. <br>
-            Dabei spielt es keine Rolle, wer man ist oder was man getan hat; für niemanden ist die Welt perfekt. <br>
+            Egal ob Mobbing, Armut, Krieg oder Naturkatastrophen – die Welt ist voller Leid, und es kann jeden treffen.
+            Dabei spielt es keine Rolle, wer man ist oder was man getan hat; für niemanden ist die Welt perfekt.
             Dieser Umstand stellt jeden, der an einen Gott glaubt, vor die Frage, warum dieser solche schlimmen Dinge überhaupt zulässt –
             die Theodizee-Frage.
+            <br><br>
+            Diese stellt den Glauben und das Gottesbild mehrerer Milliarden Menschen (religionsübergreifend) fundamental infrage
+            und ist dadurch nicht nur für Christen, sondern auch für Muslime, Juden und Andersgläubige eine der größten
+            Herausforderungen, wenn es um die Instandhaltung des eigenen Weltbildes geht.
           </p>
         </div>
+
         <div class="card card--row">
           <img
             src="https://www.sueddeutsche.de/2026/03/03/11fb452f-204f-4a9d-99eb-8e6493ed3dcb.jpg?q=60&fm=avif&width=840&rect=0%2C53%2C2048%2C1152"
             alt="Bild eines Kriegsschauplatzes im Iran"
           >
           <p>
-            <strong>Das Problem:</strong><br>
-            Gott wird im Allgemeinen mit drei wesentlichen Eigenschaften beschrieben: allmächtig, allliebend und allwissend. <br>
-            Demnach müsste er in der Lage sein, eine Welt ohne jegliche Form von Leid zu erschaffen. <br>
+            <strong>Das Problem:</strong>
+            Gott wird im Allgemeinen mit drei wesentlichen Eigenschaften beschrieben: allmächtig, allliebend und allwissend.
+            Demnach müsste er in der Lage sein, eine Welt ohne jegliche Form von Leid zu erschaffen.
             Als wohlwollender Gott sollte er auch genau das tun.
-            Offensichtlich ist das jedoch nicht der Fall – was sich nur erklären lässt, indem man eine von Gottes Eigenschaften ausschließt
-            oder annimmt, dass seine Wege für uns Menschen unergründlich sind.
+            Offensichtlich ist das jedoch nicht der Fall, beispielsweise im Iran 2026 – was sich nur erklären lässt, indem man eine von Gottes Eigenschaften
+            ausschließt oder annimmt, dass seine Wege für uns Menschen unergründlich sind.
           </p>
         </div>
+
+        <img
+          src="https://w.wallhaven.cc/full/2y/wallhaven-2y2wg6.png"
+          alt="Dekoratives Platzhalterbild"
+          id ="img-placeholder"
+        >
       </section>
 
       <!-- Biblische Perspektive -->
       <section class="content-section" id="bibel">
-        <h1 class="header">Biblische Perspektive auf Leid</h1>
+        <h1 class="section-title">Biblische Perspektive auf Leid</h1>
+        <p class="section-subtitle">Was das Buch Hiob zum Verständnis des Leidens beitragen kann</p>
+
         <div class="card">
           <p class="summary-lead">
             <strong>
               Nachdem Gott sich auf eine Wette mit Satan einließ, ob der gläubige Hiob von seinem Glauben abkäme,
-              sobald ihm Leid widerfahre, nimmt der Satan Hiobs Wohlstand, Kinder und Gesundheit. <br>
-              Auf sein Leiden hin wird er von seinen Freunden besucht, welche versuchen, ihn mit möglichen Gründen seines Leidens zu trösten:
+              sobald ihm Leid widerfahre, nimmt Satan Hiobs Wohlstand, Kinder und Gesundheit.
+              Auf sein Leiden hin wird er von seinen Freunden besucht, welche versuchen, ihn mit möglichen Gründen
+              seines Leidens zu trösten:
             </strong>
           </p>
-          <div class="comparison">
-            <div class="panel">
-              <div class="comparison-header">
+
+          <div class="comparison-grid">
+
+            <div class="comparison-panel">
+              <div class="comparison-panel-header">
                 <p><strong>Elifas von Teman, Bildad von Schuach, Zofar von Naama</strong></p>
               </div>
-              <div class="comparison-content">
+              <div class="comparison-panel-content">
                 <div class="image-text">
                   <img
                     src="https://images.meme-arsenal.com/36d19ea54255834c5b4321cabad402e8.jpg"
                     alt="Richterin"
                   >
                   <p>
-                    Hiobs älteste drei Freunde erklären ihm, dass sein Leid in einem kausalen Zusammenhang mit seinen früheren Taten steht.
-                    Demnach wird Hiob gezielt von Gott für angebliche Sünden bestraft, die er sich in der Vergangenheit schuldig gemacht haben soll.
-                    Sie insinuieren damit, dass jegliche Verantwortung und Schuld an seinem Leid einzig und allein bei Hiob liegt,
-                    indem sie darauf hinweisen, dass Gott die absolute Gerechtigkeit darstelle und dementsprechend handle.
+                    Hiobs ältesten drei Freunde erklären ihm, dass sein Leid in einem kausalen Zusammenhang mit
+                    seinen früheren Taten steht. Demnach wird Hiob gezielt von Gott für angebliche Sünden bestraft,
+                    die er sich in der Vergangenheit schuldig gemacht haben soll. Sie insinuieren damit, dass jegliche
+                    Verantwortung und Schuld an seinem Leid einzig und allein bei Hiob liegt, indem sie darauf hinweisen,
+                    dass Gott die absolute Gerechtigkeit darstelle und dementsprechend handle.
                   </p>
                 </div>
                 <p>
@@ -83,11 +106,12 @@
                 </p>
               </div>
             </div>
-            <div class="panel">
-              <div class="comparison-header">
+
+            <div class="comparison-panel">
+              <div class="comparison-panel-header">
                 <p><strong>Elihu</strong></p>
               </div>
-              <div class="comparison-content">
+              <div class="comparison-panel-content">
                 <div class="image-text">
                   <img
                     src="https://www.tagesspiegel.de/images/2814859/alternates/BASE_21_9_W1000/1660090678000/heprod-images-fotos-8-3-4-20170309-kind-319-1-20170307154356994.jpeg"
@@ -97,7 +121,7 @@
                     Der jüngste Freund Hiobs widerspricht als Einziger dieser Annahme – und hat damit recht:
                     Hiobs Leid ist keine Strafe, sondern das Ergebnis einer Wette zwischen Gott und Satan.
                     Das weiß Elihu allerdings nicht. Seine Theorie ist, dass Gott Leid als erzieherische Maßnahme nutzt,
-                    um größeres Übel zu verhindern. Er kritisiert Hiob für seine angebliche Hochmut und ist der Ansicht,
+                    um größeres Übel zu verhindern. Er kritisiert Hiob für seinen angeblichen Hochmut und ist der Ansicht,
                     dass diese Sünde einen von Gott abbringt – was wiederum zu noch mehr Leid führe.
                   </p>
                 </div>
@@ -106,76 +130,213 @@
                 </p>
               </div>
             </div>
+
           </div>
         </div>
       </section>
 
       <!-- Theologische Ansätze -->
       <section class="content-section" id="theologien">
-        <h1 class="header">Theologische Ansätze</h1>
+        <h1 class="section-title">Theologische Ansätze</h1>
+        <p class="section-subtitle"></p>
+
         <div class="card">
           <p class="summary-lead">
             <strong>Verschiedene Theologen deuten die Existenz von Leid unterschiedlich.</strong>
           </p>
-          <div class="comparison">
-            <div class="panel">
-              <div class="comparison-header">
+
+          <div class="comparison-grid">
+
+            <div class="comparison-panel">
+              <div class="comparison-panel-header">
                 <p><strong>Gottfried Wilhelm Leibniz</strong></p>
               </div>
-              <div class="comparison-content">
-                <div class="leibniz-solution">
-                  <p class="solution-title">Leibniz' Aussagen sind folgende:</p>
+              <div class="comparison-panel-content">
+                <div class="leibniz-block">
+                  <p class="leibniz-block-title">Leibniz' Aussagen sind folgende:</p>
                   <ul>
                     <li>Es gibt unendlich viele mögliche Welten (Universen)</li>
                     <li>Gott wählte diejenige, die er für die beste hielt – also jene mit dem wenigsten Leid</li>
                   </ul>
-                  <p class="solution-implication">→ Unsere Welt ist die bestmögliche aller Welten</p>
-                  <p class="solution-caveat">Jedoch widerspricht dies dem Anschein eines allmächtigen Gottes</p>
-                  <p class="solution-title" style="margin-top: 14px;">Eine andere Möglichkeit:</p>
+                  <p class="leibniz-block-implication">-> Unsere Welt ist die bestmögliche aller Welten</p>
+                  <p class="leibniz-block-caveat">Jedoch widerspricht dies dem Anschein eines allmächtigen Gottes</p>
+
+                  <p class="leibniz-block-title">Eine andere Möglichkeit:</p>
                   <ul>
                     <li>Die Welt wäre ohne Leid nicht die bestmögliche</li>
                     <li>Eventuell ist eine leidlose Welt nicht Gottes einziger Weg zur bestmöglich guten Welt</li>
                   </ul>
-                </div>
-              </div>
-            </div>
-            <div class="panel">
-              <div class="comparison-header">
-                <p><strong>Elihu</strong></p>
-              </div>
-              <div class="comparison-content">
-                <div class="image-text">
-                  <img
-                    src="https://www.tagesspiegel.de/images/2814859/alternates/BASE_21_9_W1000/1660090678000/heprod-images-fotos-8-3-4-20170309-kind-319-1-20170307154356994.jpeg"
-                    alt="Kind mit nachdenklichem Gesichtsausdruck"
-                  >
-                  <p>
-                    Der jüngste Freund Hiobs widerspricht als Einziger der Straftheorie – und hat damit recht.
-                    Seine Theorie ist, dass Gott Leid als erzieherische Maßnahme einsetzt, um größeres Übel zu verhindern.
-                    Leid dient demnach einem höheren Zweck und ist Teil eines göttlichen Plans,
-                    den wir als Menschen nicht vollständig überblicken können.
+                  <ul class="leibniz-block-implication">
+                    <li>Verbesserungen an einer Stelle können an anderer Verschlechterungen verursachen</li>
+                    <li>Gott versucht so viel Leid wie möglich zu vermeiden und gute sowie schlechte Situationen im Gleichgewicht zu halten</li>
+                  </ul>
+
+                  <p class="leibniz-block-tldr">
+                    TLDR;<br>
+                    Wenn unsere Welt – mit Leid – die beste ist, ist Gott nicht allmächtig; oder wenn er es gewollt hätte, ist er nicht moralisch perfekt.
                   </p>
                 </div>
-                <p>
-                  Leid erscheint hier als unvermeidlich, aber sinnvoll – Gottes Wege sind stets die des geringsten Gesamtübels.
-                </p>
               </div>
             </div>
+
+            <div class="comparison-panel">
+              <div class="comparison-panel-header">
+                <p><strong>Hans Jonas</strong></p>
+              </div>
+              <div class="comparison-panel-content">
+                <div class="leibniz-block">
+                  <p class="leibniz-block-title">Der Gottesbegriff nach Auschwitz (1987):</p>
+                  <ul>
+                    <li>Gottes klassische Eigenschaften sind widersprüchlich und müssen neu gedacht werden</li>
+                    <li>Jonas ist bereit, sein Gottesbild grundlegend zu ändern</li>
+                    <li>Für ihn ist es die <strong>Allmächtigkeit</strong>, die wegfällt</li>
+                  </ul>
+
+                  <p class="leibniz-block-title">Wie antwortet Jonas auf die Theodizee-Frage?</p>
+                  <ul>
+                    <li>Gott hat seine Allmacht nach der Schöpfung abgelegt, damit der Mensch frei sein kann</li>
+                    <li>Absolute Freiheit kann nur existieren, wenn Gott nicht eingreift – auch nicht um Ungerechtigkeit abzuwenden</li>
+                    <li>Gott leidet mit den Menschen (z.B. mit denen in Auschwitz) und kann nicht intervenieren</li>
+                    <li>Leid ist die Konsequenz von Freiheit</li>
+                    <li>Gott ist uns näher als wir bisher dachten</li>
+                  </ul>
+
+                  <p class="leibniz-block-tldr">
+                    TLDR;<br>
+                    Leid existiert, weil Gott – um uns absolute Freiheit zu gewähren – auf seine Allmächtigkeit verzichtet hat
+                    und es dadurch nicht abwenden kann.
+                  </p>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </section>
 
+      <!-- Umgang mit Leid -->
+      <section class="content-section" id="umgang">
+        <h1 class="section-title">Umgang mit Leid</h1>
+        <p class="section-subtitle">Wie Menschen und Religionen auf das Problem des Leidens reagieren</p>
+
+        <div class="umgang-grid">
+
+          <div class="card umgang-card">
+            <p class="umgang-card-title">Rechtfertigung des Leidens</p>
+            <ul>
+              <li>Leid wird durch höhere Zwecke gerechtfertigt – etwa als Prüfung oder als gerechte Strafe für schlechte Taten</li>
+              <li>Ohne Leid könnten wir leidfreie Zeiten nicht wertschätzen – Schmerz macht Freude erst erfahrbar</li>
+              <li>Leid kann zur moralischen Reifung und persönlichem Wachstum beitragen</li>
+            </ul>
+          </div>
+
+          <div class="card umgang-card">
+            <p class="umgang-card-title">Anpassung der Gottesattribute</p>
+            <ul>
+              <li>Man akzeptiert, dass Gott nicht gleichzeitig allmächtig, allgütig und allwissend sein kann</li>
+              <li>Laut <strong>Hans Jonas</strong> lassen sich nur zwei der drei klassischen Gotteseigenschaften gleichzeitig aufrechterhalten:</li>
+            </ul>
+            <p class="umgang-card-example">
+              z.B.: Wenn Gott verständlich und allmächtig ist, kann er nicht vollkommen gütig sein – sonst würde er eingreifen.
+            </p>
+          </div>
+
+          <div class="card umgang-card">
+            <p class="umgang-card-title">Verweigerung & Resignation</p>
+            <ul>
+              <li>Die Frage nach dem Leid wird als unlösbar und Gott als unergründlich empfunden und schlicht aufgegeben</li>
+              <li>Manche Menschen wenden sich vom Glauben ab – das Leid wird zum Argument gegen die Existenz Gottes</li>
+              <li>Diese Haltung entspricht einem praktischen Atheismus angesichts des Theodizeeproblems</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <div class="umgang-images">
+          <img src="https://bilder.deutschlandfunk.de/FI/LE/_f/46/FILE_f46070c9902658cf987ae801c704caaf/imago0095424781h-jpg-100-1920x1080.jpg" alt="Sintflut-Darstellung">
+          <img src="https://www.renovabis.de/site/assets/files/38874/auschwitz.1500x0.jpg"                                                      alt="Auschwitz">
+        </div>
+      </section>
+
+      <!-- Hilfsangebote -->
+      <section class="content-section" id="hilfe">
+        <h1 class="section-title">Hilfsangebote</h1>
+        <p class="section-subtitle">Happy getting better</p>
+
+        <div class="card">
+          <p class="hilfe-intro">
+            Im Leben begegnen Menschen immer wieder Schmerz, Leid und Verlust. Religion kann dabei helfen, solche Erfahrungen zu bewältigen und ihnen Sinn zu geben.
+            Gleichzeitig kann Leid den Glauben erschüttern und Zweifel auslösen, insbesondere im Zusammenhang mit der Theodizee-Frage nach Gott und Leid.
+            In solchen Situationen kann Unterstützung helfen, mit religiösen Fragen und persönlichem Leid umzugehen.
+            Hier findest du Beispiele, an wen du dich wenden kannst, wenn du gerade in so einer Situation bist:
+          </p>
+        </div>
+
+        <div class="hilfe-grid">
+
+          <div class="card hilfe-card">
+            <p class="hilfe-card-title">Telefon Seelsorge</p>
+            <p class="hilfe-card-desc">Eine von den christlichen Kirchen finanzierte Hotline für Hilfesuchende (religionsunabhängig)</p>
+            <p class="hilfe-card-detail">Rund um die Uhr erreichbar unter:</p>
+            <div class="hilfe-card-contact">
+              <span>0800 1110111</span>
+              <span>0800 1110222</span>
+            </div>
+          </div>
+
+          <div class="card hilfe-card">
+            <p class="hilfe-card-title">Psychologische Beratungsstelle EFL Lörrach</p>
+            <p class="hilfe-card-desc">Beratungsstelle der Katholischen Kirche</p>
+            <p class="hilfe-card-detail">Schwarzwaldstraße 1, 79539 Lörrach</p>
+            <p class="hilfe-card-detail">Erreichbar unter: <strong>07621 3087</strong></p>
+            <a class="hilfe-card-link" href="https://www.efl-loerrach.de/angebote-2/einzelberatung/" target="_blank" rel="noopener noreferrer">
+              www.efl-loerrach.de
+            </a>
+          </div>
+
+          <div class="card hilfe-card">
+            <p class="hilfe-card-title">Örtliche Kirchengemeinde</p>
+            <p class="hilfe-card-desc">Dein(e) örtliche(r) Kirchengemeinde oder Pfarrer stehen dir ebenfalls gerne zur Verfügung, wenn du Hilfe brauchst oder Fragen bezüglich deines Glaubens hast.</p>
+          </div>
+
+        </div>
+
+        <div class="help-images">
+          <img src="./contents/image-man.png"   alt="Mann, der Hilfe anbietet">
+          <img src="./contents/image-woman.png" alt="Frau, die Hilfe anbietet">
+        </div>
+      </section>
+
       <!-- Quellenangaben -->
-      <section class="content-section" id="sources">
-        <h1 class="header">Quellenangaben</h1>
+      <section class="content-section" id="quellen">
+        <h1 class="section-title">Quellenangaben</h1>
+        <p class="section-subtitle">Woher haben wir all die Infos?</p>
+
         <div class="card">
           <ul class="sources-list">
-            <li><a href="https://www.bibleserver.com/LUT/Hiob1">Das Buch Hiob – bibleserver.com</a></li>
-            <li><a href="https://images.meme-arsenal.com/36d19ea54255834c5b4321cabad402e8.jpg">Bild: Richterin (meme-arsenal.com)</a></li>
-            <li><a href="https://www.tagesspiegel.de/images/2814859/alternates/BASE_21_9_W1000/1660090678000/heprod-images-fotos-8-3-4-20170309-kind-319-1-20170307154356994.jpeg">Bild: Kind mit Mutter (tagesspiegel.de)</a></li>
-            <li><a href="https://www.sueddeutsche.de/2026/03/03/11fb452f-204f-4a9d-99eb-8e6493ed3dcb.jpg">Bild: Iran-Krieg (sueddeutsche.de)</a></li>
-            <li><a href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">Font Awesome Icons (cdnjs.cloudflare.com)</a></li>
+            <li><a href="https://www.bibleserver.com/LUT/Hiob1"                                                                                                                    target="_blank">(bibleserver.com) Das Buch Hiob                                          </a></li>
+            <li><a href="https://images.meme-arsenal.com/36d19ea54255834c5b4321cabad402e8.jpg"                                                                                     target="_blank">(meme-arsenal.com) Bild: Richterin                                       </a></li>
+            <li><a href="https://www.tagesspiegel.de/images/2814859/alternates/BASE_21_9_W1000/1660090678000/heprod-images-fotos-8-3-4-20170309-kind-319-1-20170307154356994.jpeg" target="_blank">(tagesspiegel.de) Bild: Kind mit Mutter                                  </a></li>
+            <li><a href="https://www.sueddeutsche.de/2026/03/03/11fb452f-204f-4a9d-99eb-8e6493ed3dcb.jpg"                                                                          target="_blank">(sueddeutsche.de) Bild: Iran-Krieg                                       </a></li>
+            <li><a href="https://fontawesome.com/search?ic=free-collection"                                                                                                        target="_blank">(cdnjs.cloudflare.com) Font Awesome Icons                                </a></li>
+            <li><a href="https://www.svgrepo.com/svg/414714/religion-peace-cultural"                                                                                               target="_blank">(svgrepo.com) Seiten-Icon                                                </a></li>
+            <li><a href="https://w.wallhaven.cc/full/2y/wallhaven-2y2wg6.png"                                                                                                      target="_blank">(wallhaven.cc) Platzhalterbild                                           </a></li>
+            <li><a href="https://freie-referate.de/geschichte/pinchas-lapide-und-hans-jonas-theologie-nach-auschwitz-aus-juedischer-perspektive"                                   target="_blank">(freie-referate.de) Hans Jonas zu Theodizee – eine kurze Zusammenfassung </a></li>
+            <li><a href="https://www.suhrkamp.de/buch/hans-jonas-der-gottesbegriff-nach-auschwitz-t-9783518380161"                                                                 target="_blank">(suhrkamp.de) Der Gottesbegriff nach Auschwitz – Hans Jonas              </a></li>
+            <li><a href="https://de.wikipedia.org/wiki/Hans_Jonas"                                                                                                                 target="_blank">(wikipedia.org) Hans Jonas                                               </a></li>
+            <li><a href="https://www.youtube.com/watch?v=pPU9hoNzRDg"                                                                                                              target="_blank">(youtube.com) Der Gottesbegriff nach Auschwitz (Hans Jonas)              </a></li>
+            <li><a href="https://www.die-bibel.de/ressourcen/wirelex/6-inhalte-iii-systematisch-theologische-didaktik/theodizee"                                                   target="_blank">(die-bibel.de) Leiddeutung in theologisch-systematischer Perspektive     </a></li>
+            <li><a href="https://www.telefonseelsorge.de/ueber-uns"                                                                                                                target="_blank">(telefonseelsorge.de) Seelsorge Website                                  </a></li>
+            <li><a href="https://www.efl-loerrach.de/angebote-2/einzelberatung"                                                                                                    target="_blank">(efl-loerrach.de) Kirchliche Beratungsstelle Lörrach                     </a></li>
+            <li><a href="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.GGlQFe4tliFJ53ott1rgMQHaE8%3Fpid%3DApi"                      target="_blank">(DuckDuckGo Image Discovery) Mann – Hilfe                                </a></li>
+            <li><a href="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%2Fid%2FOIP.y0bYku9INv4IC8j4U_F7mwHaE8%3Fpid%3DApi"                      target="_blank">(DuckDuckGo Image Discovery) Frau – Hilfe                                </a></li>
+            <li><a href="https://remove.bg"                                                                                                                                        target="_blank">(remove.bg) Hintergrundentfernung                                        </a></li>
+            <li><a href="https://bilder.deutschlandfunk.de/FI/LE/_f/46/FILE_f46070c9902658cf987ae801c704caaf/imago0095424781h-jpg-100-1920x1080.jpg"                               target="_blank">(deutschlandfunk.de) Sintflut-Bild                                       </a></li>
+            <li><a href="https://www.renovabis.de/site/assets/files/38874/auschwitz.1500x0.jpg"                                                                                    target="_blank">(renovabis.de) Auschwitz-Bild                                            </a></li>
+            <li><a href="https://www.ndr.de/geschichte/koepfe/Gottfried-Wilhelm-Leibniz-Philosoph-Erfinder-und-Universalgenie,leibniz196.html"                                     target="_blank">(ndr.de) Leibniz – Informationen                                         </a></li>
+            <li><a href="https://www.die-inkognito-philosophin.de/blog/leibniz-theodizee"                                                                                          target="_blank">(die-inkognito-philosophin.de) Leibniz – Informationen                   </a></li>
           </ul>
+          <p class="sources-access-date">Letztzugriff: 12. Apr. 2026</p>
         </div>
       </section>
 
@@ -183,6 +344,6 @@
   </div>
 
   <script src="app.js"></script>
-	<script type="module" src="./comments.js"></script>
+  <script type="module" src="./contents/comments.js"></script>
 </body>
 </html>

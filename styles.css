@@ -14,7 +14,7 @@
   --lavender: #b4befe;
 }
 
-/* ─── Reset ─────────────────────────────────────────────────────────────── */
+/* ─── Reset ──────────────────────────────────────────────────────────────── */
 * {
   box-sizing: border-box;
 }
@@ -91,18 +91,13 @@ body {
 }
 
 /* ─── Main Content Area ──────────────────────────────────────────────────── */
-/*
-  This is a flex column so that .content-section#comments can use
-  flex: 1 + min-height: 0 to fill the space and scroll internally.
-  Regular sections still scroll the whole panel via overflow-y: auto.
-*/
 .page-content {
   display: flex;
   flex-direction: column;
   flex: 1;
-  min-height: 0;        /* lets children shrink below their natural height  */
+  min-height: 0;
   padding: 32px;
-  overflow-y: auto;     /* regular sections scroll the panel as before       */
+  overflow-y: auto;
   background-color: var(--base);
   border: 1px solid var(--surface0);
   border-radius: 12px;
@@ -130,31 +125,12 @@ body {
     display: block;
   }
 
-  /* Comments section overrides: fills the panel and scrolls internally */
   &#comments.active {
     display: flex;
     flex-direction: column;
     flex: 1;
     min-height: 0;
-    overflow: hidden;   /* stop the panel from scrolling; list scrolls instead */
-  }
-
-  .header {
-    margin: 0 0 8px;
-    font-size: 32px;
-    font-weight: 600;
-    color: var(--lavender);
-    text-align: center;
-  }
-
-  .subheader {
-    margin: 0 0 24px;
-    padding-bottom: 16px;
-    font-size: 18px;
-    font-weight: 400;
-    color: var(--subtext0);
-    text-align: center;
-    border-bottom: 1px solid var(--surface0);
+    overflow: hidden;
   }
 }
 
@@ -163,15 +139,34 @@ body {
   to   { opacity: 1; transform: translateY(0); }
 }
 
+/* ─── Section Typography ─────────────────────────────────────────────────── */
+.section-title {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--lavender);
+  text-align: center;
+}
+
+.section-subtitle {
+  margin: 0 0 24px;
+  padding-bottom: 16px;
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--subtext0);
+  text-align: center;
+  border-bottom: 1px solid var(--surface0);
+}
+
 /* ─── Card ───────────────────────────────────────────────────────────────── */
 .card {
   padding: 24px;
   margin-bottom: 16px;
-  color: var(--subtext0);
   font-size: 18px;
   line-height: 1.6;
+  color: var(--subtext0);
   background-color: var(--mantle);
-  border: 1px solid var(--surface0);
+  border: 1px solid var(--surface1);
   border-radius: 8px;
 
   &.card--row {
@@ -212,6 +207,12 @@ img {
   object-fit: cover;
 }
 
+#img-placeholder {
+  width: 100%;
+  height: 142px;
+  border-color: var(--surface1);
+}
+
 /* ─── Summary Lead ───────────────────────────────────────────────────────── */
 .summary-lead {
   padding-left: 15px;
@@ -222,61 +223,69 @@ img {
 }
 
 /* ─── Comparison Grid ────────────────────────────────────────────────────── */
-.comparison {
+.comparison-grid {
   display: flex;
   flex-direction: row;
   gap: 25px;
   width: 100%;
   padding-top: 20px;
   font-size: 18px;
+}
 
-  .panel {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    padding: 0 5px 5px;
-    border: 2px solid var(--surface1);
-    border-radius: 10px;
+.comparison-panel {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 0 5px 5px;
+  border: 2px solid var(--surface0);
+  border-radius: 10px;
 
-    .comparison-header p {
-      margin-top: 20px;
-      font-size: 22px;
-      color: var(--lavender);
-      text-align: center;
-      text-decoration: underline;
-      text-underline-offset: 4px;
-    }
+  .comparison-panel-header p {
+    margin-top: 18px;
+    font-size: 22px;
+    color: var(--lavender);
+    text-align: center;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
 
-    .image-text {
-      display: flex;
-      flex-direction: row;
-      align-items: flex-start;
-      gap: 16px;
-      margin: 0 12px;
+  .comparison-panel-content > p {
+    margin-top: 16px;
+    padding: 0 12px;
+    font-style: italic;
+    color: var(--text);
+    text-align: center;
+  }
 
-      img {
-        flex-shrink: 0;
-        margin-top: 12px;
-      }
-
-      p {
-        margin: 12px 0 0;
-      }
-    }
-
-    .comparison-content > p {
-      margin-top: 16px;
-      padding: 0 12px;
-      text-align: center;
-      font-style: italic;
-      color: var(--text);
-    }
+  .comparison-panel-source {
+    margin: 4px 12px 0;
+    font-size: 16px;
+    font-style: italic;
+    color: var(--subtext0);
+    text-align: center;
   }
 }
 
-/* ─── Leibniz Solution Block ─────────────────────────────────────────────── */
-.leibniz-solution {
-  margin: 12px 0 8px 12px;
+/* ─── Image + Text Row ───────────────────────────────────────────────────── */
+.image-text {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 16px;
+  margin: 0 12px;
+
+  img {
+    flex-shrink: 0;
+    margin-top: 12px;
+  }
+
+  p {
+    margin: 12px 0 0;
+  }
+}
+
+/* ─── Leibniz Block ──────────────────────────────────────────────────────── */
+.leibniz-block {
   padding: 14px 18px;
   color: var(--subtext0);
   line-height: 1.7;
@@ -290,30 +299,211 @@ img {
     margin-bottom: 4px;
   }
 
-  .solution-title {
+  .leibniz-block-title {
     margin: 0 0 4px;
     font-weight: 600;
     color: var(--lavender);
   }
 
-  .solution-implication {
+  .leibniz-block-implication {
     margin: 4px 0;
     font-style: italic;
     color: var(--text);
   }
 
-  .solution-caveat {
+  .leibniz-block-caveat {
     margin: 6px 0 0;
     padding-left: 10px;
     font-size: 16px;
     color: var(--overlay1);
     border-left: 3px solid var(--surface2);
   }
+
+  .leibniz-block-tldr {
+    margin-top: 14px;
+    color: var(--text);
+  }
 }
 
-/* ─── Theologien Section ─────────────────────────────────────────────────── */
-#theologien .card > .summary-lead {
-  font-size: 18px;
+/* ─── Jonas Points Block ─────────────────────────────────────────────────── */
+.jonas-points {
+  margin: 14px 12px 0;
+
+  ul {
+    margin: 6px 0 0;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  li {
+    color: var(--subtext0);
+    line-height: 1.55;
+  }
+
+  strong {
+    color: var(--lavender);
+  }
+
+  .jonas-points-label {
+    margin: 0 0 2px;
+    font-weight: 600;
+    color: var(--lavender);
+  }
+}
+
+/* ─── Umgang Grid ────────────────────────────────────────────────────────── */
+.umgang-grid {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+/* ─── Umgang Cards ───────────────────────────────────────────────────────── */
+.umgang-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 20px 24px;
+  margin-bottom: 0;
+
+  ul {
+    margin: 0;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  li {
+    font-size: 20px;
+    color: var(--subtext0);
+    line-height: 1.55;
+  }
+
+  strong {
+    color: var(--lavender);
+  }
+
+  .umgang-card-title {
+    margin: 0 0 14px;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--lavender);
+    text-align: center;
+  }
+
+  .umgang-card-example {
+    margin: 14px 0 0;
+    padding: 10px 14px;
+    font-size: 18px;
+    font-style: italic;
+    color: var(--overlay1);
+    background-color: var(--surface0);
+    border-left: 3px solid var(--surface2);
+    border-radius: 6px;
+  }
+}
+
+.umgang-images {
+  display: flex;
+  flex-direction: row;
+  justify-self: center;
+  gap: 175px;
+
+  img {
+    border: none;
+    height: 300px;
+    width: 600px;
+  }
+}
+
+/* ─── Hilfsangebote ──────────────────────────────────────────────────────── */
+.hilfe-intro {
+  margin: 0;
+  font-size: 17px;
+  color: var(--subtext0);
+  line-height: 1.7;
+}
+
+.hilfe-grid {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  margin-top: 0;
+}
+
+.hilfe-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px 22px 24px;
+  margin-bottom: 0;
+
+  .hilfe-card-title {
+    margin: 0 0 4px;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--lavender);
+  }
+
+  .hilfe-card-desc {
+    margin: 0;
+    font-size: 16px;
+    color: var(--subtext0);
+    line-height: 1.6;
+  }
+
+  .hilfe-card-detail {
+    margin: 4px 0 0;
+    font-size: 15px;
+    color: var(--overlay1);
+
+    strong {
+      color: var(--text);
+    }
+  }
+
+  .hilfe-card-contact {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 4px;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.02em;
+  }
+
+  .hilfe-card-link {
+    display: inline-block;
+    margin-top: 6px;
+    font-size: 15px;
+    color: var(--lavender);
+    text-decoration: none;
+    transition: color 0.15s ease;
+
+    &:hover {
+      color: var(--text);
+      text-decoration: underline;
+    }
+  }
+}
+
+.help-images {
+  display: flex;
+  flex-direction: row;
+  justify-self: center;
+  gap: 300px;
+
+  img {
+    border: none;
+    height: 300px;
+    width: 300px;
+  }
 }
 
 /* ─── Sources List ───────────────────────────────────────────────────────── */
@@ -322,7 +512,7 @@ img {
   flex-direction: column;
   gap: 10px;
   padding-left: 24px;
-  list-style: disc;
+  list-style: lower-greek;
 
   a {
     color: var(--lavender);
@@ -334,4 +524,10 @@ img {
       text-decoration: underline;
     }
   }
+}
+
+.sources-access-date {
+  margin-top: 16px;
+  font-size: 15px;
+  color: var(--overlay1);
 }
