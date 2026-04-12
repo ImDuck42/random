@@ -169,7 +169,7 @@ body {
   border: 1px solid var(--surface1);
   border-radius: 8px;
 
-  &.card--row {
+  &.hilfe-card-contact {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
