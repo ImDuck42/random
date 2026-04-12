@@ -169,6 +169,28 @@ body {
   border: 1px solid var(--surface1);
   border-radius: 8px;
 
+  &.card-row {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+
+    strong {
+      color: var(--lavender);
+      font-size: 24px;
+    }
+
+    p {
+      margin-top: 0;
+    }
+
+    img {
+      flex-shrink: 0;
+      width: 520px;
+      height: 265px;
+      margin: 0;
+    }
+  }
+
   &.hilfe-card-contact {
     display: flex;
     flex-direction: row;
