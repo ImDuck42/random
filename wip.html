@@ -1,655 +1,178 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Origin Whitelist Tester</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;700;800&display=swap');
-
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --bg: #0a0a0f;
-    --surface: #111118;
-    --border: #1e1e2e;
-    --border-bright: #2e2e4e;
-    --text: #e8e8f0;
-    --muted: #6666aa;
-    --accent: #7c5cfc;
-    --accent-dim: rgba(124,92,252,0.12);
-    --green: #3dffa0;
-    --green-dim: rgba(61,255,160,0.1);
-    --red: #ff4d6a;
-    --red-dim: rgba(255,77,106,0.1);
-    --amber: #ffc94a;
-    --amber-dim: rgba(255,201,74,0.1);
-    --mono: 'JetBrains Mono', monospace;
-    --sans: 'Syne', sans-serif;
-  }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--mono);
-    min-height: 100vh;
-    padding: 40px 24px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  /* Subtle grid background */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(124,92,252,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(124,92,252,0.04) 1px, transparent 1px);
-    background-size: 40px 40px;
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  .container {
-    position: relative;
-    z-index: 1;
-    width: 100%;
-    max-width: 760px;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-  }
-
-  header {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    padding-bottom: 24px;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .label {
-    font-size: 11px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--accent);
-    font-weight: 600;
-  }
-
-  h1 {
-    font-family: var(--sans);
-    font-size: clamp(24px, 4vw, 36px);
-    font-weight: 800;
-    color: var(--text);
-    line-height: 1.1;
-  }
-
-  .subtitle {
-    font-size: 13px;
-    color: var(--muted);
-    margin-top: 4px;
-    line-height: 1.6;
-  }
-
-  /* Identity card */
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    overflow: hidden;
-  }
-
-  .card-header {
-    padding: 14px 20px;
-    border-bottom: 1px solid var(--border);
-    font-size: 11px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--muted);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .card-header::before {
-    content: '';
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--accent);
-    box-shadow: 0 0 8px var(--accent);
-    animation: pulse 2s ease-in-out infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
-  }
-
-  .identity-grid {
-    display: grid;
-    grid-template-columns: 140px 1fr;
-    gap: 0;
-  }
-
-  .identity-row {
-    display: contents;
-  }
-
-  .identity-row > * {
-    padding: 10px 20px;
-    border-bottom: 1px solid var(--border);
-    font-size: 13px;
-    line-height: 1.5;
-  }
-
-  .identity-row:last-child > * {
-    border-bottom: none;
-  }
-
-  .id-key {
-    color: var(--muted);
-    font-size: 12px;
-  }
-
-  .id-val {
-    color: var(--text);
-    word-break: break-all;
-  }
-
-  .id-val.highlight {
-    color: var(--accent);
-    font-weight: 600;
-  }
-
-  /* Result banner */
-  .result-banner {
-    border-radius: 10px;
-    padding: 20px 24px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    font-size: 15px;
-    font-weight: 600;
-    font-family: var(--sans);
-    transition: all 0.3s ease;
-  }
-
-  .result-banner.trusted {
-    background: var(--green-dim);
-    border: 1px solid rgba(61,255,160,0.25);
-    color: var(--green);
-  }
-
-  .result-banner.blocked {
-    background: var(--red-dim);
-    border: 1px solid rgba(255,77,106,0.25);
-    color: var(--red);
-  }
-
-  .result-banner .icon {
-    font-size: 24px;
-    line-height: 1;
-    flex-shrink: 0;
-  }
-
-  .result-banner .detail {
-    font-family: var(--mono);
-    font-size: 12px;
-    font-weight: 400;
-    opacity: 0.7;
-    margin-top: 2px;
-  }
-
-  /* Whitelist editor */
-  .whitelist-section {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-  }
-
-  .whitelist-entries {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-  }
-
-  .whitelist-entry {
-    display: flex;
-    align-items: center;
-    gap: 0;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .whitelist-entry:last-of-type {
-    border-bottom: none;
-  }
-
-  .entry-origin {
-    flex: 1;
-    padding: 12px 20px;
-    font-size: 13px;
-    color: var(--text);
-    background: none;
-    border: none;
-    outline: none;
-    font-family: var(--mono);
-  }
-
-  .entry-origin::placeholder {
-    color: var(--border-bright);
-  }
-
-  .entry-badge {
-    padding: 3px 10px;
-    border-radius: 4px;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    margin-right: 8px;
-    flex-shrink: 0;
-  }
-
-  .entry-badge.match {
-    background: var(--green-dim);
-    color: var(--green);
-    border: 1px solid rgba(61,255,160,0.2);
-  }
-
-  .entry-badge.no-match {
-    background: transparent;
-    color: var(--border-bright);
-    border: 1px solid var(--border);
-  }
-
-  .btn-remove {
-    width: 36px;
-    height: 36px;
-    background: none;
-    border: none;
-    color: var(--muted);
-    cursor: pointer;
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 6px;
-    margin-right: 8px;
-    transition: background 0.15s, color 0.15s;
-    flex-shrink: 0;
-  }
-
-  .btn-remove:hover {
-    background: var(--red-dim);
-    color: var(--red);
-  }
-
-  .add-row {
-    padding: 12px 20px;
-    border-top: 1px solid var(--border);
-    display: flex;
-    gap: 10px;
-    align-items: center;
-  }
-
-  .new-origin-input {
-    flex: 1;
-    background: var(--bg);
-    border: 1px solid var(--border-bright);
-    border-radius: 6px;
-    padding: 8px 14px;
-    color: var(--text);
-    font-family: var(--mono);
-    font-size: 13px;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-
-  .new-origin-input:focus {
-    border-color: var(--accent);
-  }
-
-  .new-origin-input::placeholder {
-    color: var(--muted);
-  }
-
-  .btn-add {
-    background: var(--accent-dim);
-    border: 1px solid rgba(124,92,252,0.3);
-    color: var(--accent);
-    border-radius: 6px;
-    padding: 8px 18px;
-    font-family: var(--mono);
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.15s, border-color 0.15s;
-    white-space: nowrap;
-  }
-
-  .btn-add:hover {
-    background: rgba(124,92,252,0.2);
-    border-color: rgba(124,92,252,0.5);
-  }
-
-  /* Add current origin shortcut */
-  .btn-add-current {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 20px;
-    background: none;
-    border: none;
-    border-top: 1px dashed var(--border-bright);
-    width: 100%;
-    text-align: left;
-    font-family: var(--mono);
-    font-size: 12px;
-    color: var(--amber);
-    cursor: pointer;
-    transition: background 0.15s;
-  }
-
-  .btn-add-current:hover {
-    background: var(--amber-dim);
-  }
-
-  /* Code block */
-  .code-block {
-    background: #080810;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    overflow: hidden;
-  }
-
-  .code-header {
-    padding: 10px 20px;
-    border-bottom: 1px solid var(--border);
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--muted);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .btn-copy {
-    background: none;
-    border: 1px solid var(--border-bright);
-    color: var(--muted);
-    border-radius: 4px;
-    padding: 3px 10px;
-    font-family: var(--mono);
-    font-size: 11px;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-
-  .btn-copy:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-  }
-
-  .btn-copy.copied {
-    border-color: var(--green);
-    color: var(--green);
-  }
-
-  pre {
-    padding: 20px;
-    font-size: 12px;
-    line-height: 1.7;
-    overflow-x: auto;
-    color: #a8a8d0;
-    white-space: pre;
-  }
-
-  .tok-kw  { color: #c792ea; }
-  .tok-fn  { color: #82aaff; }
-  .tok-str { color: #c3e88d; }
-  .tok-cmt { color: #4a4a6a; font-style: italic; }
-  .tok-num { color: #f78c6c; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Server Identification</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            padding: 40px;
+            background: #eef2f7;
+            color: #333;
+        }
+    
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            max-width: 650px;
+            margin: auto;
+        }
+    
+        .status-banner {
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            border: 2px solid transparent;
+        }
+    
+        .accepted {
+            background: #d4edda;
+            color: #155724;
+            border-color: #c3e6cb;
+        }
+    
+        .denied {
+            background: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
+        }
+    
+        .checking {
+            background: #fff3cd;
+            color: #856404;
+            border-color: #ffeeba;
+        }
+    
+        .info-label {
+            font-size: 0.85rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+            margin-top: 15px;
+        }
+    
+        .info-value {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #dee2e6;
+            font-family: monospace;
+            word-break: break-all;
+            font-size: 0.9rem;
+        }
+    
+        .instructions {
+            font-size: 0.85rem;
+            color: #777;
+            margin-top: 20px;
+            font-style: italic;
+        }
+    
+        hr {
+            border: 0;
+            border-top: 1px solid #eee;
+            margin: 20px 0;
+        }
+    
+        #app-content {
+            animation: fadeIn 0.5s ease-in;
+        }
+    
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+    
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
 </head>
 <body>
-<div class="container">
 
-  <header>
-    <span class="label">Security Utility</span>
-    <h1>Origin Whitelist Tester</h1>
-    <p class="subtitle">Tests whether this page's origin passes the whitelist check. Edit the whitelist below and watch the result update live.</p>
-  </header>
-
-  <!-- Result banner -->
-  <div class="result-banner" id="result-banner">
-    <span class="icon" id="result-icon"></span>
-    <div>
-      <div id="result-text"></div>
-      <div class="detail" id="result-detail"></div>
+<div class="card">
+    <div id="status-banner" class="status-banner checking">
+        Verifying Server Identity...
     </div>
-  </div>
 
-  <!-- Detected identity -->
-  <div class="card">
-    <div class="card-header">Detected server identity</div>
-    <div class="identity-grid">
-      <div class="identity-row">
-        <div class="id-key">origin</div>
-        <div class="id-val highlight" id="val-origin"></div>
-      </div>
-      <div class="identity-row">
-        <div class="id-key">hostname</div>
-        <div class="id-val" id="val-hostname"></div>
-      </div>
-      <div class="identity-row">
-        <div class="id-key">protocol</div>
-        <div class="id-val" id="val-protocol"></div>
-      </div>
-      <div class="identity-row">
-        <div class="id-key">port</div>
-        <div class="id-val" id="val-port"></div>
-      </div>
-      <div class="identity-row">
-        <div class="id-key">pathname</div>
-        <div class="id-val" id="val-pathname"></div>
-      </div>
+    <div class="info-label">Your Current Server Identity:</div>
+    <div id="current-id-display" class="info-value">Detecting...</div>
+
+    <div id="app-content" style="display: none;">
+        <hr>
+        <h3>Protected Content Unlocked</h3>
+        <p>This script has verified that it is running on a trusted hardware/software configuration.</p>
     </div>
-  </div>
 
-  <!-- Whitelist editor -->
-  <div class="card whitelist-section">
-    <div class="card-header">Whitelist entries</div>
-    <div class="whitelist-entries" id="whitelist-entries"></div>
-    <button class="btn-add-current" id="btn-add-current">
-      ＋ Add current origin (<span id="current-origin-preview"></span>)
-    </button>
-    <div class="add-row">
-      <input class="new-origin-input" id="new-origin-input" type="text" placeholder="https://example.com" spellcheck="false">
-      <button class="btn-add" onclick="addEntry()">Add</button>
+    <div id="setup-help" class="instructions" style="display: none;">
+        <strong>To authorize this server:</strong> Copy the "Current Server Identity" string above and add it to the <code>trustedServers</code> Set in the script.
     </div>
-  </div>
-
-  <!-- Generated code -->
-  <div class="code-block">
-    <div class="code-header">
-      <span>Generated guard code</span>
-      <button class="btn-copy" id="copy-btn" onclick="copyCode()">Copy</button>
-    </div>
-    <pre id="code-output"></pre>
-  </div>
-
 </div>
 
 <script>
-  // ── Whitelist state ─────────────────────────────────────────────────────────
-  // Pre-populate with current origin so opening the file shows a passing test.
-  const whitelist = new Set([window.location.origin]);
+    (async function() {
+        const trustedPatterns = [
+            // Matches any timestamp on the python hosted server
+            "http://0.0.0.0:8000 | SimpleHTTP/0.6 Python/3.14.4 | *, * * * *:*:* *",
+            
+            // Matches any server/fingerprint on this port
+            "http://localhost:8000 | * | *",
+            
+            // Live Server with a wildcard for the changing ETag
+            "http://127.0.0.1:5500 | Unknown-Server-Software | W/\"*\""
+        ];
 
-  // ── Identity ────────────────────────────────────────────────────────────────
-  function getServerIdentity() {
-    return {
-      origin:   window.location.origin,
-      hostname: window.location.hostname,
-      protocol: window.location.protocol,
-      port:     window.location.port || '(default)',
-      pathname: window.location.pathname,
-    };
-  }
+        function isTrusted(currentIdentity) {
+            return trustedPatterns.some(pattern => {
+                const regexStr = "^" + pattern
+                    .replace(/[-\/\\^$+?.()|[\]{}]/g, '\\$&')
+                    .replace(/\*/g, '.*')
+                    + "$";
+                const regex = new RegExp(regexStr);
+                return regex.test(currentIdentity);
+            });
+        }
 
-  // ── Render ──────────────────────────────────────────────────────────────────
-  function render() {
-    const id = getServerIdentity();
+        const statusBanner = document.getElementById('status-banner');
+        const idDisplay = document.getElementById('current-id-display');
+        const appContent = document.getElementById('app-content');
 
-    document.getElementById('val-origin').textContent   = id.origin;
-    document.getElementById('val-hostname').textContent = id.hostname;
-    document.getElementById('val-protocol').textContent = id.protocol;
-    document.getElementById('val-port').textContent     = id.port;
-    document.getElementById('val-pathname').textContent = id.pathname;
-    document.getElementById('current-origin-preview').textContent = id.origin;
+        async function performIdentification() {
+            try {
+                const response = await fetch(window.location.href, { method: 'HEAD' });
+                const origin = window.location.origin;
+                const serverType = response.headers.get('Server') || "Unknown-Server-Software";
+                const fingerprint = response.headers.get('ETag') || response.headers.get('Last-Modified') || "No-Fingerprint";
 
-    const trusted = whitelist.has(id.origin);
-    const banner  = document.getElementById('result-banner');
-    banner.className = 'result-banner ' + (trusted ? 'trusted' : 'blocked');
-    document.getElementById('result-icon').textContent = trusted ? '✓' : '✕';
-    document.getElementById('result-text').textContent = trusted
-      ? 'Origin is trusted — script would run'
-      : 'Origin is blocked — script would throw';
-    document.getElementById('result-detail').textContent =
-      `"${id.origin}" ${trusted ? 'found' : 'not found'} in whitelist`;
+                const currentIdentity = `${origin} | ${serverType} | ${fingerprint}`;
+                idDisplay.textContent = currentIdentity;
 
-    renderEntries(id.origin);
-    renderCode();
-  }
+                if (isTrusted(currentIdentity)) {
+                    statusBanner.textContent = "Access Granted: Identity Matches Pattern";
+                    statusBanner.className = "status-banner accepted";
+                    appContent.style.display = "block";
+                } else {
+                    statusBanner.textContent = "Access Denied: Untrusted Server";
+                    statusBanner.className = "status-banner denied";
+                }
+            } catch (err) {
+                statusBanner.textContent = "Error: Run on a local server";
+                statusBanner.className = "status-banner denied";
+            }
+        }
 
-  function renderEntries(currentOrigin) {
-    const container = document.getElementById('whitelist-entries');
-    container.innerHTML = '';
-
-    if (whitelist.size === 0) {
-      const empty = document.createElement('div');
-      empty.style.cssText = 'padding:16px 20px;font-size:13px;color:var(--muted)';
-      empty.textContent = 'No entries — add one below.';
-      container.appendChild(empty);
-      return;
-    }
-
-    for (const entry of whitelist) {
-      const row   = document.createElement('div');
-      row.className = 'whitelist-entry';
-
-      const val   = document.createElement('div');
-      val.className = 'entry-origin';
-      val.textContent = entry;
-
-      const badge = document.createElement('span');
-      const match = entry === currentOrigin;
-      badge.className = 'entry-badge ' + (match ? 'match' : 'no-match');
-      badge.textContent = match ? 'MATCH' : '—';
-
-      const rm = document.createElement('button');
-      rm.className = 'btn-remove';
-      rm.title = 'Remove';
-      rm.innerHTML = '&times;';
-      rm.onclick = () => { whitelist.delete(entry); render(); };
-
-      row.appendChild(val);
-      row.appendChild(badge);
-      row.appendChild(rm);
-      container.appendChild(row);
-    }
-  }
-
-  function renderCode() {
-    const entries = [...whitelist].map(e => `    "${e}",`).join('\n');
-    const code =
-`(function () {
-  const WHITELIST = new Set([
-${entries}
-  ]);
-
-  function getServerIdentity() {
-    return {
-      origin:   window.location.origin,
-      hostname: window.location.hostname,
-      protocol: window.location.protocol,
-      port:     window.location.port,
-    };
-  }
-
-  function assertTrustedOrigin() {
-    const { origin } = getServerIdentity();
-    if (!WHITELIST.has(origin)) {
-      throw new Error(
-        \`Untrusted origin: "\${origin}". ` +
-        `This script may only run on approved servers.\`
-      );
-    }
-  }
-
-  window.__serverIdentity = getServerIdentity;
-  assertTrustedOrigin();
-})();`;
-
-    // Very basic syntax highlighting
-    const highlighted = code
-      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-      .replace(/(\/\/.*)/g, '<span class="tok-cmt">$1</span>')
-      .replace(/\b(const|function|new|return|if|throw|window)\b/g, '<span class="tok-kw">$1</span>')
-      .replace(/\b(Set|Error)\b/g, '<span class="tok-fn">$1</span>')
-      .replace(/(`[^`]*`)/g, '<span class="tok-str">$1</span>')
-      .replace(/("[^"]*")/g, '<span class="tok-str">$1</span>')
-      .replace(/('[^']*')/g, '<span class="tok-str">$1</span>');
-
-    document.getElementById('code-output').innerHTML = highlighted;
-    document.getElementById('code-output')._raw = code;
-  }
-
-  // ── Actions ─────────────────────────────────────────────────────────────────
-  function addEntry() {
-    const input = document.getElementById('new-origin-input');
-    const val = input.value.trim().replace(/\/$/, ''); // strip trailing slash
-    if (!val) return;
-
-    // Basic validation
-    try {
-      const u = new URL(val);
-      whitelist.add(u.origin);
-    } catch {
-      // Not a valid URL — add as-is and let the comparison speak for itself
-      whitelist.add(val);
-    }
-
-    input.value = '';
-    render();
-  }
-
-  document.getElementById('new-origin-input').addEventListener('keydown', e => {
-    if (e.key === 'Enter') addEntry();
-  });
-
-  document.getElementById('btn-add-current').onclick = () => {
-    whitelist.add(window.location.origin);
-    render();
-  };
-
-  function copyCode() {
-    const code = document.getElementById('code-output')._raw;
-    navigator.clipboard.writeText(code).then(() => {
-      const btn = document.getElementById('copy-btn');
-      btn.textContent = 'Copied!';
-      btn.classList.add('copied');
-      setTimeout(() => {
-        btn.textContent = 'Copy';
-        btn.classList.remove('copied');
-      }, 2000);
-    });
-  }
-
-  // ── Init ─────────────────────────────────────────────────────────────────────
-  render();
+        performIdentification();
+    })();
 </script>
+
 </body>
 </html>
