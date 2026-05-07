@@ -1,0 +1,90 @@
+name: Merge Index Updates
+
+on:
+  push:
+    paths:
+      - 'data/**.json'
+
+concurrency:
+  group: merge-index-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  merge-index:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Rebuild _index.json files
+        run: |
+          INTERNAL="^(_index|_admin-exists|_public|_origins)\.json$"
+          TIMESTAMP="$(date -u +%Y-%m-%dT%H:%M:%S).$(printf '%03d' $(( 10#$(date -u +%N | cut -c1-3) )))Z"
+
+          find data \
+            \( -path './.git' -o -path './.github' \) -prune \
+            -o -name '*.json' -not -name '_index.json' -print \
+          | sed 's|/[^/]*$||' \
+          | sort -u \
+          | while IFS= read -r DIR; do
+
+              mapfile -t FILES < <(
+                find "$DIR" -maxdepth 1 -name '*.json' -printf '%f\n' \
+                | grep -Ev "$INTERNAL" \
+                | sort
+              )
+
+              INDEX="$DIR/_index.json"
+
+              if [ ${#FILES[@]} -eq 0 ]; then
+                [ -f "$INDEX" ] && rm -f "$INDEX" && echo "  removed   $INDEX"
+                continue
+              fi
+
+              FILES_JSON="$(printf '%s\n' "${FILES[@]}" | awk '
+                BEGIN { printf "  \"files\": [\n" }
+                {
+                  gsub(/\\/, "\\\\"); gsub(/"/, "\\\"")
+                  lines[NR] = "    \"" $0 "\""
+                  count = NR
+                }
+                END {
+                  for (i = 1; i <= count; i++) {
+                    if (i < count) printf "%s,\n", lines[i]
+                    else           printf "%s\n",  lines[i]
+                  }
+                  printf "  ]"
+                }
+              ')"
+
+              NEW_CONTENT="$(printf '{\n%s,\n  "updatedAt": "%s"\n}\n' "$FILES_JSON" "$TIMESTAMP")"
+
+              if [ -f "$INDEX" ]; then
+                OLD_FILES="$(grep -o '"[^"]*\.json"' "$INDEX" | grep -Ev "$INTERNAL" | sort | tr -d '\n')"
+                NEW_FILES="$(printf '%s\n' "${FILES[@]}" | awk '{printf "\"" $0"\""}' | tr -d '\n')"
+                [ "$OLD_FILES" = "$NEW_FILES" ] && echo "  unchanged $INDEX" && continue
+              fi
+
+              TMP="$(mktemp "$DIR/.index_tmp_XXXXXX")"
+              printf '%s' "$NEW_CONTENT" > "$TMP"
+              mv -f "$TMP" "$INDEX"
+              echo "  updated   $INDEX  (${#FILES[@]} file(s))"
+            done
+
+      - name: Commit updated indexes
+        run: |
+          git config user.name  "_indexer-bot"
+          git config user.email "_indexer-bot@users.noreply.github.com"
+
+          git add $(git ls-files --others --modified --exclude-standard | grep '_index\.json') 2>/dev/null || true
+          git add $(git ls-files --deleted | grep '_index\.json') 2>/dev/null || true
+
+          git diff --cached --quiet && echo "No index changes to commit." && exit 0
+
+          CHANGED=$(git diff --cached --name-only | grep -c '_index\.json' || true)
+          git commit -m "chore: rebuild ${CHANGED} _index.json file(s) [skip ci]"
+          git push
