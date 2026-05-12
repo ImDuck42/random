@@ -3,6 +3,7 @@ name: Merge Index Updates
 on:
   push:
     paths:
+      - '.github/workflows/indexer.yml'
       - 'guests/**.json'
 
 concurrency:
