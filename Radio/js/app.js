@@ -1,1 +1,1 @@
-import '../modules/init.js';
+import './../modules/init.js';
