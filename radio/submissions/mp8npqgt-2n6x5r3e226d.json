@@ -5,8 +5,9 @@
   "album": "DEAD CENTER",
   "duration_ms": 176890,
   "fileUrl": "https://raw.githubusercontent.com/ImDuck42/random/main/submissions/1778954725922-DEAD_CENTER.mp3",
-  "status": "pending",
+  "status": "declined",
   "submittedAt": 1778954729788,
   "createdAt": "2026-05-16T18:05:29.789Z",
-  "updatedAt": "2026-05-16T18:05:29.789Z"
+  "updatedAt": "2026-05-16T18:08:19.937Z",
+  "declinedAt": 1778954899611
 }
