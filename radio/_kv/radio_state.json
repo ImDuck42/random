@@ -1,7 +1,7 @@
 {
   "key": "radio_state",
   "value": {
-    "playlistStartedAt": 1778936601799,
+    "playlistStartedAt": 1778949102345,
     "songs": [
       {
         "id": "mp8cgvac-605g0g06396a",
@@ -61,10 +61,60 @@
         "fileUrl": "https://raw.githubusercontent.com/ImDuck42/random/main/music/1778933472198-KIRA_-_CRASH_THE_PARTY_ft._Hatsune_Miku,_Kasane_Teto,_GUMI_(Official_MV).mp3",
         "createdAt": "2026-05-16T12:11:16.281Z",
         "updatedAt": "2026-05-16T12:11:16.281Z"
+      },
+      {
+        "id": "mp8kbmqe-3r3v2w4c4t5y",
+        "title": "God Mode",
+        "artist": "HalaCG - Topic",
+        "album": "God Mode",
+        "duration_ms": 151998,
+        "fileUrl": "https://raw.githubusercontent.com/ImDuck42/random/main/submissions/1778948268948-God_Mode.mp3",
+        "createdAt": "2026-05-16T16:30:32.919Z",
+        "updatedAt": "2026-05-16T16:30:32.919Z"
+      },
+      {
+        "id": "mp8kbrka-015s4g2v0955",
+        "title": "DEAD CENTER",
+        "artist": "Reol - Topic",
+        "album": "DEAD CENTER",
+        "duration_ms": 176890,
+        "fileUrl": "https://raw.githubusercontent.com/ImDuck42/random/main/submissions/1778948268985-DEAD_CENTER.mp3",
+        "createdAt": "2026-05-16T16:30:39.178Z",
+        "updatedAt": "2026-05-16T16:30:39.178Z"
+      },
+      {
+        "id": "mp8kbssj-293z33052h5h",
+        "title": "DEAD CENTER",
+        "artist": "Reol - Topic",
+        "album": "DEAD CENTER",
+        "duration_ms": 176890,
+        "fileUrl": "https://raw.githubusercontent.com/ImDuck42/random/main/submissions/1778948289895-DEAD_CENTER.mp3",
+        "createdAt": "2026-05-16T16:30:40.771Z",
+        "updatedAt": "2026-05-16T16:30:40.771Z"
+      },
+      {
+        "id": "mp8kbtci-4l560r69606x",
+        "title": "Taste of Death",
+        "artist": "Mori Calliope - Topic",
+        "album": "Taste of Death",
+        "duration_ms": 177029,
+        "fileUrl": "https://raw.githubusercontent.com/ImDuck42/random/main/submissions/1778948301759-Taste_of_Death.mp3",
+        "createdAt": "2026-05-16T16:30:41.490Z",
+        "updatedAt": "2026-05-16T16:30:41.490Z"
+      },
+      {
+        "id": "mp8kbu52-645t2040641f",
+        "title": "平手友梨奈『Kill or Kiss』MUSIC VIDEO",
+        "artist": "平手友梨奈",
+        "album": "平手友梨奈『Kill or Kiss』MUSIC VIDEO",
+        "duration_ms": 197137,
+        "fileUrl": "https://raw.githubusercontent.com/ImDuck42/random/main/submissions/1778948315987-平手友梨奈『Kill_or_Kiss』MUSIC_VIDEO.mp3",
+        "createdAt": "2026-05-16T16:30:42.518Z",
+        "updatedAt": "2026-05-16T16:30:42.518Z"
       }
     ],
     "mode": "loop-all",
     "playlistId": "mp8ci035-3i4k6p3d5q19"
   },
-  "updatedAt": "2026-05-16T13:03:22.166Z"
+  "updatedAt": "2026-05-16T16:31:42.770Z"
 }
