@@ -1,0 +1,13 @@
+{
+  "key": "radio_rules",
+  "value": {
+    "autoLoop": true,
+    "restartOnEmpty": true,
+    "shuffleOnLoop": false,
+    "noRepeat": true,
+    "syncInterval": 10,
+    "driftThreshold": 2,
+    "adminPasswordHash": "04461ddcbe04cc160510a11baf27b908:a6f3ba6cc7825b9fe1db60ea01d0982a95d849deb8d4c7a219a9798a619ce882"
+  },
+  "updatedAt": "2026-05-16T14:32:27.866Z"
+}
