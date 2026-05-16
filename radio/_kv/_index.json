@@ -2,7 +2,8 @@
   "files": [
     "_origins.json",
     "_public.json",
+    "radio_rules.json",
     "radio_state.json"
   ],
-  "updatedAt": "2026-05-16T14:10:37.696Z"
+  "updatedAt": "2026-05-16T14:32:37.980Z"
 }
