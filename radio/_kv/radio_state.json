@@ -1,8 +1,28 @@
 {
   "key": "radio_state",
   "value": {
-    "playlistStartedAt": 1778934435264,
+    "playlistStartedAt": 1778935927034,
     "songs": [
+      {
+        "id": "mp8ch172-1z1p5k11644t",
+        "title": "Crime of Passion",
+        "artist": "YFU Baby - Topic",
+        "album": "Crime of Passion",
+        "duration_ms": 228043,
+        "fileUrl": "https://raw.githubusercontent.com/ImDuck42/random/main/music/1778935844976-Crime_of_Passion.mp3",
+        "createdAt": "2026-05-16T12:50:48.014Z",
+        "updatedAt": "2026-05-16T12:50:48.014Z"
+      },
+      {
+        "id": "mp8cgy38-4w311i67006q",
+        "title": "Hollywood Undead - First Class Suicide (Official Audio)",
+        "artist": "Hollywood Undead",
+        "album": "Hollywood Undead - First Class Suicide (Official Audio)",
+        "duration_ms": 187060,
+        "fileUrl": "https://raw.githubusercontent.com/ImDuck42/random/main/music/1778935841307-Hollywood_Undead_-_First_Class_Suicide_(Official_Audio).mp3",
+        "createdAt": "2026-05-16T12:50:43.988Z",
+        "updatedAt": "2026-05-16T12:50:43.988Z"
+      },
       {
         "id": "mp8b275l-5d6l4o1a1g0c",
         "title": "KIRA - CRASH THE  PARTY ft. Hatsune Miku, Kasane Teto, GUMI (Official MV)",
@@ -11,8 +31,20 @@
         "fileUrl": "https://raw.githubusercontent.com/ImDuck42/random/main/music/1778933472198-KIRA_-_CRASH_THE_PARTY_ft._Hatsune_Miku,_Kasane_Teto,_GUMI_(Official_MV).mp3",
         "createdAt": "2026-05-16T12:11:16.281Z",
         "updatedAt": "2026-05-16T12:11:16.281Z"
+      },
+      {
+        "id": "mp8cgvac-605g0g06396a",
+        "title": "Hollywood Undead - Bad Moon [Audio]",
+        "artist": "Hollywood Undead",
+        "album": "Hollywood Undead - Bad Moon [Audio]",
+        "duration_ms": 232176,
+        "fileUrl": "https://raw.githubusercontent.com/ImDuck42/random/main/music/1778935837336-Hollywood_Undead_-_Bad_Moon_[Audio].mp3",
+        "createdAt": "2026-05-16T12:50:40.356Z",
+        "updatedAt": "2026-05-16T12:50:40.356Z"
       }
-    ]
+    ],
+    "mode": "shuffle",
+    "playlistId": "mp8ci035-3i4k6p3d5q19"
   },
-  "updatedAt": "2026-05-16T12:27:15.674Z"
+  "updatedAt": "2026-05-16T12:52:07.357Z"
 }
