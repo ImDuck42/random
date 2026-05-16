@@ -123,6 +123,10 @@
  *    GitHubDB.encodeToken(plainToken)         // obfuscate PAT for embedding
  */
 
+/** alpha-2
+ * - Improved ETag-Caching for get openrations via API
+ * - Workflow fix with resolveToken()
+ */
 'use strict'
 
 

@@ -22,6 +22,7 @@ const DEFAULT_RULES = {
 let db;
 let rules           = { ...DEFAULT_RULES };
 let currentState    = null;
+let hasUserTunedIn  = false;
 let allSongs        = [];
 let playlists       = [];
 let selectedSongs   = new Set();
@@ -177,7 +178,7 @@ function hashString(str) {
     return hash;
 }
 
-function syncAudioToOffset(song, offsetMs, allInQueue) {
+function syncAudioToOffset(song, offsetMs, songList) {
     const offsetSec = offsetMs / 1000;
 
     getEl('now-playing-title').textContent  = song.title  ?? 'Unknown';
@@ -190,19 +191,22 @@ function syncAudioToOffset(song, offsetMs, allInQueue) {
             radioAudio.src         = song.fileUrl;
             radioAudio.currentTime = offsetSec;
             radioAudio.volume      = getLiveVolume();
-            radioAudio.play().catch(() => {});
-            document.body.classList.add('playing');
+            if (hasUserTunedIn) {
+                radioAudio.play().catch(() => {});
+                document.body.classList.add('playing');
+            }
         } else {
             if (radioAudio.paused) {
                 radioAudio.currentTime = offsetSec;
-                radioAudio.play().catch(() => {});
-                document.body.classList.add('playing');
+                if (hasUserTunedIn) {
+                    radioAudio.play().catch(() => {});
+                    document.body.classList.add('playing');
+                }
             } else if (Math.abs(radioAudio.currentTime - offsetSec) > (rules.driftThreshold ?? 2)) {
                 radioAudio.currentTime = offsetSec;
             }
         }
     } else {
-        // Catalogue is active — keep src updated silently so live resumes cleanly
         if (radioAudio.src !== song.fileUrl) {
             radioAudio.src         = song.fileUrl;
             radioAudio.currentTime = offsetSec;
@@ -210,15 +214,18 @@ function syncAudioToOffset(song, offsetMs, allInQueue) {
         }
     }
 
-    renderUpNext(song, allInQueue);
-    startProgressLoop(song);
+    renderUpNext(song, songList);
+    startProgressLoop(song, offsetMs);
 }
 
-function startProgressLoop(song) {
+function startProgressLoop(song, offsetAtStartMs) {
     if (progressRafId) cancelAnimationFrame(progressRafId);
+    const startTime = Date.now() - offsetAtStartMs;
 
     const tick = () => {
-        const currentMs  = radioAudio.currentTime * 1000;
+        const currentMs = radioAudio.paused
+            ? Math.min(Math.max(0, Date.now() - startTime), song.duration_ms)
+            : radioAudio.currentTime * 1000;
         const pct        = Math.min((currentMs / song.duration_ms) * 100, 100);
         const pctStr     = pct + '%';
         getEl('progress-bar-fill').style.width = pctStr;
@@ -1095,8 +1102,10 @@ volumeSlider.addEventListener('input', () => {
 // ── Tune-In Overlay ──────────────────────────────────────
 getEl('tune-in-btn').onclick = () => {
     getEl('tune-in-overlay').remove();
+    hasUserTunedIn = true;
     radioAudio.volume = getLiveVolume();
     radioAudio.play().catch(() => {});
+    document.body.classList.add('playing');
 };
 
 // ── Modal ────────────────────────────────────────────────
