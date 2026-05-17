@@ -3,7 +3,7 @@
   "name": "secret",
   "slug": "secret",
   "description": "lol",
-  "playlistId": "mp9nshxq-4x4s5c3s0z33",
+  "playlistId": null,
   "mode": "loop-all",
   "autoLoop": true,
   "restartOnEmpty": true,
@@ -12,5 +12,5 @@
   "syncInterval": 10,
   "driftThreshold": 2,
   "createdAt": "2026-05-17T11:18:26.887Z",
-  "updatedAt": "2026-05-17T11:30:50.511Z"
+  "updatedAt": "2026-05-17T11:46:18.771Z"
 }
