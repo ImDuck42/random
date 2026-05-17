@@ -144,7 +144,7 @@ async function init() {
             ].join('|');
 
             let chState;
-            if (existing && existing._configStamp === configStamp) {
+            if (existing && existing.configStamp === configStamp) {
                 // Config unchanged — reuse existing state, avoid unnecessary write
                 chState = existing;
             } else {
@@ -155,7 +155,7 @@ async function init() {
                     playlistId:        channel.playlistId ?? null,
                     channelId:         channel.id,
                     channelRules,
-                    _configStamp:      configStamp,
+                   configStamp:      configStamp,
                 };
                 await db.kv.set(chKey, chState);
             }
