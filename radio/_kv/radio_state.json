@@ -1,8 +1,107 @@
 {
   "key": "radio_state",
   "value": {
-    "playlistStartedAt": 1779034671574,
+    "playlistStartedAt": 1779019213935,
     "songs": [
+      {
+        "id": "mp8b275l-5d6l4o1a1g0c",
+        "title": "KIRA - CRASH THE  PARTY ft. Hatsune Miku, Kasane Teto, GUMI (Official MV)",
+        "artist": "KIRA",
+        "duration_ms": 192261.224,
+        "fileUrl": "https://raw.githubusercontent.com/ImDuck42/random/main/music/1778933472198-KIRA_-_CRASH_THE_PARTY_ft._Hatsune_Miku,_Kasane_Teto,_GUMI_(Official_MV).mp3",
+        "createdAt": "2026-05-16T12:11:16.281Z",
+        "updatedAt": "2026-05-16T12:11:16.281Z"
+      },
+      {
+        "id": "mp8cgvac-605g0g06396a",
+        "title": "Hollywood Undead - Bad Moon [Audio]",
+        "artist": "Hollywood Undead",
+        "album": "Hollywood Undead - Bad Moon [Audio]",
+        "duration_ms": 232176,
+        "fileUrl": "https://raw.githubusercontent.com/ImDuck42/random/main/music/1778935837336-Hollywood_Undead_-_Bad_Moon_[Audio].mp3",
+        "createdAt": "2026-05-16T12:50:40.356Z",
+        "updatedAt": "2026-05-16T12:50:40.356Z"
+      },
+      {
+        "id": "mp8cgy38-4w311i67006q",
+        "title": "Hollywood Undead - First Class Suicide (Official Audio)",
+        "artist": "Hollywood Undead",
+        "album": "Hollywood Undead - First Class Suicide (Official Audio)",
+        "duration_ms": 187060,
+        "fileUrl": "https://raw.githubusercontent.com/ImDuck42/random/main/music/1778935841307-Hollywood_Undead_-_First_Class_Suicide_(Official_Audio).mp3",
+        "createdAt": "2026-05-16T12:50:43.988Z",
+        "updatedAt": "2026-05-16T12:50:43.988Z"
+      },
+      {
+        "id": "mp8ch172-1z1p5k11644t",
+        "title": "Crime of Passion",
+        "artist": "YFU Baby - Topic",
+        "album": "Crime of Passion",
+        "duration_ms": 228043,
+        "fileUrl": "https://raw.githubusercontent.com/ImDuck42/random/main/music/1778935844976-Crime_of_Passion.mp3",
+        "createdAt": "2026-05-16T12:50:48.014Z",
+        "updatedAt": "2026-05-16T12:50:48.014Z"
+      },
+      {
+        "id": "mp8cw7ej-2j480g5h5d1u",
+        "title": "FEEDBACK [ft. Megurine Luka]",
+        "artist": "MonochroMenace",
+        "album": "FEEDBACK [ft. Megurine Luka]",
+        "duration_ms": 188592,
+        "fileUrl": "https://raw.githubusercontent.com/ImDuck42/random/main/music/1778936552157-FEEDBACK_[ft._Megurine_Luka].mp3",
+        "createdAt": "2026-05-16T13:02:35.899Z",
+        "updatedAt": "2026-05-16T13:02:35.899Z"
+      },
+      {
+        "id": "mp8cwad7-49254p0e1m3l",
+        "title": "New Frontier",
+        "artist": "Metal Scar Radio - Topic",
+        "album": "New Frontier",
+        "duration_ms": 231642,
+        "fileUrl": "https://raw.githubusercontent.com/ImDuck42/random/main/music/1778936556840-New_Frontier.mp3",
+        "createdAt": "2026-05-16T13:02:39.739Z",
+        "updatedAt": "2026-05-16T13:02:39.739Z"
+      },
+      {
+        "id": "mp8kbmqe-3r3v2w4c4t5y",
+        "title": "God Mode",
+        "artist": "HalaCG - Topic",
+        "album": "God Mode",
+        "duration_ms": 151998,
+        "fileUrl": "https://raw.githubusercontent.com/ImDuck42/random/main/submissions/1778948268948-God_Mode.mp3",
+        "createdAt": "2026-05-16T16:30:32.919Z",
+        "updatedAt": "2026-05-16T16:30:32.919Z"
+      },
+      {
+        "id": "mp8kbtci-4l560r69606x",
+        "title": "Taste of Death",
+        "artist": "Mori Calliope - Topic",
+        "album": "Taste of Death",
+        "duration_ms": 177029,
+        "fileUrl": "https://raw.githubusercontent.com/ImDuck42/random/main/submissions/1778948301759-Taste_of_Death.mp3",
+        "createdAt": "2026-05-16T16:30:41.490Z",
+        "updatedAt": "2026-05-16T16:30:41.490Z"
+      },
+      {
+        "id": "mp8kbu52-645t2040641f",
+        "title": "平手友梨奈『Kill or Kiss』MUSIC VIDEO",
+        "artist": "平手友梨奈",
+        "album": "平手友梨奈『Kill or Kiss』MUSIC VIDEO",
+        "duration_ms": 197137,
+        "fileUrl": "https://raw.githubusercontent.com/ImDuck42/random/main/submissions/1778948315987-平手友梨奈『Kill_or_Kiss』MUSIC_VIDEO.mp3",
+        "createdAt": "2026-05-16T16:30:42.518Z",
+        "updatedAt": "2026-05-16T16:30:42.518Z"
+      },
+      {
+        "id": "mp8vusur-251f6h0e2g55",
+        "title": "Pretty boy v3",
+        "artist": "Tuxy",
+        "album": "",
+        "duration_ms": 162200,
+        "fileUrl": "https://raw.githubusercontent.com/ImDuck42/random/main/submissions/1778968018247-Pretty_Boy_V3_-_Tuxy_Music_(Best_Part).mp3",
+        "createdAt": "2026-05-16T21:53:23.091Z",
+        "updatedAt": "2026-05-16T21:53:23.091Z"
+      },
       {
         "id": "mp9ns9go-291z1l5x3m6z",
         "title": "Rick Astley - Never Gonna Give You Up (Official Music Video)",
@@ -15,16 +114,7 @@
       }
     ],
     "mode": "loop-all",
-    "playlistId": "mp9nshxq-4x4s5c3s0z33",
-    "channelId": "mp9om4av-102u702z6z55",
-    "channelRules": {
-      "autoLoop": true,
-      "restartOnEmpty": true,
-      "shuffleOnLoop": false,
-      "noRepeat": false,
-      "syncInterval": 10,
-      "driftThreshold": 2
-    }
+    "playlistId": null
   },
-  "updatedAt": "2026-05-17T16:17:51.980Z"
+  "updatedAt": "2026-05-17T16:18:00.377Z"
 }
