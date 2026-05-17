@@ -1,7 +1,7 @@
 {
   "key": "radio_channel_mp9om4av-102u702z6z55",
   "value": {
-    "playlistStartedAt": 1779038683374,
+    "playlistStartedAt": 1779039010866,
     "songs": [
       {
         "id": "mp9ns9go-291z1l5x3m6z",
@@ -25,7 +25,7 @@
       "syncInterval": 10,
       "driftThreshold": 2
     },
-    "_configStamp": "loop-all|mp9nshxq-4x4s5c3s0z33|true|false|false|10|2|mp9ns9go-291z1l5x3m6z:212045"
+    "configStamp": "loop-all|mp9nshxq-4x4s5c3s0z33|true|false|false|10|2|mp9ns9go-291z1l5x3m6z:212045"
   },
-  "updatedAt": "2026-05-17T17:24:43.691Z"
+  "updatedAt": "2026-05-17T17:30:11.191Z"
 }
