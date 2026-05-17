@@ -1,0 +1,30 @@
+{
+  "key": "radio_channel_mp9om4av-102u702z6z55",
+  "value": {
+    "playlistStartedAt": 1779038367253,
+    "songs": [
+      {
+        "id": "mp9ns9go-291z1l5x3m6z",
+        "title": "Rick Astley - Never Gonna Give You Up (Official Music Video)",
+        "artist": "Rick Astley",
+        "album": "Rick Astley - Never Gonna Give You Up (Official Music Video)",
+        "duration_ms": 212045,
+        "fileUrl": "https://raw.githubusercontent.com/ImDuck42/random/main/music/1779015309177-Rick_Astley_-_Never_Gonna_Give_You_Up_(Official_Video)_(4K_Remaster).mp3",
+        "createdAt": "2026-05-17T10:55:13.896Z",
+        "updatedAt": "2026-05-17T10:55:13.896Z"
+      }
+    ],
+    "mode": "loop-all",
+    "playlistId": "mp9nshxq-4x4s5c3s0z33",
+    "channelId": "mp9om4av-102u702z6z55",
+    "channelRules": {
+      "autoLoop": true,
+      "restartOnEmpty": true,
+      "shuffleOnLoop": false,
+      "noRepeat": false,
+      "syncInterval": 10,
+      "driftThreshold": 2
+    }
+  },
+  "updatedAt": "2026-05-17T17:19:27.548Z"
+}
