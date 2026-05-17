@@ -5,8 +5,9 @@
   "album": "We Own The Night",
   "duration_ms": 242579,
   "fileUrl": "https://raw.githubusercontent.com/ImDuck42/random/main/submissions/1779049253486-We_Own_The_Night.mp3",
-  "status": "pending",
+  "status": "approved",
   "submittedAt": 1779049257095,
   "createdAt": "2026-05-17T20:20:57.096Z",
-  "updatedAt": "2026-05-17T20:20:57.096Z"
+  "updatedAt": "2026-05-17T20:22:18.453Z",
+  "approvedAt": 1779049338117
 }
