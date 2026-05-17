@@ -1,8 +1,17 @@
 {
   "key": "radio_state",
   "value": {
-    "playlistStartedAt": 1778968891337,
+    "playlistStartedAt": 1779016585173,
     "songs": [
+      {
+        "id": "mp8b275l-5d6l4o1a1g0c",
+        "title": "KIRA - CRASH THE  PARTY ft. Hatsune Miku, Kasane Teto, GUMI (Official MV)",
+        "artist": "KIRA",
+        "duration_ms": 192261.224,
+        "fileUrl": "https://raw.githubusercontent.com/ImDuck42/random/main/music/1778933472198-KIRA_-_CRASH_THE_PARTY_ft._Hatsune_Miku,_Kasane_Teto,_GUMI_(Official_MV).mp3",
+        "createdAt": "2026-05-16T12:11:16.281Z",
+        "updatedAt": "2026-05-16T12:11:16.281Z"
+      },
       {
         "id": "mp8cgvac-605g0g06396a",
         "title": "Hollywood Undead - Bad Moon [Audio]",
@@ -24,16 +33,6 @@
         "updatedAt": "2026-05-16T12:50:43.988Z"
       },
       {
-        "id": "mp8cw7ej-2j480g5h5d1u",
-        "title": "FEEDBACK [ft. Megurine Luka]",
-        "artist": "MonochroMenace",
-        "album": "FEEDBACK [ft. Megurine Luka]",
-        "duration_ms": 188592,
-        "fileUrl": "https://raw.githubusercontent.com/ImDuck42/random/main/music/1778936552157-FEEDBACK_[ft._Megurine_Luka].mp3",
-        "createdAt": "2026-05-16T13:02:35.899Z",
-        "updatedAt": "2026-05-16T13:02:35.899Z"
-      },
-      {
         "id": "mp8ch172-1z1p5k11644t",
         "title": "Crime of Passion",
         "artist": "YFU Baby - Topic",
@@ -44,6 +43,16 @@
         "updatedAt": "2026-05-16T12:50:48.014Z"
       },
       {
+        "id": "mp8cw7ej-2j480g5h5d1u",
+        "title": "FEEDBACK [ft. Megurine Luka]",
+        "artist": "MonochroMenace",
+        "album": "FEEDBACK [ft. Megurine Luka]",
+        "duration_ms": 188592,
+        "fileUrl": "https://raw.githubusercontent.com/ImDuck42/random/main/music/1778936552157-FEEDBACK_[ft._Megurine_Luka].mp3",
+        "createdAt": "2026-05-16T13:02:35.899Z",
+        "updatedAt": "2026-05-16T13:02:35.899Z"
+      },
+      {
         "id": "mp8cwad7-49254p0e1m3l",
         "title": "New Frontier",
         "artist": "Metal Scar Radio - Topic",
@@ -52,15 +61,6 @@
         "fileUrl": "https://raw.githubusercontent.com/ImDuck42/random/main/music/1778936556840-New_Frontier.mp3",
         "createdAt": "2026-05-16T13:02:39.739Z",
         "updatedAt": "2026-05-16T13:02:39.739Z"
-      },
-      {
-        "id": "mp8b275l-5d6l4o1a1g0c",
-        "title": "KIRA - CRASH THE  PARTY ft. Hatsune Miku, Kasane Teto, GUMI (Official MV)",
-        "artist": "KIRA",
-        "duration_ms": 192261.224,
-        "fileUrl": "https://raw.githubusercontent.com/ImDuck42/random/main/music/1778933472198-KIRA_-_CRASH_THE_PARTY_ft._Hatsune_Miku,_Kasane_Teto,_GUMI_(Official_MV).mp3",
-        "createdAt": "2026-05-16T12:11:16.281Z",
-        "updatedAt": "2026-05-16T12:11:16.281Z"
       },
       {
         "id": "mp8kbmqe-3r3v2w4c4t5y",
@@ -101,10 +101,29 @@
         "fileUrl": "https://raw.githubusercontent.com/ImDuck42/random/main/submissions/1778968018247-Pretty_Boy_V3_-_Tuxy_Music_(Best_Part).mp3",
         "createdAt": "2026-05-16T21:53:23.091Z",
         "updatedAt": "2026-05-16T21:53:23.091Z"
+      },
+      {
+        "id": "mp9ns9go-291z1l5x3m6z",
+        "title": "Rick Astley - Never Gonna Give You Up (Official Music Video)",
+        "artist": "Rick Astley",
+        "album": "Rick Astley - Never Gonna Give You Up (Official Music Video)",
+        "duration_ms": 212045,
+        "fileUrl": "https://raw.githubusercontent.com/ImDuck42/random/main/music/1779015309177-Rick_Astley_-_Never_Gonna_Give_You_Up_(Official_Video)_(4K_Remaster).mp3",
+        "createdAt": "2026-05-17T10:55:13.896Z",
+        "updatedAt": "2026-05-17T10:55:13.896Z"
       }
     ],
     "mode": "loop-all",
-    "playlistId": "mp8ci035-3i4k6p3d5q19"
+    "playlistId": "mp9nshxq-4x4s5c3s0z33",
+    "channelId": "mp9nz7td-4v3t3x4f2w5j",
+    "channelRules": {
+      "autoLoop": true,
+      "restartOnEmpty": true,
+      "shuffleOnLoop": false,
+      "noRepeat": false,
+      "syncInterval": 10,
+      "driftThreshold": 2
+    }
   },
-  "updatedAt": "2026-05-16T22:01:31.768Z"
+  "updatedAt": "2026-05-17T11:16:25.634Z"
 }
