@@ -26,7 +26,7 @@ jobs:
         run: |
           TIMESTAMP="$(date -u +%Y-%m-%dT%H:%M:%S).$(printf '%03d' $(( 10#$(date -u +%N | cut -c1-3) )))Z"
 
-          find gallery -mindepth 1 -maxdepth 2 -type d | while IFS= read -r DIR; do
+          find gallery -mindepth 1 -type d | while IFS= read -r DIR; do
             if [ ! -f "$DIR/_index.json" ]; then
               printf '{\n  "files": [],\n  "updatedAt": "%s"\n}\n' "$TIMESTAMP" > "$DIR/_index.json"
               echo "bootstrapped $DIR/_index.json"
