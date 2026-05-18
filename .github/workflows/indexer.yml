@@ -5,7 +5,7 @@ on:
     paths:
       - 'gallery/**'
       - '!gallery/**/_index.json'
-      - '.github/workflows/indexer.yml
+      - '.github/workflows/indexer.yml'
 
 concurrency:
   group: merge-index-${{ github.ref }}
