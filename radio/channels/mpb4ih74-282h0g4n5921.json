@@ -1,0 +1,16 @@
+{
+  "id": "mpb4ih74-282h0g4n5921",
+  "name": "notSecret",
+  "slug": "notsecret",
+  "description": "Description",
+  "playlistId": "mpb4gset-5t434n6p2h2j",
+  "mode": "loop-all",
+  "autoLoop": true,
+  "restartOnEmpty": true,
+  "shuffleOnLoop": false,
+  "noRepeat": false,
+  "syncInterval": 10,
+  "driftThreshold": 2,
+  "createdAt": "2026-05-18T11:31:17.008Z",
+  "updatedAt": "2026-05-18T11:31:17.008Z"
+}
