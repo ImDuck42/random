@@ -1,0 +1,16 @@
+{
+  "id": "mpaux61w-6v3y71683v5e",
+  "name": "Hi",
+  "slug": "hi",
+  "description": "Hi",
+  "playlistId": "mpauwmbg-2n070j5q4336",
+  "mode": "loop-all",
+  "autoLoop": true,
+  "restartOnEmpty": true,
+  "shuffleOnLoop": false,
+  "noRepeat": true,
+  "syncInterval": 10,
+  "driftThreshold": 2,
+  "createdAt": "2026-05-18T07:02:46.244Z",
+  "updatedAt": "2026-05-18T07:02:46.244Z"
+}
