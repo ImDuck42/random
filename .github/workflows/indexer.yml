@@ -1,10 +1,9 @@
-name: Rebuild Index Files
+name: Merge Index Updates
 
 on:
   push:
     paths:
-      - 'gallery/**'
-      - '!gallery/**/_index.json'
+      - 'gallery/**.json'
       - '.github/workflows/indexer.yml'
 
 concurrency:
@@ -24,21 +23,17 @@ jobs:
 
       - name: Rebuild _index.json files
         run: |
+          INTERNAL="^_index\.json$"
           TIMESTAMP="$(date -u +%Y-%m-%dT%H:%M:%S).$(printf '%03d' $(( 10#$(date -u +%N | cut -c1-3) )))Z"
 
-          find gallery -mindepth 1 -type d | while IFS= read -r DIR; do
-            if [ ! -f "$DIR/_index.json" ]; then
-              printf '{\n  "files": [],\n  "updatedAt": "%s"\n}\n' "$TIMESTAMP" > "$DIR/_index.json"
-              echo "bootstrapped $DIR/_index.json"
-            fi
-          done
-
-          find gallery -name '_index.json' -printf '%h\n' \
+          find gallery \
+            -name '*.json' -not -name '_index.json' -print \
+          | sed 's|/[^/]*$||' \
           | sort -u \
           | while IFS= read -r DIR; do
 
               mapfile -t FILES < <(
-                find "$DIR" -maxdepth 1 -mindepth 1 -not -name '_index.json' -not -name '.*' -printf '%f\n' \
+                find "$DIR" -maxdepth 1 -name '*.json' -not -name '_index.json' -printf '%f\n' \
                 | sort
               )
 
@@ -87,7 +82,7 @@ jobs:
           git config user.name  "GHDB-Bot"
           git config user.email "bot@ghdb.local"
 
-          git add $(find gallery -name '_index.json')
+          git add .
           git diff --cached --quiet && echo "No index changes to commit." && exit 0
 
           git commit -m "workflow: rebuild _index.json files [skip ci]"
