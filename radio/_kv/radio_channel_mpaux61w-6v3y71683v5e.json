@@ -1,0 +1,31 @@
+{
+  "key": "radio_channel_mpaux61w-6v3y71683v5e",
+  "value": {
+    "playlistStartedAt": 1779087777008,
+    "songs": [
+      {
+        "id": "mpa81hzs-0t154k3j1a2c",
+        "title": "We Own The Night",
+        "artist": "Hollywood Undead - Topic",
+        "album": "We Own The Night",
+        "duration_ms": 242579,
+        "fileUrl": "https://raw.githubusercontent.com/ImDuck42/random/main/submissions/1779049253486-We_Own_The_Night.mp3",
+        "createdAt": "2026-05-17T20:22:17.176Z",
+        "updatedAt": "2026-05-17T20:22:17.176Z"
+      }
+    ],
+    "mode": "loop-all",
+    "playlistId": "mpauwmbg-2n070j5q4336",
+    "channelId": "mpaux61w-6v3y71683v5e",
+    "channelRules": {
+      "autoLoop": true,
+      "restartOnEmpty": true,
+      "shuffleOnLoop": false,
+      "noRepeat": true,
+      "syncInterval": 10,
+      "driftThreshold": 2
+    },
+    "configStamp": "loop-all|mpauwmbg-2n070j5q4336|true|false|true|10|2|mpa81hzs-0t154k3j1a2c:242579"
+  },
+  "updatedAt": "2026-05-18T07:02:57.462Z"
+}
