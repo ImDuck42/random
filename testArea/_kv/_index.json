@@ -2,7 +2,8 @@
   "files": [
     "_admin-exists.json",
     "_origins.json",
-    "_public.json"
+    "_public.json",
+    "views.json"
   ],
-  "updatedAt": "2026-05-19T19:42:23.211Z"
+  "updatedAt": "2026-05-19T19:44:01.660Z"
 }
