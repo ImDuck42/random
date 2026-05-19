@@ -3,7 +3,7 @@ name: Merge Index Updates
 on:
   push:
     paths:
-      - 'gallery/**.json'
+      - 'testArea/**.json'
       - '.github/workflows/indexer.yml'
 
 concurrency:
@@ -26,7 +26,7 @@ jobs:
           INTERNAL="^_index\.json$"
           TIMESTAMP="$(date -u +%Y-%m-%dT%H:%M:%S).$(printf '%03d' $(( 10#$(date -u +%N | cut -c1-3) )))Z"
 
-          find gallery \
+          find testArea \
             -name '*.json' -not -name '_index.json' -print \
           | sed 's|/[^/]*$||' \
           | sort -u \
