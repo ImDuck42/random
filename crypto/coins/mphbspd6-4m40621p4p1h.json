@@ -1,0 +1,21 @@
+{
+  "id": "mphbspd6-4m40621p4p1h",
+  "name": "DuckCoin",
+  "symbol": "DCK",
+  "imageUrl": "https://raw.githubusercontent.com/ImDuck42/random/main/crypto/coins/_uploads/1779478903731-HuTaoPFP.png",
+  "price": 50,
+  "supply": 1000,
+  "creator": "ImDuck42",
+  "priceHistory": [
+    {
+      "price": 50,
+      "time": 1779478908522
+    }
+  ],
+  "priceChange24h": 0,
+  "volume24h": 0,
+  "lastEventAt": 1779478908522,
+  "nextEventAt": 1779480888522,
+  "createdAt": "2026-05-22T19:41:48.522Z",
+  "updatedAt": "2026-05-22T19:41:48.522Z"
+}
