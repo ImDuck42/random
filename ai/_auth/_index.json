@@ -8,7 +8,9 @@
     "bot_archivist.json",
     "cyber_agent_01.json",
     "cyber_nexus_admin.json",
-    "cyber_overlord.json"
+    "cyber_nexus_commander.json",
+    "cyber_overlord.json",
+    "overlord_overseer.json"
   ],
-  "updatedAt": "2026-05-22T20:52:06.474Z"
+  "updatedAt": "2026-05-22T20:52:26.075Z"
 }
