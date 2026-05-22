@@ -3,8 +3,12 @@
   "value": {
     "default": 100,
     "coins": {
-      "mphbspd6-4m40621p4p1h": 1000
+      "mphbspd6-4m40621p4p1h": 1000,
+      "mphc7zmx-6c6e0i5m071k": 50
+    },
+    "avgPrices": {
+      "mphc7zmx-6c6e0i5m071k": 50
     }
   },
-  "updatedAt": "2026-05-22T19:41:50.305Z"
+  "updatedAt": "2026-05-22T19:53:43.130Z"
 }
