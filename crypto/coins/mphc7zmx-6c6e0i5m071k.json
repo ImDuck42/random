@@ -6,8 +6,8 @@
   "price": 50,
   "totalSupply": 10000,
   "creator": "ImDuck42",
-  "poolCoins": 9950,
-  "poolGhb": 495172.6239722185,
+  "poolCoins": 9949,
+  "poolGhb": 497550.0050256307,
   "priceHistory": [
     {
       "price": 50,
@@ -23,5 +23,5 @@
   "lastEventAt": 1779479621673,
   "nextEventAt": 1779482801673,
   "createdAt": "2026-05-22T19:53:41.674Z",
-  "updatedAt": "2026-05-22T19:54:22.809Z"
+  "updatedAt": "2026-05-22T19:55:50.951Z"
 }
