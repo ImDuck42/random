@@ -2,7 +2,9 @@
   "files": [
     "_admin-exists.json",
     "_origins.json",
-    "_public.json"
+    "_public.json",
+    "agent_mode.json",
+    "system_identity.json"
   ],
-  "updatedAt": "2026-05-22T20:35:29.211Z"
+  "updatedAt": "2026-05-22T20:40:52.453Z"
 }
