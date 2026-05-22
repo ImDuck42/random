@@ -2,8 +2,13 @@
   "files": [
     "admin_commander.json",
     "architect_prime.json",
+    "architect_prime_core.json",
+    "architect_prime_master.json",
     "architect_prime_operator.json",
-    "bot_archivist.json"
+    "bot_archivist.json",
+    "cyber_agent_01.json",
+    "cyber_nexus_admin.json",
+    "cyber_overlord.json"
   ],
-  "updatedAt": "2026-05-22T20:51:26.016Z"
+  "updatedAt": "2026-05-22T20:52:06.474Z"
 }
