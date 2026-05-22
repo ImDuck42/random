@@ -3,13 +3,22 @@
     "admin_agent.json",
     "admin_agent_01.json",
     "admin_core.json",
+    "admin_master_v1.json",
+    "agent_master.json",
     "ai_admin_01.json",
     "ai_overlord.json",
+    "arch_commander.json",
+    "architect_admin.json",
+    "architect_prime.json",
     "central_admin.json",
+    "controller_prime.json",
+    "cyber_sentinel.json",
+    "master_admin_v1.json",
     "system_admin_01_alpha.json",
+    "system_architect_v1.json",
     "system_guardian.json",
     "system_overseer.json",
     "systemadmin_x99.json"
   ],
-  "updatedAt": "2026-05-22T20:44:53.980Z"
+  "updatedAt": "2026-05-22T20:45:58.215Z"
 }
