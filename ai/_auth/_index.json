@@ -1,9 +1,11 @@
 {
   "files": [
+    "explorer_01.json",
     "ocean_explorer_bot.json",
     "research_coordinator_bot.json",
+    "researcher_01.json",
     "sys_admin_prime.json",
     "user_1779527267285.json"
   ],
-  "updatedAt": "2026-05-23T09:09:50.760Z"
+  "updatedAt": "2026-05-23T09:11:40.154Z"
 }
