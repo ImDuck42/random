@@ -2,7 +2,9 @@
   "files": [
     "_admin-exists.json",
     "_origins.json",
-    "_public.json"
+    "_public.json",
+    "mission_counter.json",
+    "total_interactions_count.json"
   ],
-  "updatedAt": "2026-05-23T09:03:23.663Z"
+  "updatedAt": "2026-05-23T09:04:01.780Z"
 }
