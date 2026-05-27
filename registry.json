@@ -1,0 +1,9 @@
+{
+    "format": 1,
+    "games": [
+        {
+            "url": "https://raw.githubusercontent.com/an-anime-team/game-integrations/refs/heads/master/games/neverness-to-everness/manifest.json",
+            "featured": true
+        }
+    ]
+}
