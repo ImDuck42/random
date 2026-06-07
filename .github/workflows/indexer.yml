@@ -69,8 +69,9 @@ jobs:
               NEW_CONTENT="$(printf '{\n%s,\n  "updatedAt": "%s"\n}\n' "$FILES_JSON" "$TIMESTAMP")"
 
               if [ -f "$INDEX" ]; then
-                OLD_CONTENT=$(cat "$INDEX")
-                if [ "$OLD_CONTENT" = "$NEW_CONTENT" ]; then
+                OLD_NORM="$(grep -v '"updatedAt"' "$INDEX")"
+                NEW_NORM="$(printf '%s' "$NEW_CONTENT" | grep -v '"updatedAt"')"
+                if [ "$OLD_NORM" = "$NEW_NORM" ]; then
                   echo "unchanged $INDEX"
                   continue
                 fi
