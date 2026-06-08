@@ -3,8 +3,8 @@ name: Rebuild Index Files
 on:
   push:
     paths:
-      - 'radio/**'
-      - '!radio/**/_index.json'
+      - 'data/**'
+      - '!data/**/_index.json'
       - '.github/workflows/indexer.yml'
 
 concurrency:
@@ -26,14 +26,14 @@ jobs:
         run: |
           TIMESTAMP="$(date -u +%Y-%m-%dT%H:%M:%S).$(printf '%03d' $(( 10#$(date -u +%N | cut -c1-3) )))Z"
 
-          find "radio" -mindepth 1 -type d | while IFS= read -r DIR; do
+          find "data" -mindepth 1 -type d | while IFS= read -r DIR; do
             if [ ! -f "$DIR/_index.json" ]; then
               printf '{\n  "files": [],\n  "updatedAt": "%s"\n}\n' "$TIMESTAMP" > "$DIR/_index.json"
               echo "bootstrapped $DIR/_index.json"
             fi
           done
 
-          find "radio" -name '_index.json' -printf '%h\n' \
+          find "data" -name '_index.json' -printf '%h\n' \
           | sort -u \
           | while IFS= read -r DIR; do
 
@@ -88,7 +88,7 @@ jobs:
           git config user.name  "GHDB-Bot"
           git config user.email "bot@ghdb.local"
 
-          find "radio" -name '_index.json' -print0 | xargs -0 -r git add --
+          find "data" -name '_index.json' -print0 | xargs -0 -r git add --
           git diff --cached --quiet && echo "No index changes to commit." && exit 0
 
           git commit -m "workflow: rebuild _index.json files [skip ci]"
