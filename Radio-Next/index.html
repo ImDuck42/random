@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GHDB Radio</title>
+    <link rel="icon" type="image/svg+xml" href="./icon.svg" sizes="any">
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <base href="./" target="_blank">
+</head>
+<body>
+
+    <!-- Autoplay gate -->
+    <div id="gate-overlay">
+        <div class="gate-backdrop"></div>
+        <div class="gate-card">
+            <div class="gate-logo">
+                <i class="fa-solid fa-tower-broadcast"></i>
+                <span>GHDB Radio</span>
+            </div>
+            <h1>Radio</h1>
+            <p>Synchronized global broadcast.</p>
+            <button id="tune-in-btn" aria-label="Tune in to the live stream">
+                <i class="fa-solid fa-play" aria-hidden="true"></i>
+                Tune In
+            </button>
+        </div>
+    </div>
+
+    <!-- Login Overlay -->
+    <div id="login-overlay" class="hidden" role="dialog" aria-label="Login" aria-modal="true">
+        <div class="login-backdrop"></div>
+        <div class="login-card">
+            <div class="login-logo">
+                <i class="fa-solid fa-tower-broadcast"></i>
+                <span>GHDB Radio</span>
+            </div>
+            <h2>Log in to Dashboard</h2>
+            <div class="login-fields">
+                <input type="text" id="login-username" placeholder="Username" aria-label="Username" autocomplete="username">
+                <input type="password" id="login-password" placeholder="Password" aria-label="Password" autocomplete="current-password">
+            </div>
+            <button id="login-submit" class="btn-login">
+                <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                Log In
+            </button>
+            <button id="login-close" class="btn-login-close" aria-label="Close login">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Admin Overlay -->
+    <div id="admin-overlay" class="hidden" role="dialog" aria-label="Admin panel" aria-modal="true">
+        <div class="admin-shell">
+            <aside class="admin-sidebar" aria-label="Admin navigation">
+                <div class="admin-logo">
+                    <i class="fa-solid fa-tower-control" aria-hidden="true"></i>
+                    <span>Control Room</span>
+                    <button class="icon-btn" id="admin-close-btn" aria-label="Close admin panel">
+                        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <nav class="admin-nav">
+                    <button class="admin-nav-btn active" data-panel="broadcast">
+                        <i class="fa-solid fa-tower-broadcast" aria-hidden="true"></i>
+                        Broadcast
+                    </button>
+                    <button class="admin-nav-btn" data-panel="channels">
+                        <i class="fa-solid fa-tower-broadcast" aria-hidden="true"></i>
+                        Channels
+                    </button>
+                    <button class="admin-nav-btn" data-panel="library">
+                        <i class="fa-solid fa-compact-disc" aria-hidden="true"></i>
+                        Library
+                    </button>
+                    <button class="admin-nav-btn" data-panel="playlists">
+                        <i class="fa-solid fa-bars-staggered" aria-hidden="true"></i>
+                        Playlists
+                    </button>
+                    <button class="admin-nav-btn" data-panel="upload">
+                        <i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i>
+                        Upload
+                    </button>
+                    <button class="admin-nav-btn" data-panel="submissions">
+                        <i class="fa-solid fa-inbox" aria-hidden="true"></i>
+                        Submissions
+                    </button>
+                    <button class="admin-nav-btn" data-panel="rules">
+                        <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                        Rules
+                    </button>
+                </nav>
+                <div class="admin-user">
+                    <i class="fa-solid fa-circle-user" aria-hidden="true"></i>
+                    <div class="admin-user-info">
+                        <span id="admin-username">Admin</span>
+                        <small>Administrator</small>
+                    </div>
+                </div>
+            </aside>
+            <div class="admin-content">
+                <!-- Broadcast panel -->
+                <div class="admin-panel active" id="panel-broadcast">
+                    <div class="panel-header">
+                        <h3>On-Air Control</h3>
+                        <div class="on-air-badge" id="on-air-badge">
+                            <span class="live-dot" aria-hidden="true"></span>
+                            <span>OFF AIR</span>
+                        </div>
+                    </div>
+                    <div class="broadcast-grid">
+                        <div class="admin-card wide">
+                            <div class="card-header">
+                                <i class="fa-solid fa-wave-square" aria-hidden="true"></i>
+                                <h4>Active Broadcast</h4>
+                            </div>
+                            <div class="broadcast-info" id="broadcast-info">
+                                <div class="empty-state">
+                                    <i class="fa-solid fa-satellite-dish" aria-hidden="true"></i>
+                                    <span>No active broadcast</span>
+                                </div>
+                            </div>
+                            <div class="broadcast-controls">
+                                <button class="btn-danger" id="stop-broadcast-btn">
+                                    <i class="fa-solid fa-stop" aria-hidden="true"></i>
+                                    Stop Broadcast
+                                </button>
+                                <button class="btn-secondary" id="skip-track-btn">
+                                    <i class="fa-solid fa-forward-step" aria-hidden="true"></i>
+                                    Skip Track
+                                </button>
+                            </div>
+                        </div>
+                        <div class="admin-card wide">
+                            <div class="card-header">
+                                <i class="fa-solid fa-bolt" aria-hidden="true"></i>
+                                <h4>Quick Broadcast</h4>
+                            </div>
+                            <label class="field-label">Playlist</label>
+                            <select id="quick-playlist-select" class="select-input" style="margin-bottom:.75rem;">
+                                <option value="">All Songs (entire library)</option>
+                            </select>
+                            <label class="field-label">Playback Mode</label>
+                            <div class="mode-grid">
+                                <label class="mode-option">
+                                    <input type="radio" name="playback-mode" value="sequential" checked>
+                                    <span><i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>Sequential</span>
+                                </label>
+                                <label class="mode-option">
+                                    <input type="radio" name="playback-mode" value="shuffle">
+                                    <span><i class="fa-solid fa-shuffle" aria-hidden="true"></i>Shuffle</span>
+                                </label>
+                                <label class="mode-option">
+                                    <input type="radio" name="playback-mode" value="loop-one">
+                                    <span><i class="fa-solid fa-1" aria-hidden="true"></i>Loop One</span>
+                                </label>
+                                <label class="mode-option">
+                                    <input type="radio" name="playback-mode" value="loop-all">
+                                    <span><i class="fa-solid fa-repeat" aria-hidden="true"></i>Loop All</span>
+                                </label>
+                            </div>
+                            <button class="btn-primary" id="go-live-btn">
+                                <i class="fa-solid fa-tower-broadcast" aria-hidden="true"></i>
+                                Go Live
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Library panel -->
+                <div class="admin-panel" id="panel-library">
+                    <div class="panel-header">
+                        <h3>Song Library</h3>
+                        <div class="panel-actions">
+                            <div class="search-wrap">
+                                <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                                <input type="search" id="library-search" placeholder="Search tracks..." class="search-input" aria-label="Search library">
+                            </div>
+                            <button class="btn-secondary" id="refresh-library-btn" aria-label="Refresh library">
+                                <i class="fa-solid fa-rotate-right" aria-hidden="true"></i> Refresh
+                            </button>
+                        </div>
+                    </div>
+                    <div class="lib-stats" aria-live="polite">
+                        <div class="stat-pill"><i class="fa-solid fa-music" aria-hidden="true"></i><span id="lib-total">0</span> tracks</div>
+                        <div class="stat-pill"><i class="fa-solid fa-clock" aria-hidden="true"></i><span id="lib-duration">0:00</span> total</div>
+                    </div>
+                    <div class="table-wrap">
+                        <table class="song-table">
+                            <thead>
+                                <tr>
+                                    <th><input type="checkbox" id="select-all-checkbox" aria-label="Select all songs"></th>
+                                    <th>#</th><th>Title</th><th>Artist</th><th>Duration</th><th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="library-tbody"><tr><td colspan="6"><div class="empty-state">Loading library...</div></td></tr></tbody>
+                        </table>
+                    </div>
+                    <div class="bulk-actions">
+                        <span id="selected-count" aria-live="polite">0 selected</span>
+                        <button class="btn-secondary" id="add-to-playlist-btn"><i class="fa-solid fa-bars-staggered" aria-hidden="true"></i> Add to Playlist</button>
+                        <button class="btn-danger" id="bulk-delete-btn"><i class="fa-solid fa-trash" aria-hidden="true"></i> Delete Selected</button>
+                    </div>
+                </div>
+                <!-- Playlists panel -->
+                <div class="admin-panel" id="panel-playlists">
+                    <div class="panel-header">
+                        <h3>Playlists</h3>
+                        <button class="btn-primary" id="new-playlist-btn"><i class="fa-solid fa-plus" aria-hidden="true"></i> New Playlist</button>
+                    </div>
+                    <div class="playlists-layout">
+                        <div class="playlist-list" id="playlist-list" role="list"><div class="empty-state">No playlists yet</div></div>
+                        <div class="playlist-editor" id="playlist-editor">
+                            <div class="empty-state large"><i class="fa-solid fa-bars-staggered" aria-hidden="true"></i><span>Select a playlist to edit</span></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Upload panel -->
+                <div class="admin-panel" id="panel-upload">
+                    <div class="panel-header"><h3>Upload Music</h3></div>
+                    <div class="drop-zone" id="upload-zone">
+                        <input type="file" id="file-upload-input" accept="audio/*" multiple class="file-input-hidden" aria-label="Choose audio files to upload">
+                        <label for="file-upload-input" class="drop-label">
+                            <i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i>
+                            <span>Drop audio files here or click to browse</span>
+                            <small>MP3, WAV, FLAC, OGG supported</small>
+                        </label>
+                    </div>
+                    <div id="upload-queue" class="upload-queue" aria-live="polite"></div>
+                </div>
+                <!-- Submissions panel -->
+                <div class="admin-panel" id="panel-submissions">
+                    <div class="panel-header">
+                        <h3>Review Submissions</h3>
+                        <div class="panel-actions">
+                            <button class="btn-secondary" id="refresh-submissions-btn" aria-label="Refresh submissions"><i class="fa-solid fa-rotate-right" aria-hidden="true"></i> Refresh</button>
+                        </div>
+                    </div>
+                    <div class="table-wrap">
+                        <table class="song-table">
+                            <thead><tr><th>Title</th><th>Artist</th><th>Duration</th><th>Status</th><th>Actions</th></tr></thead>
+                            <tbody id="submissions-tbody"><tr><td colspan="5"><div class="empty-state">Loading submissions...</div></td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- Rules panel -->
+                <div class="admin-panel" id="panel-rules">
+                    <div class="panel-header">
+                        <h3>Broadcast Rules</h3>
+                        <button class="btn-primary" id="save-rules-btn"><i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> Save Rules</button>
+                    </div>
+                    <div class="rules-grid">
+                        <div class="admin-card">
+                            <div class="card-header"><i class="fa-solid fa-repeat" aria-hidden="true"></i><h4>Loop Behaviour</h4></div>
+                            <div class="rule-row">
+                                <div class="rule-info"><span>Auto-loop playlist</span><small>Keep broadcasting even when admin is offline</small></div>
+                                <label class="toggle"><input type="checkbox" id="rule-auto-loop" checked><span class="toggle-slider"></span></label>
+                            </div>
+                            <div class="rule-row">
+                                <div class="rule-info"><span>Restart on empty queue</span><small>Auto-replay playlist from the beginning</small></div>
+                                <label class="toggle"><input type="checkbox" id="rule-restart-empty" checked><span class="toggle-slider"></span></label>
+                            </div>
+                        </div>
+                        <div class="admin-card">
+                            <div class="card-header"><i class="fa-solid fa-shuffle" aria-hidden="true"></i><h4>Playback Order</h4></div>
+                            <div class="rule-row">
+                                <div class="rule-info"><span>Shuffle on loop</span><small>Re-shuffle each time the playlist loops</small></div>
+                                <label class="toggle"><input type="checkbox" id="rule-shuffle-loop"><span class="toggle-slider"></span></label>
+                            </div>
+                            <div class="rule-row">
+                                <div class="rule-info"><span>Avoid repeats</span><small>Don't play the same song twice in a row</small></div>
+                                <label class="toggle"><input type="checkbox" id="rule-no-repeat" checked><span class="toggle-slider"></span></label>
+                            </div>
+                        </div>
+                        <div class="admin-card">
+                            <div class="card-header"><i class="fa-solid fa-clock" aria-hidden="true"></i><h4>Timing</h4></div>
+                            <div class="rule-row vertical">
+                                <label class="field-label" for="rule-sync-interval">Sync interval (seconds)</label>
+                                <input type="number" id="rule-sync-interval" value="10" min="5" max="60" class="number-input">
+                            </div>
+                            <div class="rule-row vertical">
+                                <label class="field-label" for="rule-drift-threshold">Drift correction threshold (seconds)</label>
+                                <input type="number" id="rule-drift-threshold" value="2" min="1" max="10" class="number-input">
+                            </div>
+                        </div>
+                        <div class="admin-card">
+                            <div class="card-header"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i><h4>Security</h4></div>
+                            <div class="rule-row vertical">
+                                <label class="field-label" for="rule-admin-password">Admin password</label>
+                                <div class="input-row">
+                                    <input type="password" id="rule-admin-password" placeholder="New password..." class="text-input">
+                                    <button class="btn-secondary" id="change-password-btn"><i class="fa-solid fa-key" aria-hidden="true"></i> Change</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Channels panel -->
+                <div class="admin-panel" id="panel-channels">
+                    <div class="panel-header">
+                        <h3>Channels</h3>
+                        <button class="btn-primary" id="new-channel-btn"><i class="fa-solid fa-plus" aria-hidden="true"></i> New Channel</button>
+                    </div>
+                    <p class="panel-description">Channels give listeners a dedicated URL (<code>#/{slug}</code>) with a curated playlist and playback settings.</p>
+                    <div id="admin-channels-list" class="admin-ch-list">
+                        <div class="empty-state"><i class="fa-solid fa-tower-broadcast" aria-hidden="true"></i><span>No channels yet</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast notifications -->
+    <div id="toast-container" role="region" aria-live="assertive" aria-label="Notifications"></div>
+
+    <!-- Shared modal -->
+    <div id="modal-overlay" class="hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal">
+            <div class="modal-header">
+                <h4 id="modal-title">Modal</h4>
+                <button class="icon-btn" id="modal-close-btn" aria-label="Close modal">
+                    <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modal-body"></div>
+            <div class="modal-footer" id="modal-footer"></div>
+        </div>
+    </div>
+
+    <!-- Spotify Layout -->
+    <div class="spotify-app">
+        <!-- Sidebar -->
+        <aside class="sidebar" aria-label="Main navigation">
+            <div class="sidebar-top">
+                <div class="sidebar-logo">
+                    <i class="fa-solid fa-tower-broadcast" aria-hidden="true"></i>
+                    <span>GHDB Radio</span>
+                </div>
+
+                <nav class="sidebar-main-nav">
+                    <button class="nav-btn active" data-view="home" aria-current="page">
+                        <i class="fa-solid fa-house" aria-hidden="true"></i>
+                        <span>Home</span>
+                    </button>
+                    <button class="nav-btn" data-view="search">
+                        <i class="fa-solid fa-music" aria-hidden="true"></i>
+                        <span>Catalogue</span>
+                    </button>
+                </nav>
+
+                <div class="sidebar-library-header">
+                    <div class="lib-title">
+                        <i class="fa-solid fa-lines-leaning" aria-hidden="true"></i>
+                        <span>Your Library</span>
+                    </div>
+                </div>
+
+                <nav class="sidebar-lib-nav">
+                    <button class="nav-btn" data-view="library">
+                        <i class="fa-solid fa-tower-broadcast" aria-hidden="true"></i>
+                        <span>Channels</span>
+                    </button>
+                    <button class="nav-btn" data-view="submissions">
+                        <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
+                        <span>Submit Music</span>
+                    </button>
+                    <button class="nav-btn hidden" data-view="admin">
+                        <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                        <span>Dashboard</span>
+                    </button>
+                </nav>
+            </div>
+
+            <div class="sidebar-bottom">
+                <div class="divider"></div>
+                <div class="conn-status" id="conn-status" role="status" aria-live="polite">
+                    <i class="fa-solid fa-circle-dot" aria-hidden="true"></i>
+                    <span>Connecting...</span>
+                </div>
+                <button class="nav-btn-login" id="nav-login">
+                    <i class="fa-solid fa-user" aria-hidden="true"></i>
+                    <span>Log in</span>
+                </button>
+                <div class="sidebar-user hidden" id="sidebar-user">
+                    <div class="user-avatar">
+                        <i class="fa-solid fa-circle-user"></i>
+                    </div>
+                    <div class="user-info">
+                        <span class="user-name">Admin</span>
+                        <span class="user-role">Administrator</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content" id="main-scroll">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <div class="top-bar-nav">
+                    <button class="top-bar-btn" aria-label="Go back" onclick="history.back()">
+                        <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+                    </button>
+                    <button class="top-bar-btn" aria-label="Go forward" onclick="history.forward()">
+                        <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <div class="top-bar-center">
+                    <div class="top-bar-search">
+                        <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                        <input type="search" id="header-search" placeholder="Search songs..." aria-label="Search catalogue">
+                    </div>
+                </div>
+                <div class="top-bar-right">
+                    <div class="conn-pill" id="conn-pill">
+                        <i class="fa-solid fa-circle-dot"></i>
+                        <span>Connecting...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Home View (Now Playing) -->
+            <section id="view-home" class="main-view active" aria-label="Home">
+                <div class="hero-section">
+                    <div class="hero-art">
+                        <div class="disc-wrap" aria-hidden="true">
+                            <div class="disc-ring"></div>
+                            <div class="disc" id="art-disc">
+                                <div class="disc-center"><i class="fa-solid fa-music"></i></div>
+                            </div>
+                            <div class="disc-glow" id="art-glow"></div>
+                        </div>
+                    </div>
+                    <div class="hero-info">
+                        <div class="live-badge">
+                            <span class="live-dot pulse" aria-hidden="true"></span>
+                            <span>LIVE BROADCAST</span>
+                        </div>
+                        <h1 id="now-playing-title">Offline</h1>
+                        <p id="now-playing-artist">Waiting for broadcast...</p>
+                        <div class="hero-meta">
+                            <span><i class="fa-solid fa-headphones"></i> Synchronized stream</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="progress-section">
+                    <div class="progress-row" aria-label="Playback progress">
+                        <span class="time-label" id="live-time-current" aria-label="Current time">0:00</span>
+                        <div class="progress-track" aria-hidden="true">
+                            <div class="progress-fill" id="live-progress-fill"></div>
+                            <div class="progress-thumb" id="live-progress-thumb"></div>
+                        </div>
+                        <span class="time-label" id="live-time-total" aria-label="Total duration">0:00</span>
+                    </div>
+                </div>
+
+                <!-- Stats -->
+                <div class="stats-section">
+                    <div class="stat-card">
+                        <i class="fa-solid fa-bars-staggered" aria-hidden="true"></i>
+                        <div>
+                            <span id="stat-queue">\u2014</span>
+                            <label>in queue</label>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fa-solid fa-rotate" aria-hidden="true"></i>
+                        <div>
+                            <span id="stat-mode">\u2014</span>
+                            <label>mode</label>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                        <div>
+                            <span id="stat-uptime">\u2014</span>
+                            <label>on air</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Up Next -->
+                <div class="section-header">
+                    <h2>Up Next</h2>
+                </div>
+                <div id="up-next-list" class="queue-list" role="list">
+                    <div class="empty-state">
+                        <i class="fa-solid fa-satellite-dish" aria-hidden="true"></i>
+                        <span>No broadcast active</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Search View (Catalogue) -->
+            <section id="view-search" class="main-view" aria-label="Catalogue">
+                <div class="view-header">
+                    <h1>Catalogue</h1>
+                </div>
+                <div class="section-header">
+                    <h2>Browse All</h2>
+                    <span id="cat-count" class="count-badge" aria-live="polite">0 tracks</span>
+                </div>
+                <div id="cat-song-grid" class="song-grid" role="list" aria-label="Song list">
+                    <div class="empty-state large">
+                        <i class="fa-solid fa-music" aria-hidden="true"></i>
+                        <span>No songs in library</span>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- Library View (Channels) -->
+            <section id="view-library" class="main-view" aria-label="Your Library">
+                <div class="view-wrap">
+                    <div id="ch-grid-view">
+                        <div class="view-header">
+                            <h1>Your Library</h1>
+                            <div class="search-pill">
+                                <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                                <input type="search" id="ch-search" placeholder="Search channels..." aria-label="Search channels">
+                            </div>
+                        </div>
+                        <div id="ch-grid" class="ch-grid" role="list" aria-label="Channel list">
+                            <div class="empty-state large">
+                                <i class="fa-solid fa-tower-broadcast" aria-hidden="true"></i>
+                                <span>No channels available</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="ch-detail-view" class="hidden">
+                        <div class="view-header ch-detail-header-bar">
+                            <button class="btn-secondary" id="ch-back-btn" aria-label="Back to channels">
+                                <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Channels
+                            </button>
+                            <button class="btn-primary" id="ch-listen-btn" aria-label="Listen to this channel">
+                                <i class="fa-solid fa-headphones" aria-hidden="true"></i> Listen Now
+                            </button>
+                        </div>
+                        <div class="ch-detail-layout">
+                            <div class="ch-detail-hero">
+                                <div class="ch-detail-icon" aria-hidden="true"><i class="fa-solid fa-tower-broadcast"></i></div>
+                                <div class="ch-detail-meta">
+                                    <h2 id="ch-detail-name" class="ch-detail-name">Channel</h2>
+                                    <p id="ch-detail-desc" class="ch-detail-desc"></p>
+                                    <div class="ch-detail-stats">
+                                        <span class="stat-chip"><i class="fa-solid fa-music" aria-hidden="true"></i><span id="ch-detail-songs">0</span><label>songs</label></span>
+                                        <span class="stat-chip"><i class="fa-solid fa-clock" aria-hidden="true"></i><span id="ch-detail-duration">0m</span><label>total</label></span>
+                                    </div>
+                                    <div id="ch-detail-tags" class="ch-detail-tags"></div>
+                                </div>
+                            </div>
+                            <div class="ch-detail-tracks" id="ch-detail-tracks" role="list"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Submissions View -->
+            <section id="view-submissions" class="main-view" aria-label="Submit Music">
+                <div class="view-header"><h1>Submit Music</h1></div>
+                <div class="drop-zone" id="submission-upload-zone">
+                    <input type="file" id="submission-file-input" accept="audio/*" multiple class="file-input-hidden" aria-label="Choose audio files to submit">
+                    <label for="submission-file-input" class="drop-label">
+                        <i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i>
+                        <span>Drop audio files here to submit for review</span>
+                        <small>MP3, WAV, FLAC, OGG supported</small>
+                    </label>
+                </div>
+                <div class="section-header">
+                    <h2>All Submissions</h2>
+                    <span id="sub-count" class="count-badge" aria-live="polite">0 pending</span>
+                </div>
+                <div id="submissions-grid" class="song-grid" role="list">
+                    <div class="empty-state large">
+                        <i class="fa-solid fa-inbox" aria-hidden="true"></i>
+                        <span>No submissions yet</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Bottom Now Playing Bar (catalogue only) -->
+        <footer class="now-playing-bar cat-only-bar" aria-label="Now playing">
+            <div class="np-left">
+                <div class="np-cover" id="np-cover">
+                    <div class="np-cover-art" id="art-disc-small">
+                        <div class="np-disc-inner" id="player-bar-disc"><i class="fa-solid fa-music"></i></div>
+                    </div>
+                </div>
+                <div class="np-track-info">
+                    <div class="np-title" id="player-title">Offline</div>
+                    <div class="np-artist" id="player-artist">Waiting for broadcast...</div>
+                </div>
+            </div>
+            <div class="np-center">
+                <div class="np-controls">
+                    <button class="np-btn" id="player-prev-btn" aria-label="Previous">
+                        <i class="fa-solid fa-backward-step" aria-hidden="true"></i>
+                    </button>
+                    <button class="np-play-btn" id="player-play-btn" aria-label="Play or pause">
+                        <i class="fa-solid fa-play" id="player-play-icon" aria-hidden="true"></i>
+                    </button>
+                    <button class="np-btn" id="player-next-btn" aria-label="Next">
+                        <i class="fa-solid fa-forward-step" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <div class="np-progress">
+                    <span class="time-label" id="player-time-current">0:00</span>
+                    <div class="progress-track" id="player-progress-track">
+                        <div class="progress-fill" id="player-progress-fill"></div>
+                        <div class="progress-thumb" id="player-progress-thumb"></div>
+                    </div>
+                    <span class="time-label" id="player-time-total">0:00</span>
+                </div>
+            </div>
+            <div class="np-right">
+                <button class="np-btn" id="live-mute-btn" aria-label="Toggle mute">
+                    <i class="fa-solid fa-volume-high" aria-hidden="true"></i>
+                </button>
+                <div class="vol-track compact" aria-hidden="true">
+                    <div class="vol-fill" id="live-volume-fill"></div>
+                    <input type="range" id="live-volume-slider" min="0" max="100" value="80" class="vol-slider" aria-label="Volume">
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <audio id="radio-audio"></audio>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsmediatags/3.9.5/jsmediatags.min.js"></script>
+    <script type="module" src="./js/app.js"></script>
+</body>
+</html>
