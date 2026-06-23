@@ -1,7 +1,7 @@
 {
   "key": "radio_channel_mqr0uk8b-0y2f1409454z",
   "value": {
-    "playlistStartedAt": 1782243488140,
+    "playlistStartedAt": 1782244658952,
     "songs": [
       {
         "id": "mqr0p3ms-0h2i3k2t2851",
@@ -42,6 +42,16 @@
         "fileUrl": "https://raw.githubusercontent.com/ImDuck42/random/main/music/1782243034491-who_can_it_be_now_low_quality.mp3",
         "createdAt": "2026-06-23T19:30:46.079Z",
         "updatedAt": "2026-06-23T19:30:46.079Z"
+      },
+      {
+        "id": "mqr1m6qm-462j33564t4c",
+        "title": "Low Quality Portal Radio",
+        "artist": "ScratchTV",
+        "album": "Low Quality Portal Radio",
+        "duration_ms": 132516,
+        "fileUrl": "https://raw.githubusercontent.com/ImDuck42/random/main/music/1782243242660-Low_Quality_Portal_Radio.mp3",
+        "createdAt": "2026-06-23T19:34:12.382Z",
+        "updatedAt": "2026-06-23T19:34:12.382Z"
       }
     ],
     "mode": "loop-all",
@@ -55,7 +65,7 @@
       "syncInterval": 10,
       "driftThreshold": 2
     },
-    "configStamp": "loop-all|mqr0qu67-065q4m3r4t2v|true|false|true|10|2|mqr0p3ms-0h2i3k2t2851:229831|mqr0oncq-4b711u1l5u0i:118793|mqr1iq8h-5r035d072u2b:296256|mqr1hrjz-426g5x2j1866:201572"
+    "configStamp": "loop-all|mqr0qu67-065q4m3r4t2v|true|false|true|10|2|mqr0p3ms-0h2i3k2t2851:229831|mqr0oncq-4b711u1l5u0i:118793|mqr1iq8h-5r035d072u2b:296256|mqr1hrjz-426g5x2j1866:201572|mqr1m6qm-462j33564t4c:132516"
   },
-  "updatedAt": "2026-06-23T19:38:09.243Z"
+  "updatedAt": "2026-06-23T19:57:39.388Z"
 }
