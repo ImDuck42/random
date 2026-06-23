@@ -1,0 +1,16 @@
+{
+  "id": "mqr0uk8b-0y2f1409454z",
+  "name": "On Hold",
+  "slug": "on-hold",
+  "description": "It's giving phone waiting list",
+  "playlistId": "mqr0qu67-065q4m3r4t2v",
+  "mode": "loop-all",
+  "autoLoop": true,
+  "restartOnEmpty": true,
+  "shuffleOnLoop": false,
+  "noRepeat": true,
+  "syncInterval": 10,
+  "driftThreshold": 2,
+  "createdAt": "2026-06-23T19:12:43.499Z",
+  "updatedAt": "2026-06-23T19:12:43.499Z"
+}
