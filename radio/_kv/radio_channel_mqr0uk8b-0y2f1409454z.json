@@ -1,7 +1,7 @@
 {
   "key": "radio_channel_mqr0uk8b-0y2f1409454z",
   "value": {
-    "playlistStartedAt": 1782242042016,
+    "playlistStartedAt": 1782243164066,
     "songs": [
       {
         "id": "mqr0pggh-0b4g3l516f6a",
@@ -34,24 +34,24 @@
         "updatedAt": "2026-06-23T19:08:07.610Z"
       },
       {
-        "id": "mqr0nlcl-3j5m596z2432",
+        "id": "mqr1iq8h-5r035d072u2b",
         "title": "Billie Jean (low quality)",
         "artist": "The Maikeru",
         "album": "Billie Jean (low quality)",
         "duration_ms": 296256,
-        "fileUrl": "https://raw.githubusercontent.com/ImDuck42/random/main/music/1782241615492-Billie_Jean_(low_quality).mp3",
-        "createdAt": "2026-06-23T19:07:18.357Z",
-        "updatedAt": "2026-06-23T19:07:18.357Z"
+        "fileUrl": "https://raw.githubusercontent.com/ImDuck42/random/main/music/1782243070040-Billie_Jean_(low_quality).mp3",
+        "createdAt": "2026-06-23T19:31:31.025Z",
+        "updatedAt": "2026-06-23T19:31:31.025Z"
       },
       {
-        "id": "mqr0ni5v-4e0o4x571x5h",
+        "id": "mqr1hrjz-426g5x2j1866",
         "title": "who can it be now low quality",
         "artist": "KiraKat5",
         "album": "who can it be now low quality",
         "duration_ms": 201572,
-        "fileUrl": "https://raw.githubusercontent.com/ImDuck42/random/main/music/1782241615424-who_can_it_be_now_low_quality.mp3",
-        "createdAt": "2026-06-23T19:07:14.227Z",
-        "updatedAt": "2026-06-23T19:07:14.227Z"
+        "fileUrl": "https://raw.githubusercontent.com/ImDuck42/random/main/music/1782243034491-who_can_it_be_now_low_quality.mp3",
+        "createdAt": "2026-06-23T19:30:46.079Z",
+        "updatedAt": "2026-06-23T19:30:46.079Z"
       }
     ],
     "mode": "loop-all",
@@ -65,7 +65,7 @@
       "syncInterval": 10,
       "driftThreshold": 2
     },
-    "configStamp": "loop-all|mqr0qu67-065q4m3r4t2v|true|false|true|10|2|mqr0pggh-0b4g3l516f6a:132516|mqr0p3ms-0h2i3k2t2851:229831|mqr0oncq-4b711u1l5u0i:118793|mqr0nlcl-3j5m596z2432:296256|mqr0ni5v-4e0o4x571x5h:201572"
+    "configStamp": "loop-all|mqr0qu67-065q4m3r4t2v|true|false|true|10|2|mqr0pggh-0b4g3l516f6a:132516|mqr0p3ms-0h2i3k2t2851:229831|mqr0oncq-4b711u1l5u0i:118793|mqr1iq8h-5r035d072u2b:296256|mqr1hrjz-426g5x2j1866:201572"
   },
-  "updatedAt": "2026-06-23T19:14:02.995Z"
+  "updatedAt": "2026-06-23T19:32:46.517Z"
 }
