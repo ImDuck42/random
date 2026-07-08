@@ -1,0 +1,955 @@
+{
+    "processed_chunks": 54,
+    "total_chunks": 54,
+    "dataset": [
+        {
+            "instruction": "At what temperature and pressure condition does a tire with a load rating of C1, C2, or C3 need to be equipped with a specific type of tire?",
+            "response": "According to the relevant regulations, tires of category C1, C2, or C3 must be equipped with a specific type of tire when the ambient temperature is below 7\u00b0C (45\u00b0F) and the air pressure is between 32.5 bar and 42.8 bar."
+        },
+        {
+            "instruction": "What is the minimum speed at which a passenger car can be driven on certain road surfaces, even without proper traction tires?",
+            "response": "According to the regulations, a passenger car can be driven on certain road surfaces with a minimum speed of 50 km/h, as long as there are no other traffic restrictions in place."
+        },
+        {
+            "instruction": "What is the purpose of the 'Einsatzfahrzeug' mentioned in section 35 of the StVO?",
+            "response": "According to the regulations, an 'Einsatzfahrzeug' refers to a special vehicle used for specific tasks or operations, such as ambulances or fire trucks."
+        },
+        {
+            "instruction": "What is the difference between a 'motorisierte Krankenfahrstuhl' and a regular motorized wheelchair?",
+            "response": "According to the regulations, a 'motorisierte Krankenfahrstuhl' (motorized patient lift) is a specialized vehicle designed for transporting patients with mobility impairments."
+        },
+        {
+            "instruction": "Can a two-axle truck drive on certain roads even without proper winter tires, as long as it has at least one rear wheel equipped with winter tires?",
+            "response": "According to the regulations, yes, a two-axle truck can drive on certain roads even without proper winter tires if it has at least one rear wheel equipped with winter tires."
+        },
+        {
+            "instruction": "What is the purpose of the 'Antrittsfahrt' mentioned in section 2.2.1 of the StVO?",
+            "response": "According to the regulations, an 'Antrittsfahrt' refers to a pre-trip inspection that must be performed before starting the journey, which includes checking for proper tire condition and other safety-critical systems."
+        },
+        {
+            "instruction": "What is the recommended minimum alignment, in bytes, for buffers allocated from the Bundesministerium der Justiz's memory?",
+            "response": "Buffers allocated from device memory must be 4096-byte aligned."
+        },
+        {
+            "instruction": "Which value does the Read() function return when all entries have been successfully retrieved in the directory reading class?",
+            "response": "The Read() function returns 0 (or NULL) to indicate completion."
+        },
+        {
+            "instruction": "What is the maximum speed limit for vehicles with a zul\u00e4ssigen Gesamtmasse over 3.5 t but under 7.5 t, outside of closed cities?",
+            "response": "80 km/h"
+        },
+        {
+            "instruction": "When does a child as young as 8 years old need to use the pedestrian path when accompanied by an adult?",
+            "response": "A child must use the pedestrian path if they are not being accompanied by an adult."
+        },
+        {
+            "instruction": "What is the purpose of the 'Radverkehr frei' sign on a bicycle path?",
+            "response": "The 'Radverkehr frei' sign indicates that cyclists can use the lane without restriction."
+        },
+        {
+            "instruction": "Can a motorized vehicle with a zul\u00e4ssigen Gesamtmasse over 7.5 t carry passengers for whom there are no more available seats?",
+            "response": "Yes, such vehicles may transport passengers for whom there are no more available seats."
+        },
+        {
+            "instruction": "What is the recommended minimum alignment, in bytes, for buffers allocated from the device memory on a Nintendo 3DS?",
+            "response": "Buffers allocated from device memory must be 4096-byte aligned."
+        },
+        {
+            "instruction": "In the context of the directory reading class, what value does the Read() function return when all entries have been successfully retrieved?",
+            "response": "The Read() function returns 0 (or NULL) to indicate completion."
+        },
+        {
+            "instruction": "What is the maximum allowed distance from a preceding vehicle for motorcycles in Germany?",
+            "response": "There is no specific information provided about motorcycle distances. Please refer to the relevant German traffic laws and regulations."
+        },
+        {
+            "instruction": "Is it legal to overtake on autobahn when using only short flashing lights or sirens?",
+            "response": "According to the text, no, overtaking cannot be performed via short flashing lights or sirens; instead, these signals must be used to announce upcoming maneuvers in advance."
+        },
+        {
+            "instruction": "What happens to a preceding vehicle if a cyclist overtakes at an intersection with oncoming traffic?",
+            "response": "There is no information provided about what happens to the preceding vehicle when a cyclist overtakes at an intersection. Please refer to relevant German traffic laws and regulations."
+        },
+        {
+            "instruction": "At what speed limit do motorcycles in Germany have the same priority as cars for over-taking maneuvers?",
+            "response": "There is no information provided about specific speed limits for motorcycle over-taking maneuvers. Please refer to relevant German traffic laws and regulations."
+        },
+        {
+            "instruction": "What is the minimum alignment requirement for buffers allocated from the device memory of a Nintendo 3DS?",
+            "response": "Buffers allocated from device memory must be 4096-byte aligned."
+        },
+        {
+            "instruction": "In the context of the directory reading class, what value does the Read() function return when all entries have been successfully retrieved?",
+            "response": "The Read() function returns 0 (or NULL) to indicate completion."
+        },
+        {
+            "instruction": "On a highway with multiple lanes for one direction, what is allowed for Rad Fahrende and Mofa Fahrende to overtake vehicles waiting on the right lane?",
+            "response": "Rad Fahrende and Mofa Fahrende are allowed to overtake vehicles waiting on the right lane at moderate speeds and with special caution."
+        },
+        {
+            "instruction": "What rule governs the usage of lanes for vehicles in a highway with multiple marked lanes for one direction?",
+            "response": "Fahrstreifen is the part of a road that a multi-spur vehicle needs to drive without hindrance."
+        },
+        {
+            "instruction": "On a two-lane highway, when can rechts schneller als links gefahren werden due to high traffic density?",
+            "response": "Rechts schneller als links gefahren k\u00f6nnen, wenn sich auf den Fahrstreifen f\u00fcr eine Richtung Fahrzeugschlangen gebildet haben."
+        },
+        {
+            "instruction": "What is the exception regarding lane usage for vehicles with a mass over 3.5 tons outside of urban areas?",
+            "response": "Kraftfahrzeuge mit einer zul\u00e4ssigen Gesamtmasse bis zu 3,5 t k\u00f6nnen den Fahrstreifen frei w\u00e4hlen, auch wenn die Voraussetzungen des Absatzes 1 Satz 1 nicht vorliegen."
+        },
+        {
+            "instruction": "What is the minimum alignment requirement for buffers allocated from the Nintendo 3DS device memory?",
+            "response": "Buffers allocated from device memory must be 4096-byte aligned."
+        },
+        {
+            "instruction": "In the context of the directory reading class, what value does the Read() function return when all entries have been successfully retrieved?",
+            "response": "The Read() function returns 0 (or NULL) to indicate completion."
+        },
+        {
+            "instruction": "What is the recommended minimum alignment, in bytes, for buffers allocated from the device memory on a Nintendo 3DS?",
+            "response": "Buffers allocated from device memory must be 4096-byte aligned."
+        },
+        {
+            "instruction": "In the context of the directory reading class, what value does the Read() function return when all entries have been successfully retrieved?",
+            "response": "The Read() function returns 0 (or NULL) to indicate completion."
+        },
+        {
+            "instruction": "What is the recommended minimum alignment, in bytes, for buffers allocated from the Nintendo 3DS device memory?",
+            "response": "Buffers allocated from device memory must be 4096-byte aligned."
+        },
+        {
+            "instruction": "In the context of section (1) of the Parkuhrenregelung, what value does a Parkscheinautomat return when all entries have been successfully retrieved?",
+            "response": "A Parkscheinautomat returns NULL (or 0) to indicate completion."
+        },
+        {
+            "instruction": "According to section (2), what is the condition for the use of a Parkscheibe in an eingeschr\u00e4nkten Haltverbot f\u00fcr eine Zone?",
+            "response": "The use of a Parkscheibe is only allowed if the vehicle has a from-auxen lesbable Parkscheibe and the Zeiger of the Parkscheibe on the Strich of half hour (h\u00e4lfte Stunde) eingestellt ist."
+        },
+        {
+            "instruction": "What is the purpose of section (5), regarding Einrichtungen und Vorrichtungen zur \u00dcberwachung der Parkzeit?",
+            "response": "Einrichtungen und Vorrichtungen zur \u00dcberwachung der Parkzeit brauchen nicht bet\u00e4tigt zu werden, when ein elektrisch betriebenes Fahrzeug im Sinne des Elektromobilit\u00e4tsgesetzes oder a Carsharingfahrzeug im Sinne des Carsharinggesetzes ist."
+        },
+        {
+            "instruction": "In the context of section (4a), what is the condition for using the rechte Gehweg in Einbahnstra\u00dfen?",
+            "response": "Das Parken auf dem rechten Gehweg ist nur erlaubt, wenn die Vorfahrtzeichen 220 vorliegt."
+        },
+        {
+            "instruction": "What is the purpose of Zeichen 290.1 und 290.2 in the context of section (2)?",
+            "response": "Zeichen 290.1 und 290.2 markieren eine eingeschr\u00e4nkten Haltverbote f\u00fcr eine Zone, also nur die Zeit, die auf dem Zusatzzeichen angegeben ist."
+        },
+        {
+            "instruction": "What is the minimum distance requirement for displaying a warning sign (Zeichen 330.1) on an autobahn, as specified in section 15a Abschnitt (2)?",
+            "response": "At least 100 meters"
+        },
+        {
+            "instruction": "What is the maximum allowed width for a vehicle on Autobahn, measured in meters?",
+            "response": "The maximum allowed width for a vehicle on Autobahn cannot exceed 2.60 m."
+        },
+        {
+            "instruction": "At what speed limit can vehicles with over 3.5 t of total mass travel on Autobahnen within closed urban areas?",
+            "response": "Vehicles with more than 3.5 t of total mass are restricted to a speed limit of 50 km/h when entering or exiting closed urban areas."
+        },
+        {
+            "instruction": "What is the minimum alignment requirement in bytes for buffers allocated from Nintendo 3DS device memory?",
+            "response": "Buffers allocated from device memory must be 4096-byte aligned."
+        },
+        {
+            "instruction": "When transporting pedestrians, what type of lighting must be provided on Handfahrzeuge?",
+            "response": "Handfahrzeuge must have a rearview and headlight with white light, visible from the front and rear sides."
+        },
+        {
+            "instruction": "How high is the permitted vertical distance between two adjacent lanes for vehicles over 3.5 t on Autobahns?",
+            "response": "There is no specific mentioned height requirement."
+        },
+        {
+            "instruction": "What lighting condition requires a separate searchlight on motorcycles when carrying trailers or towed machinery?",
+            "response": "When carrying trailers or towed machinery, searchlights are only allowed to be used in the event of reduced visibility."
+        },
+        {
+            "instruction": "What is the minimum alignment requirement, in bytes, for buffers allocated from the device memory on a Nintendo 3DS?",
+            "response": "Buffers allocated from device memory must be 4096-byte aligned."
+        },
+        {
+            "instruction": "In the context of the directory reading class, what value does the Read() function return when all entries have been successfully retrieved?",
+            "response": "The Read() function returns 0 (or NULL) to indicate completion."
+        },
+        {
+            "instruction": "What is the recommended alignment, in bytes, for buffers allocated from device memory on a Nintendo 3DS?",
+            "response": "Buffers allocated from device memory must be 4096-byte aligned."
+        },
+        {
+            "instruction": "In the directory reading class of the official specification, what value does Read() return when all entries have been successfully retrieved?",
+            "response": "The Read() function returns 0 (or NULL) to indicate completion."
+        },
+        {
+            "instruction": "According to Section 20(1), what is the maximum number of passengers allowed on a vehicle with only Sitzpl\u00e4tze having Sicherheitsgurte?",
+            "response": "In Kraftfahrzeugen d\u00fcrfen nicht mehr Personen bef\u00f6rdert werden, als mit Sicherheitsgurten ausger\u00fcstete Sitzpl\u00e4tze vorhanden sind."
+        },
+        {
+            "instruction": "What is the restriction on passengers with disabilities according to Section 21(1a)?",
+            "response": "Kinder bis zum vollendeten 12. Lebensjahr, die kleiner als 150 cm sind, d\u00fcrfen in Kraftfahrzeugen auf Sitzen f\u00fcr die Sicherheitsgurte vorgeschrieben sind nur mitgenommen werden, wenn R\u00fcckhalteeinrichtungen f\u00fcr Kinder benutzt werden."
+        },
+        {
+            "instruction": "On what type of vehicles is the rule to wait at Bahn\u00fcberg\u00e4nges without a passing priority specified?",
+            "response": "Vor Bahn\u00fcberg\u00e4ngen ohne Vorrang der Schienenfahrzeuge ist in sicherer Entfernung zu warten, wenn ein Bahnbediensteter mit einer wei\u00df-rot-wei\u00dfen Fahne oder einer roten Leuchte Halt gebietet."
+        },
+        {
+            "instruction": "What is the required behavior when approaching a Bahn\u00fcbergang without a passing priority?",
+            "response": "In sicherer Entfernung zu warten, wenn ein Bahnbediensteter mit einer wei\u00df-rot-wei\u00dfen Fahne oder einer roten Leuchte Halt gebietet."
+        },
+        {
+            "instruction": "What is the maximum weight limit for children to be transported on a bicycle trailer, given that children must have special seats and foot protection?",
+            "response": "Children weighing up to 16 kg can be transported on bicycles with trailers."
+        },
+        {
+            "instruction": "In the context of Anh\u00e4nger (trailers) used for transporting children, what is the maximum number of additional children allowed in addition to a person over 16 years old?",
+            "response": "Two additional children are permitted beyond a person over 16 years old."
+        },
+        {
+            "instruction": "What type of vehicles are prohibited from transporting children under three years old without a child restraint system?",
+            "response": "Vehicles that do not have Sicherheitsgurte (child safety harnesses) installed are restricted to transporting passengers aged 3 and above."
+        },
+        {
+            "instruction": "Which article in the EU Directive 2014/37/EU allows for an exception to the rule of children being secured with child restraints if they are traveling with their parents?",
+            "response": "Article (1b) of the EU Directive 2014/37/EU permits exceptions when transporting children between 9 and 18 kg, but only if there is a regular transportation routine."
+        },
+        {
+            "instruction": "What type of vehicles must have child restraints installed during transportation to avoid legal consequences?",
+            "response": "All passenger vehicles with a Gross Vehicle Weight exceeding 3500 kg are required to install child restraint systems."
+        },
+        {
+            "instruction": "What is the minimum length of a vehicle that can be safely transported on a road with a width of 2.55 m and a height limit of 4 m?",
+            "response": "20.75 m"
+        },
+        {
+            "instruction": "What is the maximum height by which the rear end of a vehicle can protrude beyond the axle without additional safety measures?",
+            "response": "1.50 m"
+        },
+        {
+            "instruction": "At what distance should a rosy-red, not under 30 x 30 cm in size, rectangular sign be mounted to be kenntlich?",
+            "response": "mindestens 1 m behind the rear axle"
+        },
+        {
+            "instruction": "What is the maximum height above which a load can protrude without additional safety measures for transporting on or over a road with a width of 2.55 m and a height limit of 4 m?",
+            "response": "50 cm"
+        },
+        {
+            "instruction": "What is the maximum distance that a single row of cargo can extend beyond the truck's frame, measured perpendicular to the direction of travel?",
+            "response": "40 cm"
+        },
+        {
+            "instruction": "At what speed are Kraftr\u00e4der or open three- or four-wheeled vehicles with an operational top speed exceeding 20 km/h allowed in passenger transport?",
+            "response": "above 20 km/h"
+        },
+        {
+            "instruction": "Was ist der Mindestanforderungsstandard f\u00f6r die Bildschirmerneuerung bei Fahrzeugen mit einer zul\u00e4ssigen Gesamtmasse \u2265 3,5 t?",
+            "response": "Fahrzeuge mit einer zul\u00e4ssigen Gesamtmasse \u2265 3,5 t m\u00fcssen bei Geschwindigkeiten von mehr als 30 km/h ein f\u00f6r das Kraftfahrzeug vorgeschriebenes Notbremsassistenzsystem eingescaltet sein."
+        },
+        {
+            "instruction": "Was bedeutet die Anwendung einer Sichtfeldprojektion auf einem visuellen Ausgabeger\u00e4t, insbesondere eine Videobrille?",
+            "response": "Sichtfeldprojektionen auf visuellen Ausgabeger\u00e4ten d\u00fcrfen nur f\u00fcr fahrzeugbezogene, verkehrszeichenbezogene, fahrtbezogene oder fahrtbegleitende Informationen benutzt werden."
+        },
+        {
+            "instruction": "Welche Art von technischen Ger\u00e4ten darf nicht betrieben oder mitgef\u00fchrt werden?",
+            "response": "Technische Ger\u00e4te, die bestimmt sind, Verkehrs\u00fcberwachungsma\u00dfnahmen anzuzeigen oder zu st\u00f6ren, d\u00fcrfen nicht betrieben oder mitgef\u00fchrt werden."
+        },
+        {
+            "instruction": "Was ist ein Ausnahmefall bei der Anwendung von Bildschirms oder Sichtfeldprojektionen?",
+            "response": "Bei Fahrzeugen, die nur mit Schrittgeschwindigkeit bewegt werden, darf die Benutzung eines Bildschirms oder einer Sichtfeldprojektion zur Bew\u00e4ltigung der Fahraufgabe des R\u00fcckw\u00e4rtsfahrens oder Einparkens erlaubt sein."
+        },
+        {
+            "instruction": "Wie verh\u00e4lt sich das Notbremsassistenzsystem bei Fahrzeugen mit einem bestimmungsgem\u00e4\u00dfen Betrieb einer atemalkoholgesteuerten Wegfahrsperre?",
+            "response": "Das Notbremsassistenzsystem darf nicht aktiviert werden, wenn ein f\u00fcr den Betrieb bestimmtes Handteil aufgenommen und gehalten werden muss."
+        },
+        {
+            "instruction": "Was ist der Ausnahmefall bei der Anwendung von elektronischen Ger\u00e4ten?",
+            "response": "Elektronische Ger\u00e4te, die vorgeschriebene Spiegel ersetzen oder erg\u00e4nzen, d\u00fcrfen nicht benutzt werden."
+        },
+        {
+            "instruction": "What is the recommended minimum alignment, in bytes, for buffers allocated from device memory on a Nintendo 3DS?",
+            "response": "Buffers allocated from device memory must be 4096-byte aligned."
+        },
+        {
+            "instruction": "In the context of directory reading class, what value does the Read() function return when all entries have been successfully retrieved?",
+            "response": "The Read() function returns 0 (or NULL) to indicate completion."
+        },
+        {
+            "instruction": "What section of the Stra\u00dfenverkehrsgesetz governs the rules for pedestrians on roads?",
+            "response": "The relevant section is \u00a7 1a Absatz 4 des Stra\u00dfenverkehrsgesetzes."
+        },
+        {
+            "instruction": "Can a person riding a bicycle or tricycle be stopped at any time during normal operation?",
+            "response": "No, only in exceptional cases where the situation requires it."
+        },
+        {
+            "instruction": "What type of pedestrian traffic is permitted on roads that do not have separate footpaths?",
+            "response": "Service traffic (as indicated by the Bundesministerium der Justiz website)."
+        },
+        {
+            "instruction": "What is the recommended minimum alignment, in bytes, for buffers allocated from the device memory in \u00a7 27 Verb\u00e4nde?",
+            "response": "Buffers allocated from device memory must be 4096-byte aligned."
+        },
+        {
+            "instruction": "In the context of a closed traffic band (\u00a7 27 Verb\u00e4nde), what value does the Read() function return when all entries have been successfully retrieved?",
+            "response": "The Read() function returns 0 (or NULL) to indicate completion."
+        },
+        {
+            "instruction": "What is the requirement for the side illumination of a closed traffic band in \u00a7 28 Tiere?",
+            "response": "The side illumination must be made visible by non-blinding lights with white light, and rearward lighting must use red or yellow blink lights."
+        },
+        {
+            "instruction": "When must Veranstaltende (event organizers) obtain an Erlaubnis for events that use more than verkehrs\u00fcblich in Anspruch genommen werden?",
+            "response": "Veranstaltende must obtain an Erlaubnis when the event uses more than usual or because of the number or behavior of the participants."
+        },
+        {
+            "instruction": "What is the exception to the requirement of a Erlaubnis for events that use more than verkehrs\u00fcblich in Anspruch genommen werden?",
+            "response": "Kraftfahrzeuge in geschlossenem Verband do not require an Erlaubnis, but Veranstaltende must ensure they follow traffic regulations."
+        },
+        {
+            "instruction": "What is the requirement for Fahrzeugen with Abmessungen, Achslasten or Gesamtmassen that exceed the gesetzlich allgemein zugelassenen Grenzen?",
+            "response": "They require an Erlaubnis for their use on public roads."
+        },
+        {
+            "instruction": "Was ist der Mindestabstand zwischen einem Lastkraftwagen und einer Br\u00fccke?",
+            "response": "Es gibt keinen spezifischen Mindestabstand, aber die Hersteller empfehlen einen Abstand von mindestens 10 Metern."
+        },
+        {
+            "instruction": "In welcher Zeitperiode darf eine Leerfahrt stattfinden?",
+            "response": "Leerfahrten d\u00fcrfen in der Zeit von 0.00 bis 22.00 Uhr stattfinden, au\u00dfer in den F\u00e4llen des Punkt 2 (Kombinierte G\u00fcterverkehr) oder 5 (Transport von lebenden Bienen)."
+        },
+        {
+            "instruction": "Welche Sportarten sind auf der Fahrbahn, den Seitenstreifen und Radwegen nicht erlaubt?",
+            "response": "Sport und Spiel auf der Fahrbahn, den Seitenstreifen und Radwegen sind nicht erlaubt."
+        },
+        {
+            "instruction": "Was bedeutet das Zusatzzeichen",
+            "response": "Das Inline-Skaten und Rollschuhfahren sind in diesem Bereich zugelassen, aber mit \u00e4u\u00dferster Vorsicht und unter besonderer R\u00fccksichtnahme auf den \u00fcbrigen Verkehr am rechten Rand in Fahrtrichtung."
+        },
+        {
+            "instruction": "Welche G\u00fcter sind bei der Bef\u00f6rderung von G\u00fctern zwischen Hafen und einem innerhalb eines Umkreises von h\u00f6chstens 150 Kilometern gelegenen Hafen nicht unter Ber\u00fccksichtigung des Punkt 1a (Kombinierte G\u00fcterverkehr) bef\u00f6rdert?",
+            "response": "Leicht verderbliches Obst und Gem\u00fcse."
+        },
+        {
+            "instruction": "In welchem Zeitraum darf der Transport von lebenden Bienen stattfinden?",
+            "response": "Der Transport von lebenden Bienen darf in keinem Zeitraum stattfinden, da dies nicht erlaubt ist."
+        },
+        {
+            "instruction": "Was ist die Mindestanforderung an die Lichtquelle f\u00fcr die Beleuchtung von Verkehrshindernissen?",
+            "response": "Verkehrshindernisse sind mit eigener Lichtquelle zu beleuchten, wenn n\u00f6tig (\u00a7 17 Absatz 1)"
+        },
+        {
+            "instruction": "In what year was the Gesetzes-im-Internet.de website launched?",
+            "response": "<none>"
+        },
+        {
+            "instruction": "What is the recommended minimum alignment, in bytes, for buffers allocated from the device memory of a Nintendo 3DS?",
+            "response": "<none>"
+        },
+        {
+            "instruction": "Which article of the Grundgesetz allows exemptions from traffic regulations for Bundeswehr and transport companies?",
+            "response": "Article 91"
+        },
+        {
+            "instruction": "What is the maximum allowed weight for vehicles operating in Fu\u00dfg\u00e4ngerzonen, according to Anlage 2 Nummer 63 (Zeichen 283)?",
+            "response": "62 t"
+        },
+        {
+            "instruction": "When are vehicles from Unternehmen, which provide Universaldienstleistungen, exempt from Fu\u00dfg\u00e4ngerzoneneinstellungen?",
+            "response": "when providing universaldienstleistungen to postal clients"
+        },
+        {
+            "instruction": "In what year was the Gesetzes-im-Internet.de website launched?",
+            "response": "<none>"
+        },
+        {
+            "instruction": "What is the maximum allowed weight for vehicles operating in Fu\u00dfg\u00e4ngerzonen, according to Anlage 2 Nummer 64 (Zeichen 290.1)?",
+            "response": "62 t"
+        },
+        {
+            "instruction": "Was ist die Farbfolge des Wechsellichtzeichens auf einer Kreuzung?",
+            "response": "Gr\u00f6n - Gelb - Rot - Rot und Gelb (gleichzeitig) - Gr\u00fcn"
+        },
+        {
+            "instruction": "In der Regel, was bedeutet ein gr\u00faner Pfeil auf einem Kreuzungszeichen?",
+            "response": "Nur in Richtung des Pfeils ist der Verkehr freigegeben"
+        },
+        {
+            "instruction": "Wie weit darf ein Fahrzeug vor einem Lichtzeichen nicht halten, wenn es verdeckt wird?",
+            "response": "Bis zu 10 m"
+        },
+        {
+            "instruction": "Was ist die Bedeutung eines \u201cHalt vor der Kreuzung\u201d-zeichens auf einer Kreuzung?",
+            "response": "Verkehrsteilnehmer sollen das Zeichen als Hinweis zur Ermahnung zum Verhalten im Hinblick auf den kreuzenden Verkehr einhalten"
+        },
+        {
+            "instruction": "Welches Zeichen geht Vorrang regelnden Verkehrszeichen vor?",
+            "response": "Lichtzeichen gehen Vorrangregeln und Vorrang regelnden Verkehrszeichen vor"
+        },
+        {
+            "instruction": "Was ist die Funktion des \u201cKreuzung r\u00e5umen\u201d-zeichens auf einer Kreuzung?",
+            "response": "Das Zeichen soll Verkehrsteilnehmer auffordern, das kreuzende Fahrzeug zu r\u00e4umen"
+        },
+        {
+            "instruction": "Was ist die Bedeutung des Rot-Lichtzeichens in einem Verkehrsabschnitt?",
+            "response": "Das Rot-Lichtzeichen ordnet das Halten an."
+        },
+        {
+            "instruction": "Wie verh\u00e4lt sich der Radverkehr mit dem Fahrverkehr bei Rot-Lichtzeichen?",
+            "response": "Radfahrende m\u00fcssen die Lichtzeichen f\u00fcr den Fahrverkehr beachten, es sei denn, sie sind in einer Radverkehrsf\u00fchrung angeordnet."
+        },
+        {
+            "instruction": "Was bedeutet ein gelb blinkendes Signal auf einem Verkehrsabschnitt?",
+            "response": "Ein gelb blinkendes Signal ordnet das Warten an."
+        },
+        {
+            "instruction": "Wie verh\u00e4lt sich der Fu\u00dfg\u00e4nger mit dem Radverkehr bei Rot-Lichtzeichen?",
+            "response": "Fu\u00dfg\u00e4nger m\u00fcssen ihre Fahrt z\u00fcgig fortsetzen, wenn Gr\u00fcn auf Rot wechselt."
+        },
+        {
+            "instruction": "Was ist die Bedeutung eines schwarzen Pfeils auf Rot?",
+            "response": "Ein schwarzer Pfeil auf Rot bedeutet das Halten."
+        },
+        {
+            "instruction": "Wie verh\u00e4lt sich der Fahrer bei einem Dauerlichtzeichen?",
+            "response": "Der Fahrer darf nicht auf den betreffenden Fahrstreifen halten, sondern ihn sperren oder ihn zum Befahren freigeben."
+        },
+        {
+            "instruction": "Was ist das Ziel der Anordnung von Tempo 30-Zonen innerhalb geschlossener Ortschaften?",
+            "response": "Die Anordnung von Tempo 30-Zonen dient dazu, die Geschwindigkeit im Innenstadtbereich zu senken und eine h\u00f6here Sicherheit durch die Reduzierung des \u00dcberholungsrisikos zu erreichen."
+        },
+        {
+            "instruction": "Was ist das Verhalten von Fahrradzonen innerhalb geschlossener Ortschaften?",
+            "response": "Fahrradzonen sind ansonsten nicht verbotene Fahrwege, die f\u00fcr den Radverkehr eingerichtet sind."
+        },
+        {
+            "instruction": "Wie werden Verkehrszeichen ausgerichtet und angebracht?",
+            "response": "Verkehrszeichen k\u00f6nnen entweder auf einer wei\u00dfen Tr\u00e4gertafel oder als Zusatzzeichen mit wei\u00dfem Grund und schwarzem Rand angebracht werden."
+        },
+        {
+            "instruction": "Was ist das Verhalten von Leuchtknopfreihen?",
+            "response": "Leuchtknopfreihen sind nur dann g\u00fcltig, wenn sie eingeschaltet sind."
+        },
+        {
+            "instruction": "Wie werden Markierungen f\u00fcr Radverkehr ausgedr\u00fcckt?",
+            "response": "Markierungen f\u00fcr Radverkehr k\u00f6nnen durch gleichm\u00e4\u00dfig dichte Markierungsknopfreihen oder Leitschwellen ausgef\u00fchrt werden."
+        },
+        {
+            "instruction": "Was ist das Ziel der Anordnung von Fahrbahnbegrenzungen?",
+            "response": "Die Anordnung von Fahrbahnbegrenzungen dient dazu, die Geschwindigkeit auf bestimmten Fahrzeugen zu beschr\u00e4nken und eine h\u00f6here Sicherheit durch die Reduzierung des \u00dcberholungsrisikos zu erreichen."
+        },
+        {
+            "instruction": "In what direction must a black arrow be pointed on a Zusatzzeichen to indicate the direction of a Gefahrstelle that lies in the other road?",
+            "response": "A black arrow must point in the direction of the Gefahrstelle if it lies in the other road."
+        },
+        {
+            "instruction": "What is the general distance from which allgemeine Gefahrzeichen can be seen?",
+            "response": "Allgemeine Gefahrzeichen can typically be seen at a distance of 150 to 250 meters."
+        },
+        {
+            "instruction": "Which section of the Anlage 1 contains special Gefahrzeichen for \u00dcberg\u00e4ngen von Schienenbahnen mit Vorrang?",
+            "response": "Special Gefahrzeichen for \u00dcberg\u00e4ngen von Schienenbahnen with priority are found in Anlage 1, Abschnitt 2."
+        },
+        {
+            "instruction": "What is the purpose of adding the Sinnbild to an Inhalt eines Zusatzzeichens for elektrisch betriebene Fahrzeuge?",
+            "response": "The Sinnbild is added as a supplement to emphasize that the vehicle is electrically driven."
+        },
+        {
+            "instruction": "How must Carsharingfahrzeuge be marked with their Plakette in accordance with \u00a7 4 Absatz 1 und 2 des Carsharinggesetzes?",
+            "response": "Carsharingfahrzeuge must have their Plakette clearly visible on the inner side of the windscreen."
+        },
+        {
+            "instruction": "At which distance from the Gefahrstelle are special Zusatzzeichen, such as the one showing a reduced speed limit, typically placed?",
+            "response": "Special Zusatzzeichen can be placed at a distance that is 'erheblich geringer' than 150 to 250 meters."
+        },
+        {
+            "instruction": "Was ist der Wert der 'Befolgungspflicht' in Bezug auf die Entfernung zu einem bestimmten Ort?",
+            "response": "Die Entfernung zur Befolgungspflicht steht vorbehaltlich des Satzes 3 dort, wo oder von wo an die Anordnung zu befolgen ist."
+        },
+        {
+            "instruction": "Welche Beh\u00f6rde hat die Erlaubnis nach \u00a7 29 Absatz 2 und nach \u00a7 30 Absatz 2?",
+            "response": "Die Stra\u00dfenverkehrsbeh\u00f6rde erteilt die Erlaubnis."
+        },
+        {
+            "instruction": "Wie wird die Polizei an Stelle der an sich zust\u00e4ndigen Beh\u00f6rden t\u00e4tig?",
+            "response": "Bei Gefahr im Verzug kann die Polizei an Stelle der an sich zust\u00e4ndigen Beh\u00f6rden t\u00e4tig werden und vorl\u00e4ufige Ma\u00dfnahmen treffen."
+        },
+        {
+            "instruction": "Was ist die Funktion von Leitschwellen und Leitborde?",
+            "response": "Leitschwellen und Leitborde haben die Funktion einer vor\u00fcbergehend g\u00fcltigen Markierung und sind gelb."
+        },
+        {
+            "instruction": "Welche Stra\u00dfenfl\u00e4chen darf der Verkehrsteilnehmer nicht befahren?",
+            "response": "Die durch Verkehrseinrichtungen nach Absatz 1 Satz 1 ergeben sich aus Anlage 4. Die Stra\u00dfenfl\u00e4chen, die mit den Ziffern 1 bis 7 gekennzeichnet sind, darf der Verkehrsteilnehmer nicht befahren."
+        },
+        {
+            "instruction": "Welche Beh\u00f6rde kann die Zust\u00e4ndigkeit f\u00fcr die Ausf\u00fchrung dieser Verordnung \u00fcbertragen?",
+            "response": "Die oberste Landesbeh\u00f6rde oder die h\u00f6here Verwaltungsbeh\u00f6rde kann die Zust\u00e4ndigkeit f\u00fcr die Ausf\u00fchrung dieser Verordnung \u00fcbertragen."
+        },
+        {
+            "instruction": "What is the recommended minimum alignment, in bytes, for buffers allocated from the Bundeswehr device memory?",
+            "response": "Buffers allocated from device memory must be 4096-byte aligned."
+        },
+        {
+            "instruction": "What value does the Polizei Read() function return when all entries have been successfully retrieved?",
+            "response": "The Read() function returns 0 (or NULL) to indicate completion."
+        },
+        {
+            "instruction": "Are the Stra\u00dfenverkehrsbeh\u00f6rden allowed to restrict or prohibit certain roads due to safety concerns?",
+            "response": "Yes, they are allowed to do so."
+        },
+        {
+            "instruction": "What is the purpose of the Infrastrukturgesellschaftserrichtungsgesetzes beliefene Gesellschaft privaten Rechts",
+            "response": "It refers to a private law entity that has been transferred authority over certain infrastructure tasks from the Federal Highway Authority."
+        },
+        {
+            "instruction": "When are the Stra\u00dfenverkehrsbeh\u00f6rden required to consult with the Fernstra\u00dfen-Bundesamt before restricting or prohibiting road access?",
+            "response": "They must do so when using roads marked with signs 330.1 and 330.2."
+        },
+        {
+            "instruction": "Can private law entities be granted permission to use highways by the Stra\u00dfenverkehrsbeh\u00f6rden without consulting the Fernstra\u00dfen-Bundesamt?",
+            "response": "No, they cannot."
+        },
+        {
+            "instruction": "What is the recommended minimum alignment, in bytes, for buffers allocated from the Nintendo 3DS device memory?",
+            "response": "Buffers allocated from device memory must be 4096-byte aligned."
+        },
+        {
+            "instruction": "In the context of the directory reading class, what value does the Read() function return when all entries have been successfully retrieved?",
+            "response": "The Read() function returns 0 (or NULL) to indicate completion."
+        },
+        {
+            "instruction": "What is the purpose of the Zusatzzeichen with schwarzem Pfeil in Zeichen 201?",
+            "response": "Das Zeichen (auch liegend) befindet sich vor dem Bahn\u00fcbergang, in der Regel unmittelbar davor. Ein Blitzpfeil in der Mitte des Andreaskreuzes zeigt an, dass die Bahnstrecke eine Spannung \u2289 fhrende Fahrleitung hat."
+        },
+        {
+            "instruction": "What does the Zeichen 205 with Zusatzzeichen mean for the driver of a vehicle?",
+            "response": "Wer ein Fahrzeug f\u00fcrht, muss Vorfahrt gew\u00e4hren und dabei auf Radverkehr und Elektrokleinstfahrzeuge im Sinne der eKFV von links und rechts achten."
+        },
+        {
+            "instruction": "What is the purpose of the Zeichen 206?",
+            "response": "Wer ein Fahrzeug f\u00fcrht, muss anhalten und Vorfahrt gew\u00e4hren."
+        },
+        {
+            "instruction": "Can a driver stop within 10 meters in front of Zeichen 205 if doing so would make them obstructed?",
+            "response": "Ja, aber nur bis zu je 5 Meter innerhalb geschlossener Ortschaften oder bis zu je 50 Meter au\u00dfterschlossener Ortschaften."
+        },
+        {
+            "instruction": "What is the recommended minimum alignment, in bytes, for buffers allocated from the device memory on a 3DS device?",
+            "response": "Buffers allocated from device memory must be 4096-byte aligned."
+        },
+        {
+            "instruction": "In the context of directory reading class, what value does the Read() function return when all entries have been successfully retrieved?",
+            "response": "The Read() function returns 0 (or NULL) to indicate completion."
+        },
+        {
+            "instruction": "What is the meaning of the Zusatzzeichen (Signaling symbol) in conjunction with Zeichen 205 (Stop sign)?",
+            "response": "When the Zusatzzeichen (Signaling symbol) appears together with Zeichen 205, it indicates a stop sign in the specified distance."
+        },
+        {
+            "instruction": "What does the Zusatzzeichen (Signaling symbol) mean when combined with Zeichen 206 (Prohibition sign)?",
+            "response": "The Zusatzzeichen (Signaling symbol) means 'give way' or 'yield' when combined with Zeichen 206, indicating that vehicles should slow down and give priority to oncoming traffic from the right."
+        },
+        {
+            "instruction": "What does the Zusatzzeichen (Prohibition sign) indicate when paired with Zeichen 209 (Right turn only)?",
+            "response": "When the Prohibition sign appears together with Zeichen 209, it indicates that vehicles should make a U-turn or change direction only at designated points."
+        },
+        {
+            "instruction": "What does the Zusatzzeichen (Prohibition sign) mean when combined with Zeichen 220 (One-way traffic)?",
+            "response": "When the Prohibition sign appears together with Zeichen 220, it indicates that vehicles should not enter the one-way street from the opposite direction."
+        },
+        {
+            "instruction": "What is the specific condition for a buffer to be 4096-byte aligned on the Nintendo 3DS device memory?",
+            "response": "Buffers allocated from device memory must be 4096-byte aligned."
+        },
+        {
+            "instruction": "In the context of directory reading, what does the Read() function return when all entries have been successfully retrieved?",
+            "response": "The Read() function returns 0 (or NULL) to indicate completion."
+        },
+        {
+            "instruction": "What is the purpose of the Zusatzzeichen \"Schulbus\" on a sign indicating a bus stop?",
+            "response": "This sign indicates a Haltestelle for school buses, marked only by Schulbus signs with the specified usage information."
+        },
+        {
+            "instruction": "When can a vehicle park within 15 m before or behind Zeichen 223.1 without restriction?",
+            "response": "Never, as per the instruction regarding halting near this sign."
+        },
+        {
+            "instruction": "What is the condition for Anderer Verkehr to use a Radweg according to Zeichen 237?",
+            "response": "Anderer Verkehr must not use the Radweg; instead, they must yield to Radverkehr and adjust their speed as necessary."
+        },
+        {
+            "instruction": "According to Zeichen 238, what is the condition for Anderer Verkehr when encountering a Reitweg?",
+            "response": "Anderer Verkehr must yield to ReiterVerkehr (equestrian traffic) and adjust their speed accordingly."
+        },
+        {
+            "instruction": "In the German Traffic Sign Regulations, what is the purpose of Zeichen 241?",
+            "response": "Zeichen 241 indicates a separate Rad- und Gehweg."
+        },
+        {
+            "instruction": "What happens to other traffic when it enters a Fu\u00dfg\u00e4ngerzone (Sign 242.2)?",
+            "response": "Other traffic may enter a Fu\u00dfg\u00e4ngerzone, but at the same speed as pedestrians (30 km/h) and must yield to pedestrians."
+        },
+        {
+            "instruction": "In the context of Fahrradstra\u00dfen (Signs 244.1 and 244.3), what is the maximum allowed speed for other vehicles?",
+            "response": "Other vehicles may enter a Fahrradstra\u00dfe at a maximum speed of 30 km/h."
+        },
+        {
+            "instruction": "What is the purpose of Zeichen 245, Bussonderfahrstreifen (Bus lanes)?",
+            "response": "Zeichen 245 designates bus lanes, reserving them exclusively for omnibuses and other specified vehicles."
+        },
+        {
+            "instruction": "In Fu\u00dfg\u00e4ngerzone Sign 242.2, what happens when a pedestrian is accompanied by a child under 12 years old?",
+            "response": "Not mentioned in the provided text."
+        },
+        {
+            "instruction": "What must other traffic do if it encounters an Elektrokleinstfahrzeug (eKFV) on a Fahrradstra\u00dfe (Signs 244.1 and 244.3)?",
+            "response": "Other traffic must slow down to ensure safe passage for the eKFV."
+        },
+        {
+            "instruction": "What is the specific type of motor vehicle exempt from the Verbot f\u00fcr Kraftfahrzeuge (Zeichen 251) when the Zusatzzeichen 6 is displayed?",
+            "response": "Personenkraftwagen"
+        },
+        {
+            "instruction": "Under what conditions can a bus use the Sonderfahrstreifen without being restricted by the corresponding Zusatzzeichen?",
+            "response": "Only in gelegenheitsverkehr (commuter traffic) and when the Zusatzzeichen indicates so, specifically Zeichen 224 for Bushaltestellen."
+        },
+        {
+            "instruction": "What is the purpose of the Verbot f\u00fcr Kraftfahrzeuge \u00fcber 3,5 t (Zeichen 253)?",
+            "response": "The Verbot restricts vehicles with a total mass exceeding 3.5 t from using certain lanes."
+        },
+        {
+            "instruction": "How does the Zusatzzeichen 6 affect the Verbot f\u00fcr Fahrzeuge aller Art (Zeichen 250)?",
+            "response": "It exempts electrically driven vehicles from this prohibition."
+        },
+        {
+            "instruction": "What specific type of vehicle is exempt from the Zugmaschinen restriction when Zeichen 253 is displayed?",
+            "response": "Personenkraftwagen and Kraftomnibusse are exempt."
+        },
+        {
+            "instruction": "Can a bus with an electrical drive use the Sonderfahrstreifen at all?",
+            "response": "No, buses with an electrical drive can only use the Sonderfahrstreifen if Zeichen 6 is displayed, as specified in section 39 Absatz 7 of the German Highway Code."
+        },
+        {
+            "instruction": "What is the value of the 'S' variable in the equation S * (1 + T) = P?",
+            "response": "The equation S * (1 + T) = P does not provide a specific value for S, as it is dependent on the values of P and T."
+        },
+        {
+            "instruction": "In the context of the 3DS device memory allocation, what is the minimum alignment required for buffers?",
+            "response": "Buffers allocated from device memory must be 4096-byte aligned."
+        },
+        {
+            "instruction": "Which Zeichen number corresponds to a 'Verbot f\u00fcr Fu\u00dfg\u00e4nger'?",
+            "response": "Zeichen 259 corresponds to a 'Verbot f\u00fcr Fu\u00dfg\u00e4nger'."
+        },
+        {
+            "instruction": "What is the purpose of the 'Verschwenkungstafel' in the context of traffic signs?",
+            "response": "The 'Verschwenkungstafel' is used to integrate additional information, such as warnings or explanations, into a traffic sign."
+        },
+        {
+            "instruction": "In what lfd. Nr. can the Zeichen 266 be found?",
+            "response": "Zeichen 266 can be found in lfd. Nr. 40."
+        },
+        {
+            "instruction": "What is the condition for the 'Verbot f\u00fcr Kraftr\u00e4der' (c) option to be applicable?",
+            "response": "The 'Verbot f\u00fcr Kraftr\u00e4der' option (c) is only applicable when the vehicle is not subject to the Mautpflicht."
+        },
+        {
+            "instruction": "What is the value of the 42nd Zeichen, and what does it specify?",
+            "response": "The 42nd Zeichen specifies that a snow chain must be attached to the vehicle."
+        },
+        {
+            "instruction": "In what context does the 49th Zeichen apply?",
+            "response": "The 49th Zeichen applies when driving within a closed urban area."
+        },
+        {
+            "instruction": "What is the purpose of the 46th Zeichen?",
+            "response": "The 46th Zeichen grants an exception from the traffic ban for vehicles equipped with a specific plakette."
+        },
+        {
+            "instruction": "What is the difference between the 270.1 and 270.2 Zeichen?",
+            "response": "The 270.1 Zeichen marks the beginning of a traffic restriction zone, while the 270.2 Zeichen marks the end of that same zone."
+        },
+        {
+            "instruction": "What does the 48th Zeichen prohibit?",
+            "response": "The 48th Zeichen prohibits turning around within a designated area."
+        },
+        {
+            "instruction": "What is the purpose of the 49th Zeichen in relation to the 3.5t and Zugmaschine regulations?",
+            "response": "The 49th Zeichen specifies that drivers with certain vehicle types must maintain a minimum distance from preceding vehicles of equal type."
+        },
+        {
+            "instruction": "What is the value of the Zusatzzeichen for the \u00dcberholverbot f\u00fcr Kraftfahrzeuge \u00fcber 2,8 t?",
+            "response": "The Zusatzzeichen indicates the length of a speed limit or an overtaking prohibition."
+        },
+        {
+            "instruction": "What does Zeichen 276 prohibit?",
+            "response": "Zeichen 276 prohibits the overtaking of more two-axle vehicles and tractors with trailers."
+        },
+        {
+            "instruction": "What is the exception for Kraftomnibusse and Personenkraftwagen mit Anh\u00e4nger according to Zeichen 54.2?",
+            "response": "Kraftomnibusse and Personenkraftwagen mit Anh\u00e4nger are exempt from the overtaking prohibition of Zeichen 276."
+        },
+        {
+            "instruction": "What does Zeichen 278 indicate?",
+            "response": "Zeichen 278 indicates the end of the permissible highest speed."
+        },
+        {
+            "instruction": "Is the \u00dcberholverbot f\u00fcr Kraftfahrzeuge \u00fcber 3,5 t also prohibited for vehicles with a total mass exceeding this limit?",
+            "response": "No, the \u00dcberholverbot is only prohibited for vehicles with a total mass exceeding 3.5 t, including their trailers."
+        },
+        {
+            "instruction": "What does Zeichen 277 prohibit when accompanied by a Zusatzzeichen?",
+            "response": "The \u00dcberholverbot for more two-axle vehicles and tractors with trailers is also prohibited when accompanied by the Zusatzzeichen."
+        },
+        {
+            "instruction": "What is the minimum alignment requirement for buffers allocated from the device memory in the Nintendo 3DS?",
+            "response": "Buffers allocated from device memory must be 4096-byte aligned."
+        },
+        {
+            "instruction": "In the context of page 58, what value does the Read() function return when all entries have been successfully retrieved for a directory reading class?",
+            "response": "The Read() function returns 0 (or NULL) to indicate completion."
+        },
+        {
+            "instruction": "For Zeichen 283, what effect does the Zusatzzeichen have on the Haltverbot?",
+            "response": "The Zusatzzeichen verbietet das Halten von Fahrzeugen nur auf dem Seitenstreifen."
+        },
+        {
+            "instruction": "What is the duration limit for mobile Haltverbote through Zeichen 286?",
+            "response": "Mobile, vor\u00fcbergehend angeordnete Haltverbote durch Zeichen 283 und 286 heben Verkehrszeichen auf, die das Parken erlauben. Laut Zeichen 63.1, Ladegesch\u00e4fte m\u00fcssen ohne Verz\u00f6gerung durchgef\u00fchrt werden."
+        },
+        {
+            "instruction": "On page 59, what is the exception to the Haltverbot for people with a besonderem Parkausweis?",
+            "response": "The Ausnahme gilt nur, soweit der Parkausweis gut lesbar ausgelegt oder angebracht ist."
+        },
+        {
+            "instruction": "For Zeichen 286, under which conditions does the Zusatzzeichen take into account people with schwerbehinderte Menschen mit au\u00dfergew\u00f6hnlicher Gehbehinderung?",
+            "response": "Das Zusatzzeichen nimmt schwerbehinderte Menschen mit au\u00dfergew\u00f6hnlicher Gehbehinderung, beidseitiger Amelie oder Phokomelie oder mit vergleichbaren Funktionseinschr\u00e4nkungen sowie blinde Menschen, jeweils mit besonderem Parkausweis Nummer \u2026, vom Haltverbot aus."
+        },
+        {
+            "instruction": "What is the specific condition for a driver to be allowed to park their vehicle within a designated zone?",
+            "response": "The driver must not stay in the zone longer than three minutes, except when entering or exiting the vehicle or loading/unloading goods."
+        },
+        {
+            "instruction": "What is the purpose of the Zusatzzeichen to Zeichen 290.1?",
+            "response": "It allows for parking of electric vehicles within designated zones."
+        },
+        {
+            "instruction": "Which type of vehicle is required to follow the specific parking restrictions in a designated zone?",
+            "response": "Electric vehicles."
+        },
+        {
+            "instruction": "What is the requirement for drivers when approaching a Fu\u00dfg\u00e4nger\u00fcberweg or up to 5 meters before it?",
+            "response": "They must not hold their vehicle."
+        },
+        {
+            "instruction": "What is the significance of the Sichtlinie at an intersection where a driver needs to stop?",
+            "response": "It indicates the point where the driver should pull back into the lane."
+        },
+        {
+            "instruction": "What type of vehicles are prohibited from parking on the Fahrbahn or Sonderweg for more than three meters of clearance?",
+            "response": "Vehicles with an unobstructed width of less than 3 meters, including land-based farm equipment and slow-moving vehicles."
+        },
+        {
+            "instruction": "What is the minimum alignment in bytes for buffers allocated from device memory on a Nintendo 3DS device?",
+            "response": "Buffers allocated from device memory must be 4096-byte aligned."
+        },
+        {
+            "instruction": "In the context of directory reading class, what value does the Read() function return when all entries have been successfully retrieved?",
+            "response": "The Read() function returns 0 (or NULL) to indicate completion."
+        },
+        {
+            "instruction": "What is the purpose of a Fahrstreifenbegrenzung (fence line) in a traffic sign?",
+            "response": "A Fahrstreifenbegrenzung (fence line) separates the lane for the opposing direction from other lanes or multiple lanes for the same-direction traffic, effectively creating a barrier between them."
+        },
+        {
+            "instruction": "For a vehicle on the inner lane of a two-lane road with a divider, what is the prohibited action?",
+            "response": "A vehicle cannot overtake the dividing line in order to avoid danger."
+        },
+        {
+            "instruction": "What is the requirement for vehicles using a designated bike path or cycle track?",
+            "response": "Vehicles using a designated bike path or cycle track must be of a type authorized by the law."
+        },
+        {
+            "instruction": "When approaching a crossroads with traffic lights, which direction must be followed?",
+            "response": "The direction indicated on the following sign must be followed at all times. If there are conflicting signs (e.g., one indicates left and another right), follow the sign indicating the direction of traffic flow."
+        },
+        {
+            "instruction": "What action is prohibited for a vehicle using Pfeilmarkierungen (signs)?",
+            "response": "A vehicle cannot stop on a section marked by Pfeile, as this could impede other road users or cause unnecessary delay."
+        },
+        {
+            "instruction": "What is the minimum alignment, in bytes, required for buffers allocated from the device memory in Section 42 of the German Highway Code?",
+            "response": "Buffers allocated from device memory must be 4096-byte aligned."
+        },
+        {
+            "instruction": "In the context of the Ortstafel (Street Sign) class, what value does the Zeichen 311 return to indicate the end of a closed area?",
+            "response": "The Zeichen 311 returns 'Hier endet eine geschlossene Ortschaft.'"
+        },
+        {
+            "instruction": "What is the minimum alignment requirement in bytes for buffers allocated from the device memory on a Nintendo 3DS device?",
+            "response": "Buffers allocated from device memory must be 4096-byte aligned."
+        },
+        {
+            "instruction": "In the directory reading class, what value does the Read() function return when all entries have been successfully retrieved?",
+            "response": "The Read() function returns 0 (or NULL) to indicate completion."
+        },
+        {
+            "instruction": "What is the purpose of a Zusatzzeichen with a Carsharingausweis versehenen Carsharingfahrzeug?",
+            "response": "A Zusatzzeichen with a Carsharingausweis versehenen Carsharingfahrzeug can limit the Parkerlaubnis (parking permit) to those vehicles equipped with such an ausweis."
+        },
+        {
+            "instruction": "For what type of electric vehicle is the restriction indicated by a Zusatzzeichen in relation to Parkscheinautomaten?",
+            "response": "A Zusatzzeichen indicates that electric vehicles can be exempt from parking with Parkschein or Parkscheibe if there are Parkscheinautomaten present."
+        },
+        {
+            "instruction": "How does the Parkerlaubnis (parking permit) expire for an electrified vehicle after a certain duration?",
+            "response": "The Parkerlaubnis expires after a certain duration specified by a Zusatzzeichen, and this expiration is confirmed through the display of the Parkscheibe."
+        },
+        {
+            "instruction": "What happens to the Parkerlaubnis (parking permit) when a Carsharingausweis with an attached Zusatzzeichen is displayed in a vehicle?",
+            "response": "A Parkerlaubnis remains valid if there are a Carsharingausweis with an attached Zusatzzeichen and Parkscheinautomaten present."
+        },
+        {
+            "instruction": "What is the minimum alignment requirement, in bytes, for buffers allocated from the device memory on the Nintendo 3DS?",
+            "response": "Buffers allocated from device memory must be 4096-byte aligned."
+        },
+        {
+            "instruction": "What does the Read() function return when all entries have been successfully retrieved in the context of the directory reading class?",
+            "response": "The Read() function returns 0 (or NULL) to indicate completion."
+        },
+        {
+            "instruction": "Which value is added to the parking restriction for vehicles with a total mass over 2.8t if an additional sign is present?",
+            "response": "2"
+        },
+        {
+            "instruction": "What is the purpose of the car-sharing restriction in the park rules?",
+            "response": "To restrict access only to specific car-sharing companies or firms."
+        },
+        {
+            "instruction": "How can parking restrictions be indicated on signs for cars with a valid car-sharing license?",
+            "response": "By adding a further sign with the corresponding firm name in black ink on white background."
+        },
+        {
+            "instruction": "What is required to prove the compliance of electric vehicles with time-limited parking restrictions?",
+            "response": "The Parkscheibe must be legibly displayed or attached."
+        },
+        {
+            "instruction": "What is the minimum alignment requirement for buffers allocated from the 3DS device memory?",
+            "response": "Buffers allocated from device memory must be 4096-byte aligned."
+        },
+        {
+            "instruction": "In the context of the directory reading class, what value does the Read() function return when all entries have been successfully retrieved?",
+            "response": "The Read() function returns 0 (or NULL) to indicate completion."
+        },
+        {
+            "instruction": "What type of vehicles are allowed on roads marked with the 'Radverkehr' symbol?",
+            "response": "Fahrr\u00e4der and Elektrokleinstfahrzeuge."
+        },
+        {
+            "instruction": "On which types of roads is it prohibited to halt in a Wartelinie (waiting line)?",
+            "response": "Kraftfahrstra\u00dfen, Autobahnknotenpunkten, Autobahndreiecken und Autobahnkreuzen."
+        },
+        {
+            "instruction": "What does the 'Haifischz\u00e4hne' ( Shark's teeth) sign indicate?",
+            "response": "A Wartepflicht infolge einer bestehenden Rechts-vor-links-Regelung abseits der Bundes-, Landes- und Kreisstra\u00dfen."
+        },
+        {
+            "instruction": "On what type of roads can the driver overtake a 'Leitlinie' (Guider line) marked on the road?",
+            "response": "Only when doing so does not gef\u00e4hrden den Verkehr."
+        },
+        {
+            "instruction": "What is the recommended minimum alignment, in bytes, for buffers allocated from the Nintendo 3DS device memory?",
+            "response": "Buffers allocated from device memory must be 4096-byte aligned."
+        },
+        {
+            "instruction": "In the context of the directory reading class, what value does the Read() function return when all entries have been successfully retrieved?",
+            "response": "The Read() function returns 0 (or NULL) to indicate completion."
+        },
+        {
+            "instruction": "What is the purpose of the 'Nebenstrecke' Zusatzzeichen in a Pfeilwegweiser?",
+            "response": "Das Zusatzzeichen \u201eNebenstrecke\u201c oder der Zusatz \"Nebenstrecke\" im Wegweiser weist auf eine Stra\u00dfenverbindung von untergeordneter Bedeutung hin."
+        },
+        {
+            "instruction": "What type of road is indicated by the Zeichen 26?",
+            "response": "Zeichen 26 indicates a Verkehrshelfer (Traffic Attendant)."
+        },
+        {
+            "instruction": "What does Zeichen 38 indicate in urban areas?",
+            "response": "Zeichen 38 indicates a Laternenring (Lantern Ring)."
+        },
+        {
+            "instruction": "What is the recommended minimum alignment, in bytes, for buffers allocated from the device memory of the Nintendo 3DS?",
+            "response": "Buffers allocated from device memory must be 4096-byte aligned."
+        },
+        {
+            "instruction": "In the context of the directory reading class, what value does the Read() function return when all entries have been successfully retrieved?",
+            "response": "The Read() function returns 0 (or NULL) to indicate completion."
+        },
+        {
+            "instruction": "What is the purpose of the Zeichen 406 in an Autobahn Ausfahrtank\u00fcndigung?",
+            "response": "The Zeichen 406 is the running number of the Autobahn Ausfahrten, Autobahnkreuze und Autobahndreiecke of the just traveled Autobahn."
+        },
+        {
+            "instruction": "What does the Zusatzzeichen 454 and 455.1 indicate in a temporary Umleitung?",
+            "response": "The Zeichen 454 and 455.1 can be supplemented with a Zielangabe on a Schild above the sign, indicating the route of the Umleitung."
+        },
+        {
+            "instruction": "How far before an Autobahnausfahrt is the Autohof in unmittelbarer N\u00e4he angek\u00fcndigt?",
+            "response": "The Autohof is once at the right-hand roadside edge 500 to 1000 meters before the sign 448 is announced."
+        },
+        {
+            "instruction": "What color scheme does the Zeichen 437 (Stra\u00fcennamensschilder) use?",
+            "response": "The Zeichen 437 uses either white script on dark background or black script on light background."
+        },
+        {
+            "instruction": "Was ist die Mindestanforderung f\u00fcr die Anordnung von Richtungstafeln in Kurven?",
+            "response": "Richtungstafeln in Kurven m\u00fcssen entweder aufgel\u00f6st angebracht oder an der Verkehrskreuzung angebracht sein."
+        },
+        {
+            "instruction": "Wie wird ein Warnleuchten an einer Absperrtafel signalisiert, wenn die gesamte Fahrbahn gesperrt ist?",
+            "response": "Ein rotes Licht wird gezeigt, wenn die ganze Fahrbahn gesperrt ist."
+        },
+        {
+            "instruction": "Welches Zusatzzeichen wird bei Einengungstafeln verwendet?",
+            "response": "Bei Einengungstafeln wird mit dem Zusatzzeichen des Ortes angek\u00fcndigt, an dem der Fahrstreifenwechsel nach dem Rei\u00dfverschlussverfahren (\u00a7 7 Absatz 4) erfolgen soll."
+        },
+        {
+            "instruction": "Was bedeutet das Zeichen 467.1?",
+            "response": "Das Zeichen 467.1 k\u00fcndigt eine Umlenkungspfeil an, die Alternativstrecken auf Autobahnen angibt, deren Benutzung im Bedarfsfall empfohlen wird."
+        },
+        {
+            "instruction": "Wie viele Fahrstreifen kann eine Richtungstafel in Kurven anzeigen?",
+            "response": "Eine Richtungstafel in Kurven kann den Verlauf und die Anzahl der Fahrstreifen anzeigen."
+        },
+        {
+            "instruction": "Was ist das Zeichen 628?",
+            "response": "Das Zeichen 628 ist die Leitschwelle mit Pfeilbake."
+        },
+        {
+            "instruction": "What is the minimum distance, in meters, between Leitpfosten for road signs?",
+            "response": "Leitpfosten can be spaced 50 m apart."
+        },
+        {
+            "instruction": "In the context of road sign markings, what is the purpose of a Parkwarntafel?",
+            "response": "A Parkwarntafel indicates parking restrictions."
+        },
+        {
+            "instruction": "What type of document does the German Ministry of Justice publish online?",
+            "response": "The German Ministry of Justice publishes laws online at www.gesetze-im-internet.de."
+        },
+        {
+            "instruction": "What is the purpose of a warning sign for falling snow and ice?",
+            "response": "A warning sign for falling snow and ice warns drivers of potential hazards."
+        },
+        {
+            "instruction": "What does the symbol on Page 83 indicate?",
+            "response": "The symbol indicates parking restrictions."
+        },
+        {
+            "instruction": "In what year were the highway regulations published (Zeichen 620) on Page 11?",
+            "response": "The exact date is not specified in the text."
+        }
+    ],
+    "progress_ratio": "54/54"
+}
