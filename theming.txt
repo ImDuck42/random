@@ -12,10 +12,10 @@ git clone https://github.com/vinceliuice/WhiteSur-gtk-theme.git --depth=1
 sudo ./tweaks.sh -c dark -g -nb -b ''
 
 Remove GDM Distro Logo:
-sudo -u gdm dbus-launch gsettings set org.gnome.login-screen logo ''
+gsettings set org.gnome.login-screen logo ''
 
 Icon-Theme:
-git clone https://github.com/alvatip/Nordzy-icon.git --depth=1
+git clone https://github.com/MolassesLover/Nordzy-icon.git --depth=1
 ./install.sh -t default -c dark
 
 Grub2-Theme:
@@ -23,7 +23,7 @@ git clone https://github.com/vinceliuice/grub2-themes.git --depth=1
 sudo ./install.sh -t vimix -i white -s 2k -b
 
 Cursor:Theme:
-https://github.com/guillaumeboehm/Nordzy-cursors.git
+git clone https://github.com/guillaumeboehm/Nordzy-cursors.git
 ./install.sh
 
 
