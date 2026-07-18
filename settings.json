@@ -1,0 +1,64 @@
+{
+  "imports": "./settings.js",
+  "sections": [
+    {
+      "id": "ososedkiExt",
+      "label": "Ososedki Scraper",
+      "icon": "globe",
+      "accent": "mauve",
+      "entries": [
+        {
+          "id": "osoConfig",
+          "label": "Proxy Connection",
+          "description": "First download the proxy from 'https://github.com/ImDuck42/Node-Test/blob/main/proxy.js' and run it via node",
+          "icon": "server",
+          "elements": [
+            {
+              "type": "input",
+              "id": "osoProxy",
+              "inputType": "url",
+              "variable": "osoProxy",
+              "placeholder": "http://localhost:3000",
+              "default": "http://localhost:3000"
+            },
+            {
+              "type": "button",
+              "id": "osoDownloadProxyBtn",
+              "label": "Download Proxy Script",
+              "accent": "blue",
+              "execute": "window.open('https://github.com/ImDuck42/Node-Test/blob/main/proxy.js', '_blank')"
+            },
+            {
+              "type": "button",
+              "id": "osoTestBtn",
+              "label": "Test Scraper",
+              "accent": "green",
+              "execute": "osoTestScraper(osoProxy)"
+            }
+          ]
+        },
+        {
+          "id": "osoActions",
+          "label": "Browse Ososedki",
+          "icon": "images",
+          "elements": [
+            {
+              "type": "button",
+              "id": "osoHomeBtn",
+              "label": "Load Home Albums",
+              "accent": "mauve",
+              "execute": "osoLoadHome(osoProxy)"
+            },
+            {
+              "type": "button",
+              "id": "osoRevertBtn",
+              "label": "Revert to Local Gallery",
+              "accent": "red",
+              "execute": "osoRevert()"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
