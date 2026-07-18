@@ -1,202 +1,142 @@
 // ==================================================================================================== //
-// GENERAL FUNCTIONS
+// SCRAPER INTERCEPTOR & BRIDGE SYSTEM
 // ==================================================================================================== //
-function onToggleChange(enableToggle) {
-  console.log(`[Core Service] Status changed: ${enableToggle ? 'ENABLED' : 'DISABLED'}`)
+let scraperApi = null;
+const imageCacheMap = new Map();
+
+function getRealImageUrl(folder, file) {
+  return imageCacheMap.get(`${folder}|${file}`);
 }
 
-function printValue(textValue) {
-  if (!textValue) {
-    console.warn('[Ping] No service name provided.')
-    return
-  }
-  console.log(`[Ping] Pinging service: "${textValue}"... Success!`)
+function setRealImageUrl(folder, file, realUrl) {
+  imageCacheMap.set(`${folder}|${file}`, realUrl);
 }
 
-function toggleNotifications(enabled) {
-  console.log(`[Notifications] Email notifications are now ${enabled ? 'ON' : 'OFF'}.`)
-}
+// Intercept window.fetch requests targetting your mock port 4269
+const originalFetch = window.fetch;
+window.fetch = async function(input, init) {
+  const urlStr = typeof input === 'string' ? input : input?.url || '';
 
-// ==================================================================================================== //
-// APPEARANCE FUNCTIONS
-// ==================================================================================================== //
-function applyTheme(isDarkMode) {
-  console.log(`[Theme] Switched to ${isDarkMode ? 'Dark' : 'Light'} Mode.`)
-  if (isDarkMode) {
-    document.body.classList.add('theme-dark')
-    document.body.classList.remove('theme-light')
-  } else {
-    document.body.classList.add('theme-light')
-    document.body.classList.remove('theme-dark')
-  }
-}
-
-function updateUIScale(scaleValue) {
-  console.log(`[UI] Interface scale set to ${scaleValue}%`)
-  document.documentElement.style.setProperty('--ui-scale', `${scaleValue / 100}`)
-}
-
-function resetScale() {
-  const scaleInput = document.getElementById('scaleSlider')
-  if (scaleInput) {
-    scaleInput.value = 100
-    // Dispatch input event so the parser registers the state change automatically
-    scaleInput.dispatchEvent(new Event('input')) 
-  }
-}
-
-function applyBrandColor(hexColor) {
-  console.log(`[Brand] Applying custom color: ${hexColor}`)
-  document.documentElement.style.setProperty('--brand-color', hexColor)
-}
-
-// ==================================================================================================== //
-// AUDIO & VIDEO FUNCTIONS
-// ==================================================================================================== //
-function toggleMute(isMuted) {
-  const volInput = document.getElementById('volumeSlider')
-  if (isMuted) {
-    console.log('[Audio] System Muted.')
-    if (volInput) volInput.disabled = true
-  } else {
-    console.log('[Audio] System Unmuted.')
-    if (volInput) volInput.disabled = false
-  }
-}
-
-function changeVolume(volume) {
-  console.log(`[Audio] Master volume adjusted to: ${volume}%`)
-}
-
-function saveQuietHours(start, end) {
-  if (!start || !end) {
-    console.warn('[Quiet Hours] Please provide both a start and end time.')
-    return
-  }
-  console.log(`[Quiet Hours] Saved. Notifications will be paused from ${start} to ${end}.`)
-}
-
-// ==================================================================================================== //
-// ACCOUNT & PRIVACY FUNCTIONS
-// ==================================================================================================== //
-function updatePassword(newPassword) {
-  if (!newPassword || newPassword.length < 6) {
-    alert('Password must be at least 6 characters long!')
-    return
-  }
-  console.log(`[Security] Password updated successfully! (length: ${newPassword.length})`)
-  
-  // Clear the input after update
-  const pwInput = document.getElementById('newPassword')
-  if (pwInput) {
-    pwInput.value = ''
-    pwInput.dispatchEvent(new Event('input'))
-  }
-}
-
-function exportUserData() {
-  console.log('[Privacy] Compiling user data for export...')
-  setTimeout(() => {
-    console.log('[Privacy] User data exported successfully. Check your downloads folder.')
-    alert('Data export complete!')
-  }, 1000)
-}
-
-function deleteAccount() {
-  console.error('[Danger Zone] Account deletion initiated...')
-  alert('Your account has been flagged for deletion.')
-}
-
-// ==================================================================================================== //
-// DEVELOPER FUNCTIONS
-// ==================================================================================================== //
-function pingApiEndpoint(url) {
-  if (!url) {
-    console.warn('[API] No URL provided to ping.');
-    return
-  }
-  console.log(`[API] Sending test request to: ${url}`)
-  
-  // Simulated ping delay
-  setTimeout(() => {
-    console.log(`[API] 200 OK from ${url}`)
-  }, 800)
-}
-
-function clearLocalCache() {
-  console.log('[Dev] Clearing localStorage and sessionStorage...')
-  localStorage.clear()
-  sessionStorage.clear()
-  console.log('[Dev] Cache cleared.')
-  alert('Local cache successfully purged!')
-}
-
-async function loadExternalSettingsFromUrl(jsonUrl) {
-  if (!jsonUrl) {
-    console.warn('[API] No URL provided.');
-    alert('Please enter a URL first!');
-    return;
-  }
-
-  console.log(`[API] Fetching external settings from: ${jsonUrl}`);
-
-  try {
-    // 1. Fetch the remote settings JSON
-    const response = await fetch(jsonUrl);
-    if (!response.ok) {
-      throw new Error(`HTTP Error! Status: ${response.status}`);
+  // 1. Intercept the database manifest call
+  if (urlStr.startsWith('http://localhost:4269/folders')) {
+    console.log('[Bridge] Intercepted folders fetch. Scraping live data...');
+    try {
+      const liveData = await fetchLiveOsosedkiData();
+      return new Response(JSON.stringify(liveData), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    } catch (err) {
+      console.error('[Bridge] Live scrape fell back to error:', err);
+      return new Response(JSON.stringify([]), { status: 500 });
     }
-
-    const data = await response.json();
-    console.log('[API] Successfully loaded settings JSON:', data);
-
-    // 2. Dynamically load the associated JS file if specified in "imports"
-    if (data.imports) {
-      // Resolve the import path relative to the JSON file's URL
-      // For example, if jsonUrl is "https://example.com/config/settings.json"
-      // and data.imports is "./settings.js", it resolves to "https://example.com/config/settings.js"
-      const baseUrl = new URL(jsonUrl, window.location.href);
-      const resolvedJsUrl = new URL(data.imports, baseUrl).href;
-      
-      console.log(`[API] Dynamically loading associated JS: ${resolvedJsUrl}`);
-      await injectScript(resolvedJsUrl);
-    }
-
-    // 3. Render the newly imported sections at the bottom
-    if (typeof appendAndRenderSettings === 'function') {
-      appendAndRenderSettings(data.sections || []);
-    } else {
-      console.warn('[Dev] Settings loaded, but "appendAndRenderSettings" parser hook is missing.');
-      alert('Settings loaded successfully! Connect "appendAndRenderSettings" to update your UI.');
-    }
-
-  } catch (error) {
-    console.error('[API] Failed to fetch external config:', error);
-    alert(`Error loading settings: ${error.message}`);
   }
-}
 
-// Helper utility to inject script tags into the document
-function injectScript(src) {
-  return new Promise((resolve, reject) => {
-    // Avoid reloading the script if it's already present in the DOM
-    if (document.querySelector(`script[src="${src}"]`)) {
-      console.log(`[API] Script already loaded: ${src}`);
-      resolve();
-      return;
+  // 2. Intercept scraper calls bound to the source site and force local CORS proxy routing
+  if (urlStr.startsWith('https://ososedki.com')) {
+    const proxyBase = (settingsState.proxyUrl || 'http://localhost:3000').replace(/\/$/, '');
+    const proxiedUrl = `${proxyBase}/proxy?url=${encodeURIComponent(urlStr)}`;
+    return originalFetch(proxiedUrl, init);
+  }
+
+  return originalFetch(input, init);
+};
+
+// 3. Hijack HTML Image element src attributes
+// Standard <img> tags do not trigger window.fetch. We override the prototype setter
+// to capture local asset requests and map them to direct CDN targets.
+const originalSrcDescriptor = Object.getOwnPropertyDescriptor(HTMLImageElement.prototype, 'src') || {
+  set: function(val) { this.setAttribute('src', val); },
+  get: function() { return this.getAttribute('src'); }
+};
+
+Object.defineProperty(HTMLImageElement.prototype, 'src', {
+  set: function(value) {
+    if (typeof value === 'string' && value.includes('http://localhost:4269/image')) {
+      try {
+        const url = new URL(value);
+        const folder = url.searchParams.get('folder');
+        const file = url.searchParams.get('file');
+        const realUrl = getRealImageUrl(folder, file);
+
+        if (realUrl) {
+          const proxyBase = (settingsState.proxyUrl || 'http://localhost:3000').replace(/\/$/, '');
+          const proxiedUrl = `${proxyBase}/proxy?url=${encodeURIComponent(realUrl)}`;
+          return originalSrcDescriptor.set.call(this, proxiedUrl);
+        }
+      } catch (err) {
+        console.error('[Bridge] Image URL processing failed:', err);
+      }
     }
+    return originalSrcDescriptor.set.call(this, value);
+  },
+  get: function() {
+    return originalSrcDescriptor.get.call(this);
+  },
+  configurable: true,
+  enumerable: true
+});
 
-    const script = document.createElement('script');
-    script.src = src;
-    script.type = 'text/javascript'; // Use 'module' if your target script uses export statements
-    script.onload = () => {
-      console.log(`[API] Script successfully evaluated: ${src}`);
-      resolve();
-    };
-    script.onerror = () => {
-      reject(new Error(`Failed to load script resource: ${src}`));
-    };
-    
-    document.head.appendChild(script);
+// ==================================================================================================== //
+// MAPPING SCRAPED PORTAL DATA TO FOLDER STRUCTURE
+// ==================================================================================================== //
+async function fetchLiveOsosedkiData() {
+  // Dynamically load your modular scraper client
+  if (!scraperApi) {
+    const module = await import('./api/api.mjs');
+    scraperApi = module.createClient({ baseUrl: 'https://ososedki.com' });
+  }
+
+  const limit = parseInt(settingsState.albumLimit, 10) || 12;
+
+  // Retrieve default homepage galleries feed
+  const feed = await scraperApi.getHome(1);
+  const targetAlbums = feed.albums.slice(0, limit);
+
+  const mockFolders = [];
+
+  // Concurrently resolve the interior contents of each gallery block
+  const resolutionTasks = targetAlbums.map(async (album) => {
+    try {
+      const details = await scraperApi.getGallery(album.id);
+      const imagesList = details.allImageUrls.length ? details.allImageUrls : details.images.map(i => i.url);
+
+      // Structure title matching Folder properties
+      const folderName = `${album.modelName || 'Model'} - ${album.title}`;
+      const randomAccent = ACCENT_NAMES[Math.floor(Math.random() * ACCENT_NAMES.length)];
+      const byteCalculation = Math.floor(imagesList.length * 1.5 + 5);
+
+      const folderObject = {
+        name: folderName,
+        accent: randomAccent,
+        sizeMB: byteCalculation,
+        fileCount: imagesList.length,
+        images: imagesList.map((url, index) => {
+          const fileName = `${index + 1}.webp`;
+          setRealImageUrl(folderName, fileName, url);
+          return {
+            name: fileName,
+            size: 1.5
+          };
+        })
+      };
+
+      mockFolders.push(folderObject);
+    } catch (err) {
+      console.warn(`[Bridge] Skipped loading details for album: ${album.id}`, err);
+    }
   });
+
+  await Promise.all(resolutionTasks);
+  return mockFolders;
+}
+
+// ==================================================================================================== //
+// WORKSPACE THEME HOOK
+// ==================================================================================================== //
+function applyGlobalAccent(accentName) {
+  if (ACCENT_NAMES.includes(accentName)) {
+    document.documentElement.style.setProperty('--accent', `var(--ctp-${accentName}-rgb)`);
+    console.log(`[Theme] Accent set to: ${accentName}`);
+  }
 }

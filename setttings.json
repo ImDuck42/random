@@ -1,0 +1,77 @@
+{
+  "imports": "./settings.js",
+  "sections": [
+    {
+      "id": "scraper",
+      "label": "Scraper Connection",
+      "icon": "spider",
+      "accent": "mauve",
+      "entries": [
+        {
+          "id": "proxyConfig",
+          "label": "CORS Proxy",
+          "description": "The local address of your running proxy.js node server.",
+          "icon": "network-wired",
+          "elements": [
+            {
+              "type": "input",
+              "id": "proxyUrlInput",
+              "inputType": "url",
+              "variable": "proxyUrl",
+              "default": "http://localhost:3000"
+            }
+          ]
+        },
+        {
+          "id": "limitConfig",
+          "label": "Album Feed Limit",
+          "description": "Maximum number of home albums to scrape and parse simultaneously.",
+          "icon": "list-ol",
+          "elements": [
+            {
+              "type": "input",
+              "id": "albumLimitInput",
+              "inputType": "number",
+              "variable": "albumLimit",
+              "min": 4,
+              "max": 30,
+              "step": 2,
+              "default": 12
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "appearance",
+      "label": "Appearance",
+      "icon": "palette",
+      "accent": "teal",
+      "entries": [
+        {
+          "id": "accentOverride",
+          "label": "Global Highlight Theme",
+          "description": "The workspace color theme for focus states.",
+          "icon": "brush",
+          "elements": [
+            {
+              "type": "dropdown",
+              "id": "accentDropdown",
+              "variable": "uiAccent",
+              "default": "mauve",
+              "options": [
+                { "value": "rosewater", "label": "Rosewater" },
+                { "value": "pink", "label": "Pink" },
+                { "value": "mauve", "label": "Mauve" },
+                { "value": "teal", "label": "Teal" },
+                { "value": "sky", "label": "Sky" },
+                { "value": "sapphire", "label": "Sapphire" }
+              ],
+              "execute": "applyGlobalAccent(uiAccent)"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
