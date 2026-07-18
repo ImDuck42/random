@@ -1,0 +1,357 @@
+{
+  "imports": "./settings.js",
+  "sections": [
+    {
+      "id"     : "general",
+      "label"  : "General",
+      "icon"   : "sliders",
+      "accent" : "green",
+      "entries": [
+        {
+          "id"      : "enableSomething",
+          "label"   : "Enable Core Service",
+          "icon"    : "cog",
+          "elements": [
+            {
+              "type"    : "toggle",
+              "id"      : "enableToggle",
+              "variable": "enableToggle",
+              "default" : false,
+              "execute" : "onToggleChange(enableToggle)"
+            },
+            {
+              "type"       : "input",
+              "id"         : "textInput1",
+              "inputType"  : "text",
+              "variable"   : "textInput1",
+              "accent"     : "mauve",
+              "placeholder": "Service Name",
+              "default"    : ""
+            },
+            {
+              "type"   : "button",
+              "id"     : "printButton",
+              "label"  : "Ping",
+              "accent" : "green",
+              "confirm": false,
+              "execute": "printValue(textInput1)"
+            }
+          ]
+        },
+        {
+          "id"      : "notifications",
+          "label"   : "Notifications",
+          "icon"    : "bell",
+          "accent"  : "yellow",
+          "elements": [
+            {
+              "type"    : "checkbox",
+              "id"      : "emailNotify",
+              "variable": "emailNotify",
+              "accent"  : "yellow",
+              "default" : true,
+              "execute" : "toggleNotifications(emailNotify)"
+            },
+            {
+              "type"     : "input",
+              "id"       : "notifyLimit",
+              "inputType": "number",
+              "variable" : "notifyLimit",
+              "min"      : 0,
+              "max"      : 100,
+              "step"     : 5,
+              "default"  : 10
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id"     : "appearance",
+      "label"  : "Appearance",
+      "icon"   : "palette",
+      "accent" : "flamingo",
+      "entries": [
+        {
+          "id"         : "darkMode",
+          "label"      : "Dark Mode",
+          "description": "Switch between light and dark themes globally.",
+          "icon"       : "moon",
+          "accent"     : "lavender",
+          "elements"   : [
+            {
+              "type"    : "toggle",
+              "id"      : "themeToggle",
+              "variable": "isDarkMode",
+              "default" : true,
+              "execute" : "applyTheme(isDarkMode)"
+            },
+            {
+              "type"    : "dropdown",
+              "id"      : "themeDropdown",
+              "variable": "theme",
+              "default" : "dark",
+              "options" : [
+                { "value": "light",  "label": "Light Theme" },
+                { "value": "dark",   "label": "Dark Theme" },
+                { "value": "system", "label": "System Desssssssssssssssssssfault" }
+              ],
+              "execute" : "applyTheme(theme)"
+            }
+          ]
+        },
+        {
+          "id"      : "uiScale",
+          "label"   : "Interface Scale",
+          "icon"    : "magnifying-glass",
+          "accent"  : "sky",
+          "elements": [
+            {
+              "type"     : "input",
+              "id"       : "scaleSlider",
+              "inputType": "range",
+              "variable" : "uiScale",
+              "min"      : 50,
+              "max"      : 200,
+              "step"     : 10,
+              "default"  : 100,
+              "execute"  : "updateUIScale(uiScale)"
+            },
+            {
+              "type"   : "button",
+              "id"     : "resetScaleBtn",
+              "label"  : "Reset",
+              "accent" : "sky",
+              "execute": "resetScale()"
+            }
+          ]
+        },
+        {
+          "id"         : "customColor",
+          "label"      : "Brand Color",
+          "description": "Pick a custom hex color for your workspace.",
+          "icon"       : "brush",
+          "elements"   : [
+            {
+              "type"     : "input",
+              "id"       : "colorPicker",
+              "inputType": "color",
+              "variable" : "brandColor",
+              "default"  : "#ffb86c",
+              "accent"   : "peach"
+            },
+            {
+              "type"   : "button",
+              "id"     : "applyColorBtn",
+              "label"  : "Apply Color",
+              "accent" : "peach",
+              "execute": "applyBrandColor(brandColor)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id"     : "audioVideo",
+      "label"  : "Audio & Video",
+      "icon"   : "headphones",
+      "accent" : "blue",
+      "entries": [
+        {
+          "id"      : "volumeControl",
+          "label"   : "Master Volume",
+          "icon"    : "volume-high",
+          "elements": [
+            {
+              "type"    : "toggle",
+              "id"      : "muteToggle",
+              "variable": "isMuted",
+              "accent"  : "red",
+              "default" : false,
+              "execute" : "toggleMute(isMuted)"
+            },
+            {
+              "type"     : "input",
+              "id"       : "volumeSlider",
+              "inputType": "range",
+              "variable" : "masterVolume",
+              "min"      : 0,
+              "max"      : 100,
+              "step"     : 1,
+              "default"  : 75,
+              "accent"   : "blue",
+              "execute"  : "changeVolume(masterVolume)"
+            }
+          ]
+        },
+        {
+          "id"         : "quietHours",
+          "label"      : "Quiet Hours",
+          "description": "Automatically mute notifications during this time.",
+          "icon"       : "clock",
+          "accent"     : "rosewater",
+          "elements"   : [
+            {
+              "type"     : "input",
+              "id"       : "quietStart",
+              "inputType": "time",
+              "variable" : "quietTimeStart",
+              "default"  : "22:00"
+            },
+            {
+              "type"     : "input",
+              "id"       : "quietEnd",
+              "inputType": "time",
+              "variable" : "quietTimeEnd",
+              "default"  : "07:00"
+            },
+            {
+              "type"   : "button",
+              "id"     : "saveQuietHours",
+              "label"  : "Save",
+              "accent" : "rosewater",
+              "execute": "saveQuietHours(quietTimeStart, quietTimeEnd)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id"     : "account",
+      "label"  : "Account & Privacy",
+      "icon"   : "shield-halved",
+      "accent" : "sapphire",
+      "entries": [
+        {
+          "id"      : "profileInfo",
+          "label"   : "Profile Details",
+          "icon"    : "id-card",
+          "elements": [
+            {
+              "type"       : "input",
+              "id"         : "displayNameInput",
+              "inputType"  : "text",
+              "variable"   : "displayName",
+              "placeholder": "Display Name",
+              "default"    : "User123"
+            },
+            {
+              "type"     : "input",
+              "id"       : "birthDate",
+              "inputType": "date",
+              "variable" : "birthDate",
+              "default"  : ""
+            }
+          ]
+        },
+        {
+          "id"      : "passwordChange",
+          "label"   : "Change Password",
+          "icon"    : "key",
+          "accent"  : "maroon",
+          "elements": [
+            {
+              "type"       : "input",
+              "id"         : "newPassword",
+              "inputType"  : "password",
+              "variable"   : "newPassword",
+              "placeholder": "New Password",
+              "default"    : ""
+            },
+            {
+              "type"   : "button",
+              "id"     : "updatePasswordBtn",
+              "label"  : "Update",
+              "accent" : "maroon",
+              "confirm": true,
+              "execute": "updatePassword(newPassword)"
+            }
+          ]
+        },
+        {
+          "id"         : "dangerZone",
+          "label"      : "Danger Zone",
+          "description": "Actions here cannot be undone.",
+          "icon"       : "triangle-exclamation",
+          "accent"     : "red",
+          "elements"   : [
+            {
+              "type"   : "button",
+              "id"     : "exportDataBtn",
+              "label"  : "Export Data",
+              "accent" : "teal",
+              "execute": "exportUserData()"
+            },
+            {
+              "type" : "button",
+              "id"   : "",
+              "label": "spacer"
+            },
+            {
+              "type"   : "button",
+              "id"     : "deleteAccountButton",
+              "label"  : "Delete Account",
+              "accent" : "red",
+              "confirm": true,
+              "execute": "deleteAccount()"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id"     : "developer",
+      "label"  : "Developer Settings",
+      "icon"   : "code",
+      "accent" : "teal",
+      "entries": [
+        {
+          "id"         : "apiEndpoint",
+          "label"      : "API Endpoint",
+          "description": "Configure the base URL for backend requests.",
+          "icon"       : "server",
+          "elements"   : [
+            {
+              "type"       : "input",
+              "id"         : "apiUrl",
+              "inputType"  : "url",
+              "variable"   : "apiUrl",
+              "placeholder": "https://api.example.com",
+              "default"    : "https://api.example.com"
+            },
+            {
+              "type"   : "button",
+              "id"     : "testApiBtn",
+              "label"  : "Ping URL",
+              "accent" : "pink",
+              "execute": "pingApiEndpoint(apiUrl)"
+            }
+          ]
+        },
+        {
+          "id"         : "importSettings",
+          "label"      : "Import Settings via URL",
+          "description": "Load an external JSON settings file and dynamically load its corresponding JavaScript logic.",
+          "icon"       : "cloud-arrow-down",
+          "elements"   : [
+            {
+              "type"       : "input",
+              "id"         : "settingsUrlInput",
+              "inputType"  : "url",
+              "variable"   : "settingsUrl",
+              "placeholder": "https://example.com/path/settings.json",
+              "default"    : ""
+            },
+            {
+              "type"   : "button",
+              "id"     : "loadSettingsUrlBtn",
+              "label"  : "Load Settings",
+              "accent" : "teal",
+              "execute": "loadExternalSettingsFromUrl(settingsUrl)"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
