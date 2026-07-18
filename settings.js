@@ -266,7 +266,7 @@ function updateOsoChips(newAlbums) {
     }
   }
 
-  const allChipHtml    = `<button class="chip ${osoState.activeAlbums.length === 0 ? 'active' : ''} oso-item" data-oso-folder="all"><span>All Images</span></button>`
+  const allChipHtml    = `<button class="chip oso-item" data-oso-folder="all"><span>All Images</span></button>`
   const albumChipsHtml = osoState.loadedAlbums.map(album => {
     const isActive = osoState.activeAlbums.includes(album.id)
     return `<button class="chip ${isActive ? 'active' : ''} oso-item" data-oso-folder="${album.id}"><span>${album.title}</span></button>`
