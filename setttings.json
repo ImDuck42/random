@@ -18,7 +18,14 @@
               "id": "proxyUrlInput",
               "inputType": "url",
               "variable": "proxyUrl",
-              "default": "http://localhost:3000"
+              "default": "http://localhost:4269"
+            },
+            {
+              "type": "button",
+              "id": "testProxyBtn",
+              "label": "Test Proxy",
+              "accent": "mauve",
+              "execute": "testProxyConnection(proxyUrl)"
             }
           ]
         },
@@ -37,37 +44,13 @@
               "max": 30,
               "step": 2,
               "default": 12
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "appearance",
-      "label": "Appearance",
-      "icon": "palette",
-      "accent": "teal",
-      "entries": [
-        {
-          "id": "accentOverride",
-          "label": "Global Highlight Theme",
-          "description": "The workspace color theme for focus states.",
-          "icon": "brush",
-          "elements": [
+            },
             {
-              "type": "dropdown",
-              "id": "accentDropdown",
-              "variable": "uiAccent",
-              "default": "mauve",
-              "options": [
-                { "value": "rosewater", "label": "Rosewater" },
-                { "value": "pink", "label": "Pink" },
-                { "value": "mauve", "label": "Mauve" },
-                { "value": "teal", "label": "Teal" },
-                { "value": "sky", "label": "Sky" },
-                { "value": "sapphire", "label": "Sapphire" }
-              ],
-              "execute": "applyGlobalAccent(uiAccent)"
+              "type": "button",
+              "id": "saveLimitBtn",
+              "label": "Apply Limit",
+              "accent": "mauve",
+              "execute": "updateScraperSettings(albumLimit)"
             }
           ]
         }
