@@ -54,7 +54,7 @@ class OsosedkiAPI {
   }
 
   parseAlbums(doc) {
-    const seen = new Set()
+    const seen   = new Set()
     const albums = []
 
     for (const link of doc.querySelectorAll('a[href^="/photos/"]')) {
@@ -65,20 +65,20 @@ class OsosedkiAPI {
       if (!figure) continue
       seen.add(albumId)
 
-      const img = figure.querySelector('img')
+      const img     = figure.querySelector('img')
       let thumbnail = img?.getAttribute('data-src') ?? img?.getAttribute('src') ?? ''
       if (thumbnail.startsWith('/')) thumbnail = OSO_ORIGIN + thumbnail
 
       const [titleCell, modelCell, countCell] = link.querySelectorAll(':scope > div')
-      let title     = titleCell?.textContent.trim() ?? ''
-      let modelName = modelCell?.textContent.trim() ?? ''
+      let title      = titleCell?.textContent.trim() ?? ''
+      let modelName  = modelCell?.textContent.trim() ?? ''
       let imageCount = countCell ? extractInteger(countCell.textContent) : 0
 
       if (!title) {
         const lines = link.textContent.replace(/NEW/g, '').split('\n').map(line => line.trim()).filter(Boolean)
-        title     = lines[0] ?? ''
-        modelName = lines[1] ?? ''
-        imageCount = lines[2] ? extractInteger(lines[2]) : 0
+        title       = lines[0] ?? ''
+        modelName   = lines[1] ?? ''
+        imageCount  = lines[2] ? extractInteger(lines[2]) : 0
       }
       if (!modelName && title.includes(' - ')) [modelName] = title.split(' - ')
 
@@ -105,7 +105,7 @@ class OsosedkiAPI {
   }
 
   async getGalleryImages(albumId) {
-    const doc = this.parse(await this.request(`/photos/${albumId}`))
+    const doc    = this.parse(await this.request(`/photos/${albumId}`))
     const images = []
     for (const figure of doc.querySelectorAll('figure.photo-item')) {
       const link = figure.querySelector('a[href^="/images/a/"]')
@@ -126,14 +126,14 @@ function proxifyOso(url, proxyHost) {
 // PLUGIN STATE
 // ==================================================================================================== //
 const osoState = {
-  currentPage: 1,
-  isLoading: false,
-  hasMore: true,
-  currentQuery: '',
-  proxyUrl: '',
-  loadedAlbums: [],
-  cachedAlbumImages: {},
-  activeAlbums: [],
+  currentPage:        1,
+  isLoading:          false,
+  hasMore:            true,
+  currentQuery:       '',
+  proxyUrl:           '',
+  loadedAlbums:       [],
+  cachedAlbumImages:  {},
+  activeAlbums:       [],
   gallerySortApplied: false
 }
 
@@ -150,7 +150,7 @@ function resetOsoState(proxyUrl, query = '') {
 }
 
 // ==================================================================================================== //
-// DOM INJECTION & NATIVE OVERRIDES
+// DOM & OVERRIDES
 // ==================================================================================================== //
 function injectOsoStyles() {
   if (document.getElementById('oso-styles')) return
@@ -254,7 +254,7 @@ function setupMarquee(root = document) {
 }
 
 // ==================================================================================================== //
-// ALBUM PAGE CHIPS IMPLEMENTATION
+// ALBUM PAGE CHIPS
 // ==================================================================================================== //
 function updateOsoChips(newAlbums) {
   const chipContainer = document.querySelector('.chip-container')
@@ -361,15 +361,15 @@ function createOsoImageCard(imageData) {
   card.style.contentVisibility = 'auto'
   card.style.containIntrinsicSize = '200px 300px'
 
-  card.setAttribute('data-name',        imageData.url)   // Raw non-proxy URL
-  card.setAttribute('data-folder-name', imageData.title) // Album title
+  card.setAttribute('data-name',        imageData.url)
+  card.setAttribute('data-folder-name', imageData.title)
 
   const img = document.createElement('img')
-  img.loading    = 'lazy'
-  img.decoding   = 'async'
-  img.src        = proxifyOso(imageData.url, osoState.proxyUrl)
-  img.alt        = imageData.title
-  img.onload     = () => packOsoCard(card)
+  img.loading  = 'lazy'
+  img.decoding = 'async'
+  img.src      = proxifyOso(imageData.url, osoState.proxyUrl)
+  img.alt      = imageData.title
+  img.onload   = () => packOsoCard(card)
 
   card.appendChild(img)
   return card
@@ -490,7 +490,7 @@ async function runOsoAlbumQuery(proxyUrl, query = '') {
   if (!proxyUrl) return alert('Proxy URL required.')
 
   document.body.classList.add('oso-mode-active')
-  switchNativeTab(0) // Go to Folders Tab
+  switchNativeTab(0)
   clearOsoItems('.folder-grid')
   resetOsoState(proxyUrl, query)
 
@@ -537,7 +537,7 @@ window.osoLoadGallery = async function (proxyUrl, albumId, title) {
 }
 
 // ==================================================================================================== //
-// INFINITE SCROLL, SORT PILL, SEARCH HOOKS, & LOCAL FILTERING
+// INFINITE SCROLL, SORT PILL, SEARCH, & FILTERING
 // ==================================================================================================== //
 async function loadNextPageOfAlbums() {
   osoState.isLoading = true
