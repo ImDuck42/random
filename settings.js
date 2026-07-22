@@ -687,10 +687,14 @@ function initSearchHook() {
   const searchSubmit  = document.querySelector('.search-submit')
   if (!searchInput) return
 
+  const shouldHijackSearch = () => {
+    return document.body.classList.contains('oso-mode-active') && osoState.loadedAlbums.length > 0;
+  }
+
   const performOsoSearch = () => {
     const query = searchInput.value.trim().toLowerCase()
 
-    if (isGalleryTabActive() && document.body.classList.contains('oso-mode-active')) {
+    if (isGalleryTabActive()) {
       localGallerySearch(query)
       return
     }
@@ -706,9 +710,11 @@ function initSearchHook() {
   }
 
   searchInput.addEventListener('input', () => {
+    if (!shouldHijackSearch()) return;
+
     const query = searchInput.value.trim().toLowerCase()
 
-    if (isGalleryTabActive() && document.body.classList.contains('oso-mode-active')) {
+    if (isGalleryTabActive()) {
       const hasNoLoadedImages = !document.querySelector('.gallery-masonry .oso-item')
 
       if (query === '' && hasNoLoadedImages && !osoState.isLoading) {
@@ -722,15 +728,17 @@ function initSearchHook() {
   })
 
   searchInput.addEventListener('keydown', event => {
-    if (!document.body.classList.contains('oso-mode-active')) return
+    if (!shouldHijackSearch()) return
     if (event.key !== 'Enter') return
+    
     event.stopImmediatePropagation()
     event.preventDefault()
     performOsoSearch()
   }, true)
 
   searchSubmit?.addEventListener('click', event => {
-    if (!document.body.classList.contains('oso-mode-active')) return
+    if (!shouldHijackSearch()) return
+    
     event.stopImmediatePropagation()
     event.preventDefault()
     performOsoSearch()
