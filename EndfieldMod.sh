@@ -16,8 +16,6 @@ set -euo pipefail
 USER_HOME="${HOME:-/home/$(whoami)}"
 
 DEFAULT_LOADER_DIR="${USER_HOME}/Downloads/Endfield"
-OLD_LOADER_DIR="${USER_HOME}/Downloads/endfield-mods"
-
 LOADER_DIR="${LOADER_DIR:-$DEFAULT_LOADER_DIR}"
 CONFIG_FILE="${LOADER_DIR}/config.conf"
 
@@ -295,13 +293,6 @@ configure() {
   save_config
 }
 
-migrate_loader_dir() {
-  if [[ -d "$OLD_LOADER_DIR" && ! -e "$LOADER_DIR" ]]; then
-    log_info "Migrating ${OLD_LOADER_DIR} -> ${LOADER_DIR}"
-    mv "$OLD_LOADER_DIR" "$LOADER_DIR"
-  fi
-}
-
 # ===========================================================================
 # Package Management & Synchronization
 # ===========================================================================
@@ -550,7 +541,6 @@ to_windows_path() {
 # ===========================================================================
 main() {
   check_dependencies
-  migrate_loader_dir
 
   if [[ "$RECONFIGURE" -eq 0 ]]; then
     load_config
