@@ -173,8 +173,12 @@ startEmu() {
     fi
   fi
 
+  # Global state variables for cleanup handler
+  origTimeout=""
+  suspendModuleIds=""
+  emuPid=""
+
   # Temporarily disable GNOME's "App Not Responding" popup
-  local origTimeout=""
   if command -v gsettings >/dev/null 2>&1; then
     local rawVal
     rawVal=$(gsettings get org.gnome.mutter check-alive-timeout 2>/dev/null | awk '{print $NF}' | tr -dc '0-9')
@@ -187,7 +191,6 @@ startEmu() {
     logNote "Temporarily disabled GNOME 'App Not Responding' popups."
   fi
 
-  local suspendModuleIds=""
   if command -v pactl >/dev/null 2>&1; then
     suspendModuleIds="$(pactl list short modules 2>/dev/null | awk '/module-suspend-on-idle/ {print $1}')" || true
     if [ -n "$suspendModuleIds" ]; then
@@ -203,14 +206,18 @@ startEmu() {
     trap - EXIT INT TERM
     echo -e "\n${YELLOW}[*] Shutting down Android Emulator...${NC}"
 
-    adb -s "$DEVICE_SERIAL" emu kill >/dev/null 2>&1 || kill "$emuPid" >/dev/null 2>&1 || true
+    if [ -n "${emuPid:-}" ]; then
+      adb -s "$DEVICE_SERIAL" emu kill >/dev/null 2>&1 || kill "$emuPid" >/dev/null 2>&1 || true
+    else
+      adb -s "$DEVICE_SERIAL" emu kill >/dev/null 2>&1 || true
+    fi
 
-    if [ -n "$origTimeout" ]; then
+    if [ -n "${origTimeout:-}" ]; then
       logNote "Restoring GNOME 'check-alive-timeout' back to original value ($origTimeout)..."
       gsettings set org.gnome.mutter check-alive-timeout "$origTimeout" 2>/dev/null || true
     fi
 
-    if command -v pactl >/dev/null 2>&1 && [ -n "$suspendModuleIds" ]; then
+    if command -v pactl >/dev/null 2>&1 && [ -n "${suspendModuleIds:-}" ]; then
       pactl load-module module-suspend-on-idle >/dev/null 2>&1 || true
     fi
   }
