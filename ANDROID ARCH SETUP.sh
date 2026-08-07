@@ -301,7 +301,8 @@ cleanEnv() {
 
   logWarn "[2/4] Removing SDK directory ($SDK_DIR)..."
   sudo rm -rf "$SDK_DIR"
-  rm -rf "$HOME/.android" # cleans up leftover global android cache
+  rm -rf "$HOME/Android"
+  rm -rf "$HOME/.android"
 
   logWarn "[3/4] Uninstalling installed packages via pacman..."
   local targetPackages=("android-sdk-cmdline-tools-latest" "qemu-full" "vulkan-tools")
