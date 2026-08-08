@@ -1,60 +1,105 @@
 {
-  "imports": "./settings.js",
+  "imports": "./test.js",
   "sections": [
     {
-      "id":     "ososedkiExt",
-      "label":  "Ososedki Scraper",
-      "icon":   "globe",
-      "accent": "mauve",
+      "identifier": "ososedkiScraperExtension",
+      "label":      "Ososedki Scraper",
+      "icon":       "globe",
+      "accent":     "mauve",
       "entries": [
         {
-          "id":          "osoConfig",
+          "identifier":  "proxyConfiguration",
           "label":       "Proxy Connection",
           "description": "First download the proxy and run it via 'node ./proxy.js'",
           "icon":        "server",
           "elements": [
             {
               "type":        "input",
-              "id":          "osoProxy",
+              "identifier":  "proxyServerAddress",
               "inputType":   "url",
-              "variable":    "osoProxy",
+              "variable":    "proxyServerAddress",
               "placeholder": "http://localhost:3000",
               "default":     "http://localhost:3000"
             },
             {
-              "type":    "button",
-              "id":      "osoDownloadProxyBtn",
-              "label":   "Download Proxy Script",
-              "accent":  "blue",
-              "execute": "window.open('https://github.com/ImDuck42/Node-Test/blob/main/proxy.js', '_blank')"
+              "type":       "button",
+              "identifier": "downloadProxyButton",
+              "label":      "Download Proxy Script",
+              "accent":     "blue",
+              "execute":    "window.open('https://github.com/ImDuck42/Node-Test/blob/main/proxy.js', '_blank')"
             },
             {
-              "type":    "button",
-              "id":      "osoTestBtn",
-              "label":   "Test Scraper",
-              "accent":  "green",
-              "execute": "osoTestScraper(osoProxy)"
+              "type":       "button",
+              "identifier": "testScraperButton",
+              "label":      "Test Scraper",
+              "accent":     "green",
+              "execute":    "window.executeOsosedkiTestScraper(proxyServerAddress)"
             }
           ]
         },
         {
-          "id":    "osoActions",
-          "label": "Browse Ososedki",
-          "icon":  "images",
+          "identifier":  "accountConfiguration",
+          "label":       "Github-DB Account Login (Kinda unsecure, but will do)",
+          "description": "To create an account, visit 'https://imduck42.github.io/Node-Test/#/profile' and register",
+          "icon":        "user",
           "elements": [
             {
-              "type":    "button",
-              "id":      "osoHomeBtn",
-              "label":   "Load Home Albums",
-              "accent":  "mauve",
-              "execute": "osoLoadHome(osoProxy)"
+              "type":        "input",
+              "identifier":  "accountUsername",
+              "inputType":   "text",
+              "variable":    "accountUsername",
+              "placeholder": "Username",
+              "default":     ""
             },
             {
-              "type":    "button",
-              "id":      "osoRevertBtn",
-              "label":   "Revert to Local Gallery",
-              "accent":  "red",
-              "execute": "osoRevert()"
+              "type":        "input",
+              "identifier":  "accountPassword",
+              "inputType":   "password",
+              "variable":    "accountPassword",
+              "placeholder": "Password",
+              "default":     ""
+            },
+            {
+              "type":       "button",
+              "identifier": "accountLoginButton",
+              "label":      "Login",
+              "accent":     "blue",
+              "execute":    "window.executeOsosedkiLogin(accountUsername, accountPassword)"
+            },
+            {
+              "type":       "button",
+              "identifier": "accountLogoutButton",
+              "label":      "Logout",
+              "accent":     "red",
+              "execute":    "window.executeOsosedkiLogout()"
+            },
+            {
+              "type":       "button",
+              "identifier": "viewProfileButton",
+              "label":      "View Profile",
+              "accent":     "mauve",
+              "execute":    "window.openOsosedkiProfileWindow()"
+            }
+          ]
+        },
+        {
+          "identifier": "browseActions",
+          "label":      "Browse Ososedki",
+          "icon":       "images",
+          "elements": [
+            {
+              "type":       "button",
+              "identifier": "loadHomeButton",
+              "label":      "Load Home Albums",
+              "accent":     "mauve",
+              "execute":    "window.loadOsosedkiHomeAlbums(proxyServerAddress)"
+            },
+            {
+              "type":       "button",
+              "identifier": "revertGalleryButton",
+              "label":      "Revert to Local Gallery",
+              "accent":     "red",
+              "execute":    "window.revertToLocalGalleryEnvironment()"
             }
           ]
         }
