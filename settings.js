@@ -1,5 +1,5 @@
 // ==================================================================================================== //
-// OSOSEDKI SCRAPER APPLICATION INTERFACE
+// OSOSEDKI SCRAPER GALLERY PLUGIN
 // ==================================================================================================== //
 /** Stuff to maybe add:
  *    Marquee for liked folders
