@@ -1,5 +1,5 @@
 {
-  "imports": "./test.js",
+  "imports": "./settings.js",
   "sections": [
     {
       "identifier": "ososedkiScraperExtension",
