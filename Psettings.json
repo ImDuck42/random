@@ -1,0 +1,28 @@
+{
+  "imports": "./Psettings.js",
+  "sections": [
+    {
+      "id":     "pawchivePluginSection",
+      "label":  "Pawchive Archive",
+      "icon":   "paw",
+      "accent": "maroon",
+      "entries": [
+        {
+          "id":          "pawchiveToggleEntry",
+          "label":       "Enable Pawchive Integration",
+          "description": "A browser extension bypassing CORS is required.",
+          "icon":        "power-off",
+          "elements": [
+            {
+              "type":     "toggle",
+              "id":       "pawchiveToggle",
+              "variable": "pawchiveEnabled",
+              "default":   false,
+              "execute":   "togglePawchive(pawchiveEnabled)"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
