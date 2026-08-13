@@ -1,18 +1,33 @@
 (async function autoLoadExtensions() {
-  const EXTENSION_URLS = [
-    'https://imduck42.github.io/random/Osettings.json',
-    'https://imduck42.github.io/random/Psettings.json'
+  const EXTENSIONS_TO_INSTALL = [
+    "https://imduck42.github.io/random/Osettings.json",
+    "https://imduck42.github.io/random/Psettings.json"
   ];
 
-  console.log('[Autoloader] Silently loading extensions...');
-
-  for (const url of EXTENSION_URLS) {
-    if (!url) continue;
+  function getInstalledImports() {
     try {
-      await loadExternalSettingsFromUrl(url);
-      console.log(`[Autoloader] Successfully loaded: ${url}`);
+      return JSON.parse(localStorage.getItem('imports') || '[]');
     } catch (error) {
-      console.error(`[Autoloader] Failed to load: ${url}`, error);
+      console.error('[Autoloader] Failed to parse local storage imports:', error);
+      return [];
+    }
+  }
+
+  const installed = getInstalledImports();
+
+  for (const rawUrl of EXTENSIONS_TO_INSTALL) {
+    const url = rawUrl.trim();
+    if (!url) continue;
+
+    if (!installed.includes(url)) {
+      console.log(`[Autoloader] Extension not installed yet, installing: ${url}`);
+      try {
+        await loadExternalSettingsFromUrl(url);
+      } catch (error) {
+        console.error(`[Autoloader] Error installing ${url}:`, error);
+      }
+    } else {
+      console.log(`[Autoloader] Extension already installed, skipping to prevent double-loading: ${url}`);
     }
   }
 })();

@@ -953,6 +953,20 @@ if (document.readyState === 'loading') {
   setupEventInterception()
 }
 
-if (localStorage.getItem('pawchive_enabled') === 'true') {
-  setTimeout(() => togglePawchive(true), 200)
-}
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    const storedEnabled = localStorage.getItem('pawchive_enabled') === 'true'
+    const toggleInput   = document.getElementById('pawchiveToggle')
+
+    if (toggleInput) {
+      if (toggleInput.checked !== storedEnabled) {
+        toggleInput.checked = storedEnabled
+        toggleInput.dispatchEvent(new Event('change', { bubbles: true }))
+      } else if (storedEnabled) {
+        togglePawchive(true)
+      }
+    } else if (storedEnabled) {
+      setTimeout(() => togglePawchive(true), 200)
+    }
+  }, 300)
+})
