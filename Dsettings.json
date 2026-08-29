@@ -68,8 +68,8 @@
               "id"         : "danbooruDefaultTags",
               "inputType"  : "text",
               "variable"   : "danbooruDefaultTags",
-              "placeholder": "order:rank",
-              "default"    : "order:rank"
+              "placeholder": "order:rank rating:g",
+              "default"    : "order:rank rating:g"
             },
             {
               "type"     : "input",

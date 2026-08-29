@@ -20,15 +20,9 @@ const DANBOORU_SELECTORS = {
   contentSections:  '.content > div',
 }
 
-let danbooruSavedTags = localStorage.getItem('dbooru_tags') || 'order:rank'
-if (danbooruSavedTags.includes('score:>300')) {
-  danbooruSavedTags = 'order:rank'
-  localStorage.setItem('dbooru_tags', danbooruSavedTags)
-}
-
 const DANBOORU_CONFIG = {
   enabled:  localStorage.getItem('dbooru_enabled') === 'true',
-  tags:     danbooruSavedTags,
+  tags:     localStorage.getItem('dbooru_tags')           || 'order:rank rating:g',
   limit:    parseInt(localStorage.getItem('dbooru_limit') || '50', 10),
   username: localStorage.getItem('dbooru_user')           || '',
   apiKey:   localStorage.getItem('dbooru_key')            || '',
@@ -784,8 +778,8 @@ function clearDanbooruImages() {
 }
 
 function toggleDanbooruIntegration(enabled) {
-  DANBOORU_CONFIG.enabled = enabled
-  localStorage.setItem('dbooru_enabled', String(enabled))
+  DANBOORU_CONFIG.enabled = Boolean(enabled) && String(enabled) !== 'false'
+  localStorage.setItem('dbooru_enabled', String(DANBOORU_CONFIG.enabled))
 
   if (!enabled) {
     clearDanbooruImages()
