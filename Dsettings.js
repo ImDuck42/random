@@ -29,7 +29,7 @@ if (danbooruSavedTags.includes('score:>300')) {
 const DANBOORU_CONFIG = {
   enabled:  localStorage.getItem('dbooru_enabled') === 'true',
   tags:     danbooruSavedTags,
-  limit:    parseInt(localStorage.getItem('dbooru_limit') || '30', 10),
+  limit:    parseInt(localStorage.getItem('dbooru_limit') || '50', 10),
   username: localStorage.getItem('dbooru_user')           || '',
   apiKey:   localStorage.getItem('dbooru_key')            || '',
 }
@@ -93,7 +93,7 @@ const DANBOORU_METATAGS = [
 // ==================================================================================================== //
 // API FETCHER & AUTOCOMPLETE
 // ==================================================================================================== //
-async function fetchDanbooruApi(tagQuery, limit = 30, page = 1) {
+async function fetchDanbooruApi(tagQuery, limit = 50, page = 1) {
   const queryTags = (tagQuery || 'order:rank').trim()
 
   const url = new URL(`${DANBOORU_ENDPOINT}/posts.json`)
