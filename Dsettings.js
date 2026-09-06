@@ -1,820 +1,751 @@
 // ==================================================================================================== //
 // CONFIGURATION
 // ==================================================================================================== //
-const DANBOORU_ENDPOINT    = 'https://danbooru.donmai.us'
-const DANBOORU_FOLDER_NAME = 'Danbooru Feed'
-const DANBOORU_ACCENT      = 'peach'
+const DISCORD_API_BASE   = 'https://discord.com/api/v10'
+const DISCORD_EPOCH      = 1420070400000n
+const ALLOWED_IMAGE_EXTS = ['png', 'jpg', 'jpeg', 'webp', 'gif']
+const ALLOWED_VIDEO_EXTS = ['mp4', 'webm', 'mov']
 
-const DANBOORU_SELECTORS = {
-  galleryMasonry:   '.gallery-masonry',
-  galleryGrid:      '.gallery-grid',
-  folderGrid:       '.folder-grid',
-  chipContainer:    '.chip-container',
-  imageCountLabel:  '.image-count',
-  searchInput:      '.search-input',
-  searchSubmit:     '.search-submit',
-  searchPill:       '.search-pill',
-  navPill:          '.nav-pill',
-  navTab:           '.tab',
-  contentContainer: '.content',
-  contentSections:  '.content > div',
+const DISCORD_SELECTORS = {
+  contentPanel:    '.content',
+  folderGrid:      '.folder-grid',
+  galleryMasonry:  '.gallery-masonry',
+  chipContainer:   '.chip-container',
+  fullScreenModal: '.full-screen',
+  fullScreenImage: '.full-screen-img',
+  sortPill:        '.sort-pill',
+  sortActive:      '.sort-pill .sort-option.active',
+  navTabs:         '.nav-pill .tab',
+  imageCountLabel: '.image-count',
 }
 
-const DANBOORU_CONFIG = {
-  enabled:  localStorage.getItem('dbooru_enabled') === 'true',
-  tags:     localStorage.getItem('dbooru_tags')           || 'order:rank rating:g',
-  limit:    parseInt(localStorage.getItem('dbooru_limit') || '50', 10),
-  username: localStorage.getItem('dbooru_user')           || '',
-  apiKey:   localStorage.getItem('dbooru_key')            || '',
+const STORAGE_KEYS = {
+  token:       'discord_token',
+  servers:     'discord_servers',
+  channels:    'discord_channels',
+  isWhitelist: 'discord_is_whitelist',
 }
 
-let danbooruFolderCache    = {}
-let danbooruFolderQueryMap = new Map()
+const discordState = {
+  currentChannel:     null,
+  currentChannelName: '',
+  lastMessageId:      null,
+  isLoading:          false,
+  hasMore:            true,
+  mediaCards:         [],
+  previewQueueToken:  0,
+}
 
-let danbooruPagination = {
-  activeFolder: DANBOORU_FOLDER_NAME,
-  query:        DANBOORU_CONFIG.tags,
-  page:         1,
-  isLoading:    false,
-  hasMore:      true,
+let modalOpenedTimestamp = 0
+
+// ==================================================================================================== //
+// STORAGE & UTILITY
+// ==================================================================================================== //
+function getStoredArray(key) {
+  try {
+    return JSON.parse(localStorage.getItem(key) || '[]')
+  } catch {
+    return []
+  }
+}
+
+function setStoredArray(key, array) {
+  localStorage.setItem(key, JSON.stringify(array))
+}
+
+function snowflakeToTimestamp(id) {
+  try {
+    return Number((BigInt(id) >> 22n) + DISCORD_EPOCH)
+  } catch {
+    return Date.now()
+  }
+}
+
+function getStoredAuthHeader() {
+  const token = localStorage.getItem(STORAGE_KEYS.token)
+  if (!token) throw new Error('No Discord token saved. Configure authentication in Settings.')
+  return token
 }
 
 // ==================================================================================================== //
-// METATAG DICTIONARY
+// SETTINGS INTEGRATION
 // ==================================================================================================== //
-const DANBOORU_METATAGS = [
-  // Ratings
-  { value: 'rating:general',      label: 'rating:general (Safe)',       type: 'meta' },
-  { value: 'rating:sensitive',    label: 'rating:sensitive (SFW/Mild)', type: 'meta' },
-  { value: 'rating:questionable', label: 'rating:questionable (Ecchi)', type: 'meta' },
-  { value: 'rating:explicit',     label: 'rating:explicit (NSFW)',      type: 'meta' },
+window.discord_saveToken = function(type, token) {
+  const trimmed = (token || '').trim()
+  if (!trimmed) return alert('Please enter a valid token.')
 
-  // Sort Orders
-  { value: 'order:rank',          label: 'order:rank (Top Trending)',   type: 'sort' },
-  { value: 'order:score',         label: 'order:score (Highest Score)', type: 'sort' },
-  { value: 'order:favcount',      label: 'order:favcount (Most Liked)', type: 'sort' },
-  { value: 'order:id',            label: 'order:id (Newest First)',     type: 'sort' },
-  { value: 'order:id_asc',        label: 'order:id_asc (Oldest First)', type: 'sort' },
-  { value: 'order:mpixels',       label: 'order:mpixels (Resolution)',  type: 'sort' },
-  { value: 'order:portrait',      label: 'order:portrait (Tallest)',    type: 'sort' },
-  { value: 'order:landscape',     label: 'order:landscape (Widest)',    type: 'sort' },
-  { value: 'order:filesize',      label: 'order:filesize (Largest MB)', type: 'sort' },
-
-  // Score & Favorites
-  { value: 'score:>100',          label: 'score:>100',                  type: 'meta' },
-  { value: 'score:>500',          label: 'score:>500',                  type: 'meta' },
-  { value: 'score:>1000',         label: 'score:>1000',                 type: 'meta' },
-  { value: 'favcount:>50',        label: 'favcount:>50',                type: 'meta' },
-  { value: 'favcount:>200',       label: 'favcount:>200',               type: 'meta' },
-
-  // Aspect Ratios & Dimensions
-  { value: 'ratio:portrait',      label: 'ratio:portrait',              type: 'meta' },
-  { value: 'ratio:landscape',     label: 'ratio:landscape',             type: 'meta' },
-  { value: 'ratio:square',        label: 'ratio:square',                type: 'meta' },
-  { value: 'width:>1920',         label: 'width:>1920 (HD Width)',      type: 'meta' },
-  { value: 'height:>1080',        label: 'height:>1080 (HD Height)',    type: 'meta' },
-  { value: 'mpixels:>2',          label: 'mpixels:>2 (2MP+ High Res)',  type: 'meta' },
-
-  // Media Types & Status
-  { value: 'is:animated',         label: 'is:animated (GIF / Video)',   type: 'meta' },
-  { value: 'is:parent',           label: 'is:parent (Has Variants)',    type: 'meta' },
-  { value: 'status:active',       label: 'status:active',               type: 'meta' },
-  { value: 'age:<1d',             label: 'age:<1d (Past 24 Hours)',     type: 'meta' },
-  { value: 'age:<1w',             label: 'age:<1w (Past Week)',         type: 'meta' },
-  { value: 'age:<1mo',            label: 'age:<1mo (Past Month)',       type: 'meta' },
-]
-
-// ==================================================================================================== //
-// API FETCHER & AUTOCOMPLETE
-// ==================================================================================================== //
-async function fetchDanbooruApi(tagQuery, limit = 50, page = 1) {
-  const queryTags = (tagQuery || 'order:rank').trim()
-
-  const url = new URL(`${DANBOORU_ENDPOINT}/posts.json`)
-  url.searchParams.set('tags',  queryTags)
-  url.searchParams.set('limit', String(limit))
-  url.searchParams.set('page',  String(page))
-
-  if (DANBOORU_CONFIG.username && DANBOORU_CONFIG.apiKey) {
-    url.searchParams.set('login',   DANBOORU_CONFIG.username)
-    url.searchParams.set('api_key', DANBOORU_CONFIG.apiKey)
-  }
-
-  console.log(`[Danbooru] Fetching Page ${page}: ${url.toString()}`)
-  const response = await fetch(url.toString())
-
-  if (!response.ok) {
-    // 401 / 403: Invalid Auth Credentials
-    if (response.status === 401 || response.status === 403) {
-      throw new Error('Invalid Danbooru Username or API Key.')
-    }
-    // 410: Pagination Limit Reached
-    if (response.status === 410) {
-      console.log('[Danbooru] Pagination limit reached (410 Gone).')
-      danbooruPagination.hasMore = false
-      return []
-    }
-    // 429: Rate Limit Exceeded
-    if (response.status === 429) {
-      throw new Error('Rate limit reached (429 User Throttled). Please wait a moment.')
-    }
-    // 500: Statement / Query Timeout
-    if (response.status === 500) {
-      throw new Error('Danbooru query timed out. Avoid "score:>X" alone; use "order:rank" or "order:score".')
-    }
-    // 502 / 503: Maintenance / Downbooru
-    if (response.status === 502 || response.status === 503) {
-      throw new Error('Danbooru is temporarily unavailable / in maintenance (Downbooru).')
-    }
-
-    throw new Error(`Danbooru API error (${response.status})`)
-  }
-
-  const posts = await response.json()
-  return posts.filter((post) => post.file_url || post.large_file_url || post.preview_file_url)
+  const authHeader = type === 'Bot' ? `Bot ${trimmed}` : trimmed
+  localStorage.setItem(STORAGE_KEYS.token, authHeader)
+  alert(`Token saved successfully as [${type}].`)
 }
 
-async function getHybridAutocomplete(rawToken) {
-  if (!rawToken || rawToken.trim().length < 1) return []
-
-  const cleanQuery = rawToken.trim()
-  const matches    = []
-
-  DANBOORU_METATAGS.forEach((meta) => {
-    if (meta.value.toLowerCase().includes(cleanQuery.toLowerCase())) {
-      matches.push({
-        value: meta.value,
-        label: meta.label,
-        type:  meta.type,
-        badge: meta.type.toUpperCase(),
-      })
+window.discord_toggleFilterMode = function(isWhitelist) {
+  localStorage.setItem(STORAGE_KEYS.isWhitelist, isWhitelist ? 'true' : 'false')
+  setTimeout(() => {
+    const label = document.querySelector('.entry[data-entry-id="discordChannels"] .label')
+    if (label) {
+      label.textContent = isWhitelist ? 'Channel Filters (WHITELIST)' : 'Channel Filters (BLACKLIST)'
     }
-  })
+  }, 0)
+}
 
-  if (cleanQuery.length >= 2) {
-    try {
-      const url = new URL(`${DANBOORU_ENDPOINT}/autocomplete.json`)
-      url.searchParams.set('search[query]', cleanQuery)
-      url.searchParams.set('search[type]',  'tag_query')
-      url.searchParams.set('version',       '1')
-      url.searchParams.set('limit',         '8')
+window.discord_addServer = function(serverId) {
+  const id = (serverId || '').trim()
+  if (!id) return
 
-      const response = await fetch(url.toString())
-      if (response.ok) {
-        const data = await response.json()
-        data.forEach((item) => {
-          const val   = item.value || item.label
-          const count = item.post_count > 1000
-            ? `${(item.post_count / 1000).toFixed(1)}k`
-            : (item.post_count || '')
-
-          matches.push({
-            value: val,
-            label: val,
-            type:  'tag',
-            badge: count ? `${count}` : 'TAG',
-          })
-        })
-      }
-    } catch {}
+  const servers = getStoredArray(STORAGE_KEYS.servers)
+  if (!servers.includes(id)) {
+    servers.push(id)
+    setStoredArray(STORAGE_KEYS.servers, servers)
+    syncServerDropdown()
   }
+}
 
-  return matches.slice(0, 10)
+window.discord_removeServer = function() {
+  const wrapper  = document.getElementById('discordServerList')?.closest('.dropdown')
+  const selected = wrapper?.querySelector('.options .selected')?.dataset.value
+  if (!selected) return
+
+  const servers = getStoredArray(STORAGE_KEYS.servers).filter((item) => item !== selected)
+  setStoredArray(STORAGE_KEYS.servers, servers)
+  syncServerDropdown()
+}
+
+window.discord_addChannel = function(channelId) {
+  const id = (channelId || '').trim()
+  if (!id) return
+
+  const channels = getStoredArray(STORAGE_KEYS.channels)
+  if (!channels.includes(id)) {
+    channels.push(id)
+    setStoredArray(STORAGE_KEYS.channels, channels)
+    syncChannelDropdown()
+  }
+}
+
+window.discord_removeChannel = function() {
+  const wrapper  = document.getElementById('discordChannelList')?.closest('.dropdown')
+  const selected = wrapper?.querySelector('.options .selected')?.dataset.value
+  if (!selected) return
+
+  const channels = getStoredArray(STORAGE_KEYS.channels).filter((item) => item !== selected)
+  setStoredArray(STORAGE_KEYS.channels, channels)
+  syncChannelDropdown()
+}
+
+function syncServerDropdown() {
+  const servers = getStoredArray(STORAGE_KEYS.servers)
+  const options = servers.length > 0
+    ? servers.map((server) => ({ value: server, label: server }))
+    : [{ value: '', label: 'No Servers Added' }]
+
+  window.SettingsAPI?.updateSetting('discordServerList', { options, default: options[0].value })
+}
+
+function syncChannelDropdown() {
+  const channels = getStoredArray(STORAGE_KEYS.channels)
+  const options  = channels.length > 0
+    ? channels.map((channel) => ({ value: channel, label: channel }))
+    : [{ value: '', label: 'No Filtered Channels' }]
+
+  window.SettingsAPI?.updateSetting('discordChannelList', { options, default: options[0].value })
 }
 
 // ==================================================================================================== //
-// MASONRY PACKER & TAB NAVIGATION
+// DISCORD API
 // ==================================================================================================== //
-function packDanbooruCard(card) {
-  const grid  = document.querySelector(DANBOORU_SELECTORS.galleryMasonry)
-  const image = card.querySelector('img')
-  if (!grid || !image) return
+window.discord_loadFolders = async function() {
+  const servers     = getStoredArray(STORAGE_KEYS.servers)
+  const filterList  = getStoredArray(STORAGE_KEYS.channels)
+  const isWhitelist = localStorage.getItem(STORAGE_KEYS.isWhitelist) === 'true'
+  const grid        = document.querySelector(DISCORD_SELECTORS.folderGrid)
 
-  const applySpan = () => {
-    if (!image.naturalWidth) return
-    const gridStyles      = getComputedStyle(grid)
-    const rowHeight       = parseFloat(gridStyles.getPropertyValue('grid-auto-rows')) || 1
-    const rowGap          = parseFloat(gridStyles.getPropertyValue('gap')) || 20
-    const cardWidth       = card.getBoundingClientRect().width || 250
-    const scaledHeight    = cardWidth * (image.naturalHeight / image.naturalWidth)
-    const rowSpan         = Math.ceil((scaledHeight + rowGap) / (rowHeight + rowGap))
-    card.style.gridRowEnd = `span ${rowSpan}`
-  }
+  if (servers.length === 0) return alert('Please add at least one Discord Server ID in Settings.')
 
-  if (image.complete && image.naturalWidth) {
-    applySpan()
-  } else {
-    image.addEventListener('load', applySpan)
-  }
-}
-
-function switchToGalleryTab() {
-  const tabs   = document.querySelectorAll(`${DANBOORU_SELECTORS.navPill} ${DANBOORU_SELECTORS.navTab}`)
-  const panels = document.querySelectorAll(DANBOORU_SELECTORS.contentSections)
-
-  tabs.forEach((tab, index)     => tab.classList.toggle('active', index   === 1))
-  panels.forEach((panel, index) => panel.classList.toggle('active', index === 1))
-}
-
-function toggleFolderFilter(folderName) {
-  const chip = document.querySelector(`${DANBOORU_SELECTORS.chipContainer} .chip[data-folder="${folderName}"]`)
-  if (!chip) return
-
-  const isCurrentlyActive = chip.classList.contains('active') && folderName !== 'all'
-
-  if (isCurrentlyActive) {
-    let prev = chip.previousElementSibling
-    while (prev && (prev.style.display === 'none' || !prev.classList.contains('chip'))) {
-      prev = prev.previousElementSibling
-    }
-
-    const targetFolder = prev?.dataset?.folder || 'all'
-
-    if (folderName.startsWith('Booru:')) {
-      chip.remove()
-      document.querySelector(`${DANBOORU_SELECTORS.folderGrid} .folder-card[data-name="${folderName}"]`)?.remove()
-      document.querySelectorAll(`.gallery-card[data-folder-name="${folderName}"]`).forEach((element) => element.remove())
-      delete danbooruFolderCache[folderName]
-    }
-
-    filterByFolder(targetFolder)
-  } else {
-    filterByFolder(folderName)
-  }
-}
-
-function rememberFolderQuery(folderName) {
-  return Boolean(folderName) && folderName !== 'all' && folderName !== DANBOORU_FOLDER_NAME
-}
-
-function syncSearchInput(folderName) {
-  const searchInput = document.querySelector(DANBOORU_SELECTORS.searchInput)
-  const nextQuery   = rememberFolderQuery(folderName)
-    ? (danbooruFolderQueryMap.get(folderName) || '')
-    : ''
-
-  if (searchInput) searchInput.value = nextQuery
-}
-
-function filterByFolder(folderName) {
-  const previousFolder = danbooruPagination.activeFolder || 'all'
-  const searchInput    = document.querySelector(DANBOORU_SELECTORS.searchInput)
-
-  if (rememberFolderQuery(previousFolder) && searchInput) {
-    const savedQuery = (searchInput.value || '').trim()
-    danbooruFolderQueryMap.set(previousFolder, savedQuery)
-  }
-
-  const chips = document.querySelectorAll(`${DANBOORU_SELECTORS.chipContainer} .chip`)
-  chips.forEach((chip) => chip.classList.toggle('active', chip.dataset.folder === folderName))
-
-  danbooruPagination.activeFolder = folderName
-  syncSearchInput(folderName)
-
-  if (danbooruFolderCache[folderName]) {
-    renderDanbooruCards(danbooruFolderCache[folderName], folderName, false)
-  }
-
-  let visibleCount = 0
-  document.querySelectorAll(`${DANBOORU_SELECTORS.galleryMasonry} .gallery-card`).forEach((card) => {
-    const matches      = folderName === 'all' || card.dataset.folderName === folderName
-    card.style.display = matches ? '' : 'none'
-    if (matches) {
-      visibleCount += 1
-      packDanbooruCard(card)
-    }
-  })
-
-  const countLabel = document.querySelector(DANBOORU_SELECTORS.imageCountLabel)
-  if (countLabel) countLabel.textContent = `${visibleCount} Images`
-}
-
-function renderDanbooruCards(posts, folderLabel, isAppend = false) {
-  const gridContainer = document.querySelector(DANBOORU_SELECTORS.galleryMasonry)
-  if (!gridContainer) return
-
-  if (!isAppend) {
-    document.querySelectorAll(`.gallery-card[data-folder-name="${folderLabel}"]`).forEach((element) => element.remove())
-  }
-
-  const fragment = document.createDocumentFragment()
-
-  posts.forEach((post) => {
-    if (isAppend && document.querySelector(`.gallery-card[data-id="${post.id}"]`)) return
-
-    const size       = post.file_size             || (post.image_width * post.image_height) || 500000
-    const cleanTitle = (post.tag_string_character || post.tag_string_artist                 || post.tag_string_general || 'Danbooru')
-      .split(' ').slice(0, 3).join(' ')
-
-    const imgUrl = post.large_file_url || post.file_url || post.preview_file_url
-
-    const card              = document.createElement('div')
-    card.className          = 'gallery-card'
-    card.dataset.id         = post.id
-    card.dataset.folderName = folderLabel
-    card.dataset.name       = `#${post.id} ${cleanTitle}`
-    card.dataset.size       = size
-    card.dataset.date       = post.created_at ? new Date(post.created_at).getTime() : Date.now()
-    card.dataset.type       = (post.file_ext || 'jpg').toLowerCase()
-
-    card.style.setProperty('--accent', `var(--ctp-${DANBOORU_ACCENT}-rgb)`)
-    card.innerHTML = `<img loading="lazy" decoding="async" src="${imgUrl}" alt="${cleanTitle}">`
-
-    packDanbooruCard(card)
-    fragment.appendChild(card)
-  })
-
-  gridContainer.appendChild(fragment)
-}
-
-function injectDanbooruPostsIntoGallery(posts, folderLabel = DANBOORU_FOLDER_NAME, isAppend = false) {
-  if (!DANBOORU_CONFIG.enabled) return
-
-  if (!posts || posts.length === 0) {
-    console.warn(`[Danbooru] No posts returned for: "${folderLabel}"`)
-    return
-  }
-
-  if (!danbooruFolderCache[folderLabel] || !isAppend) {
-    danbooruFolderCache[folderLabel] = posts
-  } else {
-    danbooruFolderCache[folderLabel].push(...posts)
-  }
-
-  const allPosts      = danbooruFolderCache[folderLabel]
-  const folderGrid    = document.querySelector(DANBOORU_SELECTORS.folderGrid)
-  const chipContainer = document.querySelector(DANBOORU_SELECTORS.chipContainer)
-
-  renderDanbooruCards(posts, folderLabel, isAppend)
-
-  if (folderGrid) {
-    let   folderCard = folderGrid.querySelector(`.folder-card[data-name="${folderLabel}"]`)
-    const totalBytes = allPosts.reduce((acc, post) => acc + (post.file_size || 500000), 0)
-    const sizeMB     = (totalBytes / (1024 * 1024)).toFixed(1)
-    const previewUrl = allPosts[0].preview_file_url || allPosts[0].large_file_url || allPosts[0].file_url
-
-    if (!folderCard) {
-      folderCard              = document.createElement('div')
-      folderCard.className    = 'folder-card'
-      folderCard.dataset.name = folderLabel
-      folderCard.dataset.size = sizeMB
-      folderCard.dataset.date = Date.now()
-      folderCard.dataset.type = 'folder'
-      folderCard.style.setProperty('--accent', `var(--ctp-${DANBOORU_ACCENT}-rgb)`)
-
-      folderCard.innerHTML = `
-        <div class="folder-tab"><span class="file-count">${allPosts.length} Files</span></div>
-        <div class="folder-body">
-          <div class="folder-preview"><img decoding="async" src="${previewUrl}" alt="${folderLabel}"></div>
-          <div class="folder-info">
-            <h3   class="folder-title"><span>${folderLabel}</span></h3>
-            <span class="folder-size">${sizeMB} MB</span>
-          </div>
-        </div>
-      `
-      folderCard.addEventListener('click', () => {
-        switchToGalleryTab()
-        filterByFolder(folderLabel)
-      })
-      folderGrid.appendChild(folderCard)
-    } else {
-      folderCard.querySelector('.file-count').textContent  = `${allPosts.length} Files`
-      folderCard.querySelector('.folder-size').textContent = `${sizeMB} MB`
-
-      const previewContainer = folderCard.querySelector('.folder-preview')
-      if (previewContainer) {
-        previewContainer.innerHTML = `<img decoding="async" src="${previewUrl}" alt="${folderLabel}">`
-      }
-    }
-  }
-
-  if (chipContainer) {
-    let chip = chipContainer.querySelector(`.chip[data-folder="${folderLabel}"]`)
-    if (!chip) {
-      chip                = document.createElement('button')
-      chip.className      = 'chip'
-      chip.dataset.folder = folderLabel
-      chip.innerHTML      = `<span>${folderLabel}</span>`
-      chip.addEventListener('click', () => toggleFolderFilter(folderLabel))
-      chipContainer.appendChild(chip)
-    }
-  }
-
-  if (!isAppend) {
-    filterByFolder(folderLabel)
-  } else {
-    const totalVisible = document.querySelectorAll(`${DANBOORU_SELECTORS.galleryMasonry} .gallery-card:not([style*="display: none"])`).length
-    const countLabel   = document.querySelector(DANBOORU_SELECTORS.imageCountLabel)
-    if (countLabel) countLabel.textContent = `${totalVisible} Images`
-  }
-}
-
-// ==================================================================================================== //
-// INFINITE SCROLL
-// ==================================================================================================== //
-async function loadMoreDanbooruPosts() {
-  if (danbooruPagination.isLoading || !danbooruPagination.hasMore || !DANBOORU_CONFIG.enabled) return
-
-  const isGalleryActive  = document.querySelector(DANBOORU_SELECTORS.galleryGrid)?.classList.contains('active')
-  const isDanbooruActive = danbooruPagination.activeFolder.startsWith('Danbooru') || danbooruPagination.activeFolder.startsWith('Booru:')
-
-  if (!isGalleryActive || !isDanbooruActive) return
-
-  danbooruPagination.isLoading = true
-  const nextPage               = danbooruPagination.page + 1
-
-  console.log(`[Danbooru] Loading page ${nextPage} for "${danbooruPagination.query}"...`)
+  document.querySelectorAll(DISCORD_SELECTORS.navTabs)[0]?.click()
 
   try {
-    const posts = await fetchDanbooruApi(danbooruPagination.query, DANBOORU_CONFIG.limit, nextPage)
-    if (!posts || posts.length === 0) {
-      danbooruPagination.hasMore = false
-      console.log('[Danbooru] Reached end of results.')
-      return
-    }
+    const authHeader = getStoredAuthHeader()
 
-    danbooruPagination.page = nextPage
-    injectDanbooruPostsIntoGallery(posts, danbooruPagination.activeFolder, true)
-  } catch (error) {
-    console.warn('[Danbooru] Infinite scroll fetch error:', error.message)
-  } finally {
-    danbooruPagination.isLoading = false
-  }
-}
-
-function initDanbooruInfiniteScroll() {
-  const contentPanel = document.querySelector(DANBOORU_SELECTORS.contentContainer)
-  if (!contentPanel) return
-
-  contentPanel.addEventListener('scroll', () => {
-    if (!DANBOORU_CONFIG.enabled) return
-    const isNearBottom = contentPanel.scrollHeight - contentPanel.scrollTop - contentPanel.clientHeight < 800
-    if (isNearBottom) {
-      loadMoreDanbooruPosts()
-    }
-  }, { passive: true })
-}
-
-// ==================================================================================================== //
-// SEARCH BAR & AUTOCOMPLETE
-// ==================================================================================================== //
-function getCurrentWordToken(inputElement) {
-  const fullText     = inputElement.value
-  const cursorPos    = inputElement.selectionStart || fullText.length
-  const leftOfCursor = fullText.slice(0, cursorPos)
-  const words        = leftOfCursor.split(/\s+/)
-  const currentWord  = words[words.length - 1] || ''
-
-  return {
-    word:           currentWord,
-    wordStartIndex: cursorPos - currentWord.length,
-    wordEndIndex:   cursorPos,
-  }
-}
-
-function replaceCurrentWordToken(inputElement, replacement) {
-  const fullText  = inputElement.value
-  const cursorPos = inputElement.selectionStart ?? fullText.length
-  const leftText  = fullText.slice(0, cursorPos)
-  const rightText = fullText.slice(cursorPos)
-  const selected  = String(replacement || '').trim()
-
-  const leftMatch  = leftText.match(/[^\s]+$/)
-  const rightMatch = rightText.match(/^[^\s]+/)
-  const tokenStart = leftMatch  ? cursorPos - leftMatch[0].length  : cursorPos
-  const tokenEnd   = rightMatch ? cursorPos + rightMatch[0].length : cursorPos
-
-  const before   = fullText.slice(0, tokenStart)
-  const after    = fullText.slice(tokenEnd)
-  const inserted = `${selected} `
-  const newText  = `${before}${inserted}${after}`
-
-  inputElement.value = newText
-  inputElement.focus()
-  const newCursor = before.length + inserted.length
-  inputElement.setSelectionRange(newCursor, newCursor)
-}
-
-function setupAutocompleteDropdown() {
-  const searchPill  = document.querySelector(DANBOORU_SELECTORS.searchPill)
-  const searchInput = document.querySelector(DANBOORU_SELECTORS.searchInput)
-  if (!searchPill || !searchInput) return
-
-  if (!document.getElementById('booru-autocomplete-styles')) {
-    const style       = document.createElement('style')
-    style.id          = 'booru-autocomplete-styles'
-    style.textContent = `
-      .search-pill { position: relative; }
-      .booru-autocomplete-list {
-        position:         absolute;
-        top:              calc(100% + 8px);
-        left:             0;
-        right:            0;
-        background-color: rgb(var(--ctp-surface0-rgb));
-        border:           3px solid rgb(var(--ctp-surface2-rgb));
-        border-radius:    16px;
-        box-shadow:       0 8px 24px rgb(var(--ctp-crust-rgb));
-        z-index:          1000;
-        max-height:       280px;
-        overflow-y:       auto;
-        display:          none;
-        flex-direction:   column;
-        padding:          6px;
-        gap:              4px;
-      }
-      .booru-autocomplete-list.open { display: flex; }
-      .booru-item {
-        display:          flex;
-        align-items:      center;
-        justify-content:  space-between;
-        padding:          8px 14px;
-        border-radius:    8px;
-        cursor:           pointer;
-        font:             750 0.85rem sans-serif;
-        color:            rgb(var(--ctp-text-rgb));
-        transition:       all 0.15s ease;
-      }
-      .booru-item:hover, .booru-item.selected {
-        background-color: rgb(var(--ctp-surface1-rgb));
-        color:            rgb(var(--ctp-peach-rgb));
-      }
-      .booru-badge {
-        font-size:        0.72rem;
-        font-weight:      800;
-        padding:          2px 8px;
-        border-radius:    6px;
-        background:       rgb(var(--ctp-mantle-rgb));
-        color:            rgb(var(--ctp-subtext0-rgb));
-      }
-      .booru-badge.sort {
-        background:       rgba(var(--ctp-sapphire-rgb), 0.2);
-        color:            rgb(var(--ctp-sapphire-rgb));
-      }
-      .booru-badge.meta {
-        background:       rgba(var(--ctp-mauve-rgb), 0.2);
-        color:            rgb(var(--ctp-mauve-rgb));
-      }
-    `
-    document.head.appendChild(style)
-  }
-
-  let dropdown = searchPill.querySelector('.booru-autocomplete-list')
-  if (!dropdown) {
-    dropdown           = document.createElement('div')
-    dropdown.className = 'booru-autocomplete-list'
-    searchPill.appendChild(dropdown)
-  }
-
-  let debounceTimer = null
-
-  const closeDropdown = () => {
-    dropdown.classList.remove('open')
-    dropdown.innerHTML = ''
-  }
-
-  searchInput.addEventListener('input', (event) => {
-    if (!DANBOORU_CONFIG.enabled) return
-    event.stopImmediatePropagation()
-
-    const rawVal = searchInput.value.trim().toLowerCase()
-
-    if (rawVal === '') {
-      closeDropdown()
-      let visibleCount = 0
-      document.querySelectorAll(`${DANBOORU_SELECTORS.galleryMasonry} .gallery-card`).forEach((card) => {
-        const belongsToActive = danbooruPagination.activeFolder === 'all' || card.dataset.folderName === danbooruPagination.activeFolder
-        card.style.display    = belongsToActive ? '' : 'none'
-        if (belongsToActive) {
-          visibleCount += 1
-          packDanbooruCard(card)
-        }
+    for (const serverId of servers) {
+      const response = await fetch(`${DISCORD_API_BASE}/guilds/${serverId}/channels`, {
+        headers: { Authorization: authHeader },
       })
 
-      const countLabel = document.querySelector(DANBOORU_SELECTORS.imageCountLabel)
-      if (countLabel) countLabel.textContent = `${visibleCount} Images`
-      return
+      if (!response.ok) {
+        console.warn(`[Discord Plugin] Failed to fetch server ${serverId} (HTTP ${response.status})`)
+        continue
+      }
+
+      const channels = await response.json()
+      channels.sort((channelA, channelB) => channelA.position - channelB.position)
+
+      channels.forEach((channel) => {
+        if (![0, 2, 5, 15].includes(channel.type)) return
+
+        if (isWhitelist && !filterList.includes(channel.id)) return
+        if (!isWhitelist && filterList.includes(channel.id)) return
+
+        createDiscordFolderCard(channel, grid)
+      })
+
+      queueChannelFolderPreviews(channels, filterList, isWhitelist, authHeader)
+    }
+  } catch (error) {
+    alert(`Discord Connection Error: ${error.message}`)
+  }
+}
+
+async function queueChannelFolderPreviews(channels, filterList, isWhitelist, authHeader) {
+  const currentToken = ++discordState.previewQueueToken
+
+  for (const channel of channels) {
+    if (currentToken !== discordState.previewQueueToken) break
+    if (![0, 2, 5, 15].includes(channel.type)) continue
+    if (isWhitelist && !filterList.includes(channel.id)) continue
+    if (!isWhitelist && filterList.includes(channel.id)) continue
+
+    try {
+      const response = await fetch(`${DISCORD_API_BASE}/channels/${channel.id}/messages?limit=15`, {
+        headers: { Authorization: authHeader },
+      })
+
+      if (response.ok) {
+        const messages = await response.json()
+        for (const message of messages) {
+          if (!message.attachments || message.attachments.length === 0) continue
+
+          const mediaAttachment = message.attachments.find((attachment) => {
+            const extension = (attachment.filename.split('.').pop() || '').toLowerCase()
+            return ALLOWED_IMAGE_EXTS.includes(extension)
+          })
+
+          if (mediaAttachment) {
+            const previewContainer = document.getElementById(`discord-preview-${channel.id}`)
+            if (previewContainer) {
+              previewContainer.innerHTML = `<img loading="lazy" decoding="async" src="${mediaAttachment.url}" alt="${channel.name} Preview">`
+            }
+            break
+          }
+        }
+      }
+    } catch (error) {
+      console.warn(`[Discord Plugin] Preview fetch error for channel ${channel.id}:`, error)
     }
 
-    let visibleCount = 0
-    document.querySelectorAll(`${DANBOORU_SELECTORS.galleryMasonry} .gallery-card`).forEach((card) => {
-      const belongsToActive = danbooruPagination.activeFolder === 'all' || card.dataset.folderName === danbooruPagination.activeFolder
-      const matchesQuery    = (card.dataset.name                        || '').toLowerCase().includes(rawVal)
-      const show            = belongsToActive && matchesQuery
+    await new Promise((resolve) => setTimeout(resolve, 250))
+  }
+}
 
-      card.style.display = show ? '' : 'none'
-      if (show) {
-        visibleCount += 1
-        packDanbooruCard(card)
+function openDiscordChannelInGallery(channelId, channelName) {
+  discordState.currentChannel     = channelId
+  discordState.currentChannelName = channelName
+  discordState.lastMessageId      = null
+  discordState.isLoading          = false
+  discordState.hasMore            = true
+  discordState.mediaCards         = []
+
+  document.querySelectorAll(DISCORD_SELECTORS.navTabs)[1]?.click()
+
+  document.querySelectorAll(`${DISCORD_SELECTORS.galleryMasonry} .gallery-card`).forEach((card) => {
+    card.style.display = 'none'
+  })
+
+  const chipContainer = document.querySelector(DISCORD_SELECTORS.chipContainer)
+  if (chipContainer) {
+    chipContainer.querySelectorAll('.chip').forEach((chip) => chip.classList.remove('active'))
+
+    let discordChip = document.getElementById('discord-temp-chip')
+    if (!discordChip) {
+      discordChip           = document.createElement('button')
+      discordChip.id        = 'discord-temp-chip'
+      discordChip.className = 'chip active'
+      discordChip.dataset.folder = `discord-${channelId}`
+      chipContainer.appendChild(discordChip)
+    }
+
+    discordChip.innerHTML = `<span># ${channelName}</span>`
+    discordChip.classList.add('active')
+  }
+
+  document.querySelectorAll(`${DISCORD_SELECTORS.galleryMasonry} .gallery-card.discord-media`).forEach((card) => card.remove())
+
+  fetchDiscordMediaBatch()
+}
+
+async function fetchDiscordMediaBatch() {
+  if (discordState.isLoading || !discordState.hasMore) return
+  discordState.isLoading = true
+
+  const grid = document.querySelector(DISCORD_SELECTORS.galleryMasonry)
+  if (!grid) return
+
+  try {
+    let mediaResolvedCount = 0
+    let skippedBatches     = 0
+
+    while (mediaResolvedCount === 0 && discordState.hasMore && skippedBatches < 5) {
+      skippedBatches += 1
+
+      let endpointUrl = `${DISCORD_API_BASE}/channels/${discordState.currentChannel}/messages?limit=100`
+      if (discordState.lastMessageId) endpointUrl += `&before=${discordState.lastMessageId}`
+
+      const response = await fetch(endpointUrl, {
+        headers: { Authorization: getStoredAuthHeader() },
+      })
+
+      if (!response.ok) {
+        if (response.status === 401) throw new Error('401 Unauthorized: Invalid Token.')
+        if (response.status === 403) throw new Error('403 Forbidden: Missing permissions to read history.')
+        throw new Error(`HTTP Error ${response.status}`)
       }
+
+      const messages = await response.json()
+      if (messages.length < 100) discordState.hasMore = false
+      if (messages.length === 0) break
+
+      discordState.lastMessageId = messages[messages.length - 1].id
+
+      messages.forEach((message) => {
+        if (!message.attachments) return
+
+        message.attachments.forEach((attachment) => {
+          const extension = (attachment.filename.split('.').pop() || '').toLowerCase()
+          const isImage   = ALLOWED_IMAGE_EXTS.includes(extension)
+          const isVideo   = ALLOWED_VIDEO_EXTS.includes(extension)
+
+          if (isImage || isVideo) {
+            mediaResolvedCount += 1
+            createDiscordMediaCard(attachment, extension, grid)
+          }
+        })
+      })
+    }
+
+    const countLabel = document.querySelector(DISCORD_SELECTORS.imageCountLabel)
+    if (countLabel) countLabel.textContent = `${discordState.mediaCards.length} Media`
+  } catch (error) {
+    console.error('[Discord Plugin] Fetch error:', error)
+    alert(`Discord Error: ${error.message}`)
+  } finally {
+    discordState.isLoading = false
+  }
+}
+
+// ==================================================================================================== //
+// DOM CARD & MASONRY
+// ==================================================================================================== //
+function createDiscordFolderCard(channel, gridContainer) {
+  const card = document.createElement('div')
+  card.className = 'folder-card discord-folder'
+  card.style.setProperty('--accent', 'var(--ctp-mauve-rgb)')
+
+  card.dataset.name = channel.name.toLowerCase()
+  card.dataset.size = '0'
+  card.dataset.date = String(snowflakeToTimestamp(channel.id))
+  card.dataset.type = 'folder'
+
+  card.innerHTML = `
+    <div class="folder-tab">
+      <span class="file-count">Discord</span>
+    </div>
+    <div class="folder-body">
+      <div class="folder-preview" id="discord-preview-${channel.id}">
+        <i class="brands fa-discord"></i>
+      </div>
+      <div class="folder-info">
+        <h3 class="folder-title">
+          <span># ${channel.name}</span>
+        </h3>
+        <span class="folder-size">Cloud</span>
+      </div>
+    </div>
+  `
+
+  card.addEventListener('click', () => {
+    openDiscordChannelInGallery(channel.id, channel.name)
+  })
+
+  gridContainer.appendChild(card)
+}
+
+function createDiscordMediaCard(attachment, extension, gridContainer) {
+  const card = document.createElement('div')
+  card.className = 'gallery-card discord-media'
+  card.style.setProperty('--accent', 'var(--ctp-mauve-rgb)')
+
+  card.dataset.name       = (attachment.filename || '').toLowerCase()
+  card.dataset.size       = String(attachment.size || 0)
+  card.dataset.date       = String(snowflakeToTimestamp(attachment.id))
+  card.dataset.type       = extension
+  card.dataset.folderName = discordState.currentChannelName
+
+  if (ALLOWED_IMAGE_EXTS.includes(extension)) {
+    const image = document.createElement('img')
+    image.loading  = 'lazy'
+    image.decoding = 'async'
+    image.src      = attachment.url
+    image.alt      = attachment.filename
+    image.addEventListener('load', () => packDiscordCard(card, image.naturalWidth, image.naturalHeight))
+
+    card.addEventListener('click', () => {
+      openDiscordFullscreenMedia(attachment.url, 'image')
     })
 
-    const countLabel = document.querySelector(DANBOORU_SELECTORS.imageCountLabel)
-    if (countLabel) countLabel.textContent = `${visibleCount} Images`
+    card.appendChild(image)
+  } else if (ALLOWED_VIDEO_EXTS.includes(extension)) {
+    const container = document.createElement('div')
+    container.className = 'discord-video-container'
 
-    const tokenInfo = getCurrentWordToken(searchInput)
-    const token     = tokenInfo.word
+    const video = document.createElement('video')
+    video.src      = attachment.url
+    video.controls = true
+    video.preload  = 'metadata'
+    video.addEventListener('loadedmetadata', () => packDiscordCard(card, video.videoWidth, video.videoHeight))
 
-    if (!token || token.length < 1) {
-      closeDropdown()
-      return
+    const shiftOverlay = document.createElement('div')
+    shiftOverlay.className = 'discord-shift-overlay'
+    shiftOverlay.title     = 'Shift + Click to View Fullscreen'
+    shiftOverlay.addEventListener('click', (event) => {
+      event.preventDefault()
+      event.stopPropagation()
+      video.pause()
+      openDiscordFullscreenMedia(attachment.url, 'video')
+    })
+
+    const expandButton = document.createElement('button')
+    expandButton.type      = 'button'
+    expandButton.className = 'discord-fs-btn'
+    expandButton.title     = 'Open Fullscreen'
+    expandButton.innerHTML = '<i class="fas fa-expand"></i>'
+    expandButton.addEventListener('click', (event) => {
+      event.preventDefault()
+      event.stopPropagation()
+      video.pause()
+      openDiscordFullscreenMedia(attachment.url, 'video')
+    })
+
+    container.append(video, shiftOverlay, expandButton)
+    card.appendChild(container)
+  }
+
+  discordState.mediaCards.push(card)
+  gridContainer.appendChild(card)
+}
+
+function packDiscordCard(card, naturalWidth, naturalHeight) {
+  const grid = document.querySelector(DISCORD_SELECTORS.galleryMasonry)
+  if (!grid || !naturalWidth) return
+
+  const gridStyles   = getComputedStyle(grid)
+  const rowHeight    = parseFloat(gridStyles.getPropertyValue('grid-auto-rows'))
+  const rowGap       = parseFloat(gridStyles.getPropertyValue('gap'))
+  const cardWidth    = card.getBoundingClientRect().width
+  const scaledHeight = cardWidth * (naturalHeight / naturalWidth)
+
+  const rowSpan         = Math.ceil((scaledHeight + rowGap) / (rowHeight + rowGap))
+  card.style.gridRowEnd = `span ${rowSpan}`
+}
+
+// ==================================================================================================== //
+// FULLSCREEN MODAL
+// ==================================================================================================== //
+function scaleFullscreenVideo(videoElement) {
+  if (!videoElement || !videoElement.videoWidth || !videoElement.videoHeight) return
+
+  const videoRatio    = videoElement.videoWidth / videoElement.videoHeight
+  const containerPad  = 20
+  const maxAvailableW = window.innerWidth  - containerPad
+  const maxAvailableH = window.innerHeight - containerPad
+  const viewportRatio = maxAvailableW / maxAvailableH
+
+  if (videoRatio > viewportRatio) {
+    videoElement.style.width  = `${maxAvailableW}px`
+    videoElement.style.height = `${Math.round(maxAvailableW / videoRatio)}px`
+  } else {
+    videoElement.style.height = `${maxAvailableH}px`
+    videoElement.style.width  = `${Math.round(maxAvailableH * videoRatio)}px`
+  }
+}
+
+function openDiscordFullscreenMedia(mediaUrl, mediaType) {
+  const modal = document.querySelector(DISCORD_SELECTORS.fullScreenModal)
+  if (!modal) return
+
+  const modalImage     = modal.querySelector(DISCORD_SELECTORS.fullScreenImage)
+  modalOpenedTimestamp = Date.now()
+
+  modal.querySelector('.full-screen-video')?.remove()
+
+  if (mediaType === 'image') {
+    if (modalImage) {
+      modalImage.style.display = ''
+      modalImage.src = mediaUrl
+      modalImage.onload = () => {
+        const imageRatio    = modalImage.naturalWidth / modalImage.naturalHeight
+        const viewportRatio = window.innerWidth       / window.innerHeight
+        if (imageRatio > viewportRatio) {
+          modalImage.style.width  = '100%'
+          modalImage.style.height = 'auto'
+        } else {
+          modalImage.style.height = '100%'
+          modalImage.style.width  = 'auto'
+        }
+      }
+    }
+    modal.classList.add('active')
+  } else if (mediaType === 'video') {
+    if (modalImage) modalImage.style.display = 'none'
+
+    const video = document.createElement('video')
+    video.className = 'full-screen-img full-screen-video'
+    video.src       = mediaUrl
+    video.controls  = true
+    video.autoplay  = true
+
+    const triggerScaling = () => scaleFullscreenVideo(video)
+    video.addEventListener('loadedmetadata', triggerScaling)
+    video.addEventListener('loadeddata',     triggerScaling)
+    video.addEventListener('canplay',        triggerScaling)
+    video.addEventListener('playing',        triggerScaling)
+
+    if (video.readyState >= 1) triggerScaling()
+
+    let pollCount = 0
+    const pollTimer = setInterval(() => {
+      pollCount += 1
+      if (video.videoWidth > 0) {
+        triggerScaling()
+        clearInterval(pollTimer)
+      } else if (pollCount > 20) {
+        clearInterval(pollTimer)
+      }
+    }, 50)
+
+    video.addEventListener('pointerdown', (event) => event.stopPropagation())
+    video.addEventListener('click',       (event) => event.stopPropagation())
+
+    modal.appendChild(video)
+    modal.classList.add('active')
+  }
+}
+
+// ==================================================================================================== //
+// SORT PILL
+// ==================================================================================================== //
+function sortDiscordGalleryMedia() {
+  const grid = document.querySelector(DISCORD_SELECTORS.galleryMasonry)
+  if (!grid || !discordState.currentChannel || discordState.mediaCards.length === 0) return
+
+  grid.querySelectorAll('.gallery-card:not(.discord-media)').forEach((card) => {
+    card.style.display = 'none'
+  })
+
+  const activeOption  = document.querySelector(DISCORD_SELECTORS.sortActive)
+  const sortKey       = activeOption?.dataset.sort      || 'name'
+  const sortDirection = activeOption?.dataset.direction || 'up'
+
+  discordState.mediaCards.sort((cardA, cardB) => {
+    if (sortKey === 'type') {
+      return (Math.random() > 0.5 ? 1 : -1) * (sortDirection === 'up' ? 1 : -1)
     }
 
-    clearTimeout(debounceTimer)
-    debounceTimer = setTimeout(async () => {
-      const results = await getHybridAutocomplete(token)
-      if (!results || results.length === 0) {
-        closeDropdown()
-        return
-      }
+    const valueA = cardA.dataset[sortKey] ?? ''
+    const valueB = cardB.dataset[sortKey] ?? ''
 
-      dropdown.innerHTML = ''
-      results.forEach((item) => {
-        const row     = document.createElement('div')
-        row.className = 'booru-item'
-        row.innerHTML = `
-          <span>${item.label}</span>
-          <span class="booru-badge ${item.type}">${item.badge}</span>
-        `
+    const comparison = (sortKey === 'size' || sortKey === 'date')
+      ? (Number(valueA) || 0) - (Number(valueB) || 0)
+      : String(valueA).localeCompare(String(valueB), undefined, { numeric: true, sensitivity: 'base' })
 
-        row.addEventListener('click', (ev) => {
-          ev.stopPropagation()
-          replaceCurrentWordToken(searchInput, item.value)
-          closeDropdown()
-        })
+    return sortDirection === 'up' ? comparison : -comparison
+  })
 
-        dropdown.appendChild(row)
-      })
+  discordState.mediaCards.forEach((card) => grid.appendChild(card))
 
-      dropdown.classList.add('open')
-    }, 150)
-  }, { capture: true })
-
-  document.addEventListener('click', (event) => {
-    if (!searchPill.contains(event.target)) closeDropdown()
+  discordState.mediaCards.forEach((card) => {
+    const image = card.querySelector('img')
+    const video = card.querySelector('video')
+    if (image && image.naturalWidth) packDiscordCard(card, image.naturalWidth, image.naturalHeight)
+    if (video && video.videoWidth)   packDiscordCard(card, video.videoWidth,   video.videoHeight)
   })
 }
 
-async function triggerDanbooruSearch(tagQuery) {
-  if (!DANBOORU_CONFIG.enabled) return
-
-  const searchInput = document.querySelector(DANBOORU_SELECTORS.searchInput)
-  const query       = (tagQuery || searchInput?.value || '').trim()
-
-  if (!query) {
-    filterByFolder(danbooruPagination.activeFolder)
-    return
-  }
-
-  const searchFolderName = `Booru: ${query}`
-  danbooruFolderQueryMap.set(searchFolderName, query)
-  console.log(`[Danbooru] Searching tags: "${query}"`)
-  if (searchInput) searchInput.disabled = true
-
-  danbooruPagination.activeFolder = searchFolderName
-  danbooruPagination.query        = query
-  danbooruPagination.page         = 1
-  danbooruPagination.hasMore      = true
-
-  try {
-    const posts = await fetchDanbooruApi(query, DANBOORU_CONFIG.limit, 1)
-    injectDanbooruPostsIntoGallery(posts, searchFolderName, false)
-    switchToGalleryTab()
-  } catch (error) {
-    console.warn('[Danbooru] Search failed:', error.message)
-  } finally {
-    if (searchInput) {
-      searchInput.disabled = false
-      searchInput.focus()
-    }
-  }
-}
-
-function initSearchbarDanbooruHook() {
-  const searchInput  = document.querySelector(DANBOORU_SELECTORS.searchInput)
-  const searchSubmit = document.querySelector(DANBOORU_SELECTORS.searchSubmit)
-  if (!searchInput || searchInput.dataset.danbooruHooked) return
-
-  searchInput.dataset.danbooruHooked = 'true'
-  setupAutocompleteDropdown()
-
-  searchInput.addEventListener('keydown', (event) => {
-    if (event.key === 'Enter') {
-      if (!DANBOORU_CONFIG.enabled) return
-      event.preventDefault()
-      event.stopImmediatePropagation()
-      document.querySelector('.booru-autocomplete-list')?.classList.remove('open')
-      triggerDanbooruSearch(searchInput.value)
-    }
-  }, { capture: true })
-
-  if (searchSubmit) {
-    searchSubmit.addEventListener('click', (event) => {
-      if (!DANBOORU_CONFIG.enabled) return
-      event.preventDefault()
-      event.stopImmediatePropagation()
-      document.querySelector('.booru-autocomplete-list')?.classList.remove('open')
-      triggerDanbooruSearch(searchInput.value)
-    }, { capture: true })
-  }
-}
-
 // ==================================================================================================== //
-// SETTINGS ACTIONS
+// CSS STYLES
 // ==================================================================================================== //
-function saveDanbooruAuth(username, apiKey) {
-  DANBOORU_CONFIG.username = (username || '').trim()
-  DANBOORU_CONFIG.apiKey   = (apiKey   || '').trim()
+function injectDiscordPluginStyles() {
+  if (document.getElementById('discord-plugin-styles')) return
 
-  localStorage.setItem('dbooru_user', DANBOORU_CONFIG.username)
-  localStorage.setItem('dbooru_key',  DANBOORU_CONFIG.apiKey)
+  const style = document.createElement('style')
+  style.id = 'discord-plugin-styles'
+  style.textContent = `
+    /* Folder preview Discord fallback icon */
+    .folder-card.discord-folder .folder-preview {
+      display:         flex;
+      justify-content: center;
+      align-items:     center;
+      font-size:       3.5rem;
+      color:           rgb(var(--ctp-mauve-rgb));
+    }
 
-  console.log('[Danbooru] Credentials saved.')
-}
+    /* Video card and container layout */
+    .gallery-card.discord-media {
+      position: relative;
+    }
 
-async function fetchDanbooruFeed(tags, limit, isManual = false) {
-  if (!DANBOORU_CONFIG.enabled) return
+    .gallery-card.discord-media video {
+      width:            100%;
+      height:           100%;
+      display:          block;
+      object-fit:       cover;
+      background-color: rgb(var(--ctp-mantle-rgb));
+    }
 
-  const queryTags  = tags  !== undefined ? tags  : DANBOORU_CONFIG.tags
-  const queryLimit = limit !== undefined ? limit : DANBOORU_CONFIG.limit
+    .gallery-card.discord-media audio {
+      width:  calc(100% - 20px);
+      margin: 10px;
+    }
 
-  DANBOORU_CONFIG.tags  = queryTags
-  DANBOORU_CONFIG.limit = queryLimit
-  localStorage.setItem('dbooru_tags',  queryTags)
-  localStorage.setItem('dbooru_limit', String(queryLimit))
+    .discord-video-container {
+      position: relative;
+      width:    100%;
+      height:   100%;
+    }
 
-  danbooruPagination.activeFolder = DANBOORU_FOLDER_NAME
-  danbooruPagination.query        = queryTags
-  danbooruPagination.page         = 1
-  danbooruPagination.hasMore      = true
+    /* Shift-click interceptor overlay */
+    .discord-shift-overlay {
+      position:       absolute;
+      inset:          0;
+      z-index:        5;
+      pointer-events: none;
+    }
 
-  try {
-    const posts = await fetchDanbooruApi(queryTags, queryLimit, 1)
-    injectDanbooruPostsIntoGallery(posts, DANBOORU_FOLDER_NAME, false)
-    console.log(`[Danbooru] Synced ${posts.length} posts.`)
-  } catch (error) {
-    console.warn(`[Danbooru] Sync failed: ${error.message}`)
-  }
-}
+    body.shift-down .discord-shift-overlay {
+      pointer-events: auto !important;
+      cursor:         zoom-in;
+    }
 
-function clearDanbooruImages() {
-  document.querySelectorAll('.gallery-card[data-folder-name^="Danbooru"], .gallery-card[data-folder-name^="Booru:"]').forEach((card) => card.remove())
-  document.querySelectorAll('.folder-card[data-name^="Danbooru"],         .folder-card[data-name^="Booru:"]').forEach((card)         => card.remove())
-  document.querySelectorAll('.chip[data-folder^="Danbooru"],              .chip[data-folder^="Booru:"]').forEach((chip)              => chip.remove())
+    /* Corner fullscreen expansion button */
+    .discord-fs-btn {
+      position:         absolute;
+      top:              8px;
+      right:            8px;
+      z-index:          6;
+      width:            32px;
+      height:           32px;
+      display:          flex;
+      align-items:      center;
+      justify-content:  center;
+      background-color: rgba(var(--ctp-crust-rgb), 0.8);
+      color:            rgb(var(--ctp-text-rgb));
+      border:           2px solid rgb(var(--ctp-surface1-rgb));
+      border-radius:    8px;
+      cursor:           pointer;
+      opacity:          0;
+      transition:       opacity 0.2s ease, transform 0.15s ease, border-color 0.2s ease;
 
-  document.querySelector('.booru-autocomplete-list')?.remove()
-  document.getElementById('booru-autocomplete-styles')?.remove()
+      &:hover {
+        border-color: rgb(var(--accent));
+        transform:    scale(1.1);
+      }
+    }
 
-  danbooruFolderCache     = {}
-  danbooruPagination.page = 1
+    .gallery-card:hover .discord-fs-btn {
+      opacity: 1;
+    }
 
-  const allChip = document.querySelector(`${DANBOORU_SELECTORS.chipContainer} .chip[data-folder="all"]`)
-  if (allChip) allChip.classList.add('active')
-
-  const countLabel = document.querySelector(DANBOORU_SELECTORS.imageCountLabel)
-  if (countLabel) {
-    const totalVisible     = document.querySelectorAll(`${DANBOORU_SELECTORS.galleryMasonry} .gallery-card`).length
-    countLabel.textContent = `${totalVisible} Images`
-  }
-}
-
-function toggleDanbooruIntegration(enabled) {
-  DANBOORU_CONFIG.enabled = Boolean(enabled) && String(enabled) !== 'false'
-  localStorage.setItem('dbooru_enabled', String(DANBOORU_CONFIG.enabled))
-
-  if (!enabled) {
-    clearDanbooruImages()
-  } else {
-    setupAutocompleteDropdown()
-    fetchDanbooruFeed(undefined, undefined, false)
-  }
-}
-
-function populateDanbooruSettings() {
-  const update = window.SettingsAPI?.updateSetting
-  if (typeof update === 'function') {
-    if (DANBOORU_CONFIG.username) update('danbooruUsername',    { default: DANBOORU_CONFIG.username })
-    if (DANBOORU_CONFIG.enabled)  update('danbooruToggle',      { default: DANBOORU_CONFIG.enabled})
-    if (DANBOORU_CONFIG.apiKey)   update('danbooruApiKey',      { default: DANBOORU_CONFIG.apiKey })
-    if (DANBOORU_CONFIG.limit)    update('danbooruFetchLimit',  { default: DANBOORU_CONFIG.limit })
-    if (DANBOORU_CONFIG.tags)     update('danbooruDefaultTags', { default: DANBOORU_CONFIG.tags })
-  }
+    /* Fullscreen video sizing */
+    .full-screen-video {
+      outline:    none;
+      box-sizing: border-box;
+    }
+  `
+  document.head.appendChild(style)
 }
 
 // ==================================================================================================== //
 // INITIALIZATION
 // ==================================================================================================== //
-function initDanbooruExtension() {
-  initSearchbarDanbooruHook()
-  initDanbooruInfiniteScroll()
-  setTimeout(populateDanbooruSettings, 100)
+function initDiscordPlugin() {
+  injectDiscordPluginStyles()
+  syncServerDropdown()
+  syncChannelDropdown()
 
-  if (DANBOORU_CONFIG.enabled) {
-    fetchDanbooruFeed(undefined, undefined, false)
+  const isWhitelist = localStorage.getItem(STORAGE_KEYS.isWhitelist) === 'true'
+  window.SettingsAPI?.updateSetting('discordFilterToggle', { default: isWhitelist })
+
+  setTimeout(() => {
+    const label = document.querySelector('.entry[data-entry-id="discordChannels"] .label')
+    if (label) {
+      label.textContent = isWhitelist ? 'Channel Filters (WHITELIST)' : 'Channel Filters (BLACKLIST)'
+    }
+  }, 100)
+
+  window.addEventListener('keydown', (event) => {
+    if (event.key === 'Shift') document.body.classList.add('shift-down')
+  })
+
+  window.addEventListener('keyup', (event) => {
+    if (event.key === 'Shift') document.body.classList.remove('shift-down')
+  })
+
+  window.addEventListener('blur', () => {
+    document.body.classList.remove('shift-down')
+  })
+
+  const sortPill = document.querySelector(DISCORD_SELECTORS.sortPill)
+  if (sortPill && !sortPill.dataset.discordHooked) {
+    sortPill.dataset.discordHooked = 'true'
+    sortPill.addEventListener('click', () => {
+      if (!discordState.currentChannel) return
+      setTimeout(sortDiscordGalleryMedia, 35)
+    })
   }
+
+  const contentPanel = document.querySelector(DISCORD_SELECTORS.contentPanel)
+  if (contentPanel && !contentPanel.dataset.discordScrollHooked) {
+    contentPanel.dataset.discordScrollHooked = 'true'
+    contentPanel.addEventListener('scroll', () => {
+      if (!discordState.currentChannel || discordState.isLoading || !discordState.hasMore) return
+      const isNearBottom = contentPanel.scrollHeight - contentPanel.scrollTop - contentPanel.clientHeight < 800
+      if (isNearBottom) {
+        requestAnimationFrame(fetchDiscordMediaBatch)
+      }
+    }, { passive: true })
+  }
+
+  const modal = document.querySelector(DISCORD_SELECTORS.fullScreenModal)
+  if (modal && !modal.dataset.discordHooked) {
+    modal.dataset.discordHooked = 'true'
+
+    modal.addEventListener('click', (event) => {
+      if (Date.now() - modalOpenedTimestamp < 350) {
+        event.stopImmediatePropagation()
+        event.preventDefault()
+      }
+    }, true)
+
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'class' && !modal.classList.contains('active')) {
+          const video = modal.querySelector('.full-screen-video')
+          if (video) {
+            video.pause()
+            video.remove()
+          }
+          const image = modal.querySelector(DISCORD_SELECTORS.fullScreenImage)
+          if (image) image.style.display = ''
+        }
+      })
+    })
+
+    observer.observe(modal, { attributes: true })
+  }
+
+  window.addEventListener('resize', () => {
+    const activeVideo = document.querySelector('.full-screen-video')
+    if (activeVideo) scaleFullscreenVideo(activeVideo)
+  })
 }
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initDanbooruExtension)
-} else {
-  initDanbooruExtension()
-}
+setTimeout(initDiscordPlugin, 100)

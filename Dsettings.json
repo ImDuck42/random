@@ -1,92 +1,134 @@
 {
-  "imports" : "./Dsettings.js",
+  "imports": "./Dsettings.js",
   "sections": [
     {
-      "id"     : "danbooruCore",
-      "label"  : "Danbooru Integration",
-      "icon"   : "images",
-      "accent" : "peach",
+      "id"     : "discord",
+      "label"  : "Discord Media Integration",
+      "icon"   : "brands fa-discord",
+      "accent" : "mauve",
       "entries": [
         {
-          "id"         : "enableDanbooru",
-          "label"      : "Enable Danbooru Feed",
-          "description": "Feed Danbooru posts directly into your Folders and Gallery masonry grid",
-          "icon"       : "bolt",
-          "accent"     : "peach",
-          "elements"   : [
-            {
-              "type"    : "toggle",
-              "id"      : "danbooruToggle",
-              "variable": "danbooruEnabled",
-              "accent"  : "peach",
-              "default" : false,
-              "execute" : "toggleDanbooruIntegration(danbooruEnabled)"
-            }
-          ]
-        },
-        {
-          "id"         : "danbooruAuth",
-          "label"      : "Danbooru Account (Optional)",
-          "description": "Save your username and API key locally for unlimited searches",
+          "id"         : "discordAuth",
+          "label"      : "Authentication",
+          "description": "Select the token type and save your Discord token",
           "icon"       : "key",
-          "accent"     : "lavender",
-          "elements"   : [
-            {
-              "type"       : "input",
-              "id"         : "danbooruUsername",
-              "inputType"  : "text",
-              "variable"   : "danbooruUsername",
-              "placeholder": "Username",
-              "default"    : ""
-            },
-            {
-              "type"       : "input",
-              "id"         : "danbooruApiKey",
-              "inputType"  : "password",
-              "variable"   : "danbooruApiKey",
-              "placeholder": "API Key",
-              "default"    : ""
-            },
-            {
-              "type"   : "button",
-              "id"     : "saveDanbooruAuthBtn",
-              "label"  : "Save Auth",
-              "accent" : "lavender",
-              "execute": "saveDanbooruAuth(danbooruUsername, danbooruApiKey)"
-            }
-          ]
-        },
-        {
-          "id"         : "danbooruFeedQuery",
-          "label"      : "Default Feed Query",
-          "description": "Default tags loaded when opening the gallery (e.g. order:rank)",
-          "icon"       : "magnifying-glass",
           "accent"     : "mauve",
           "elements"   : [
             {
-              "type"       : "input",
-              "id"         : "danbooruDefaultTags",
-              "inputType"  : "text",
-              "variable"   : "danbooruDefaultTags",
-              "placeholder": "order:rank rating:g",
-              "default"    : "order:rank rating:g"
+              "type"    : "dropdown",
+              "id"      : "discordTokenType",
+              "variable": "discordTokenType",
+              "default" : "Bot",
+              "options" : [
+                { "value": "Bot",  "label": "Bot Token (Safe)"  },
+                { "value": "User", "label": "User Token (Nuuh)" }
+              ]
             },
             {
-              "type"     : "input",
-              "id"       : "danbooruFetchLimit",
-              "inputType": "number",
-              "variable" : "danbooruLimit",
-              "min"      : 5,
-              "max"      : 100,
-              "step"     : 5,
-              "default"  : 50
+              "type"       : "input",
+              "id"         : "discordTokenInput",
+              "inputType"  : "password",
+              "variable"   : "discordToken",
+              "placeholder": "Paste Token Here",
+              "default"    : ""
             },
             {
               "type"   : "button",
-              "id"     : "danbooruSyncBtn",
-              "label"  : "Sync Feed",
+              "id"     : "discordVerifyBtn",
+              "label"  : "Save Token",
               "accent" : "green",
-              "execute": "fetchDanbooruFeed(danbooruDefaultTags, danbooruLimit, true)"
+              "execute": "discord_saveToken(discordTokenType, discordToken)"
+            }
+          ]
+        },
+        {
+          "id"         : "discordServers",
+          "label"      : "Manage Servers",
+          "description": "Add Server IDs to fetch media from.",
+          "icon"       : "server",
+          "accent"     : "blue",
+          "elements"   : [
+            {
+              "type"       : "input",
+              "id"         : "discordServerInput",
+              "variable"   : "discordNewServer",
+              "placeholder": "Server ID",
+              "default"    : ""
+            },
+            {
+              "type"   : "button",
+              "id"     : "discordAddServerBtn",
+              "label"  : "Add",
+              "accent" : "blue",
+              "execute": "discord_addServer(discordNewServer)"
+            },
+            {
+              "type": "dropdown",
+              "id"  : "discordServerList"
+            },
+            {
+              "type"   : "button",
+              "id"     : "discordRemoveServerBtn",
+              "label"  : "Remove",
+              "accent" : "red",
+              "execute": "discord_removeServer()"
+            }
+          ]
+        },
+        {
+          "id"         : "discordChannels",
+          "label"      : "Channel Filters",
+          "description": "Blacklist (hide) or Whitelist (only show) channels bt ID",
+          "icon"       : "filter",
+          "accent"     : "yellow",
+          "elements"   : [
+            {
+              "type"    : "toggle",
+              "id"      : "discordFilterToggle",
+              "variable": "discordIsWhitelist",
+              "default" : false,
+              "execute" : "discord_toggleFilterMode(discordIsWhitelist)"
+            },
+            {
+              "type"       : "input",
+              "id"         : "discordChannelInput",
+              "variable"   : "discordNewChannel",
+              "placeholder": "Channel ID",
+              "default"    : ""
+            },
+            {
+              "type"   : "button",
+              "id"     : "discordAddChannelBtn",
+              "label"  : "Add",
+              "accent" : "yellow",
+              "execute": "discord_addChannel(discordNewChannel)"
+            },
+            {
+              "type": "dropdown",
+              "id"  : "discordChannelList"
+            },
+            {
+              "type"   : "button",
+              "id"     : "discordRemoveChannelBtn",
+              "label"  : "Remove",
+              "accent" : "red",
+              "execute": "discord_removeChannel()"
+            }
+          ]
+        },
+        {
+          "id"         : "discordAction",
+          "label"      : "Fetch Content",
+          "description": "Scan servers and fill Folders view with channel media folders",
+          "icon"       : "cloud-arrow-down",
+          "accent"     : "green",
+          "elements"   : [
+            {
+              "type"   : "button",
+              "id"     : "discordLoadBtn",
+              "label"  : "Load Channels",
+              "accent" : "mauve",
+              "execute": "discord_loadFolders()"
             }
           ]
         }

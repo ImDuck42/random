@@ -1,0 +1,96 @@
+{
+  "imports" : "./Dsettings.js",
+  "sections": [
+    {
+      "id"     : "danbooruCore",
+      "label"  : "Danbooru Integration",
+      "icon"   : "images",
+      "accent" : "peach",
+      "entries": [
+        {
+          "id"         : "enableDanbooru",
+          "label"      : "Enable Danbooru Feed",
+          "description": "Feed Danbooru posts directly into your Folders and Gallery masonry grid",
+          "icon"       : "bolt",
+          "accent"     : "peach",
+          "elements"   : [
+            {
+              "type"    : "toggle",
+              "id"      : "danbooruToggle",
+              "variable": "danbooruEnabled",
+              "accent"  : "peach",
+              "default" : false,
+              "execute" : "toggleDanbooruIntegration(danbooruEnabled)"
+            }
+          ]
+        },
+        {
+          "id"         : "danbooruAuth",
+          "label"      : "Danbooru Account (Optional)",
+          "description": "Save your username and API key locally for unlimited searches",
+          "icon"       : "key",
+          "accent"     : "lavender",
+          "elements"   : [
+            {
+              "type"       : "input",
+              "id"         : "danbooruUsername",
+              "inputType"  : "text",
+              "variable"   : "danbooruUsername",
+              "placeholder": "Username",
+              "default"    : ""
+            },
+            {
+              "type"       : "input",
+              "id"         : "danbooruApiKey",
+              "inputType"  : "password",
+              "variable"   : "danbooruApiKey",
+              "placeholder": "API Key",
+              "default"    : ""
+            },
+            {
+              "type"   : "button",
+              "id"     : "saveDanbooruAuthBtn",
+              "label"  : "Save Auth",
+              "accent" : "lavender",
+              "execute": "saveDanbooruAuth(danbooruUsername, danbooruApiKey)"
+            }
+          ]
+        },
+        {
+          "id"         : "danbooruFeedQuery",
+          "label"      : "Default Feed Query",
+          "description": "Default tags loaded when opening the gallery (e.g. order:rank)",
+          "icon"       : "magnifying-glass",
+          "accent"     : "mauve",
+          "elements"   : [
+            {
+              "type"       : "input",
+              "id"         : "danbooruDefaultTags",
+              "inputType"  : "text",
+              "variable"   : "danbooruDefaultTags",
+              "placeholder": "order:rank rating:g",
+              "default"    : "order:rank rating:g"
+            },
+            {
+              "type"     : "input",
+              "id"       : "danbooruFetchLimit",
+              "inputType": "number",
+              "variable" : "danbooruLimit",
+              "min"      : 5,
+              "max"      : 100,
+              "step"     : 5,
+              "default"  : 50
+            },
+            {
+              "type"   : "button",
+              "id"     : "danbooruSyncBtn",
+              "label"  : "Sync Feed",
+              "accent" : "green",
+              "execute": "fetchDanbooruFeed(danbooruDefaultTags, danbooruLimit, true)"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
