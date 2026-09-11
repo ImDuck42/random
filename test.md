@@ -13,4 +13,4 @@
 | :---------------- | :---------------------------------------------------------------- | :--------------- | :------------------------ | :------  | :----------- |
 | **Bleeding Edge** | [imduck42.github.io/Gallery](https://imduck42.github.io/Gallery/) | Rolling Release  | Latest features & changes | **Duck** | Not this one |
 | **Stable\* ish**  | [nyxie.nekoweb.org](https://nyxie.nekoweb.org/)                   | Batched releases | Polished* & fancy(URL)    | Cat      | **This one** |  
-*Applies 100% of the time unless you interact with it.
+\*Applies 100% of the time unless you interact with it.
