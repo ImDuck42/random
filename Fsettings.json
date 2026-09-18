@@ -1,0 +1,87 @@
+{
+  "imports": "./Fsettings.js",
+  "sections": [
+    {
+      "id"     : "futurepornSection",
+      "label"  : "FuturePorn VOD Archive",
+      "icon"   : "video",
+      "accent" : "mauve",
+      "entries": [
+        {
+          "id"         : "fpLoadOnStartEntry",
+          "label"      : "Auto populate on load ",
+          "description": "Automatically load and display the VOD archive when opening the gallery",
+          "icon"       : "power-off",
+          "accent"     : "green",
+          "elements"   : [
+            {
+              "type"    : "toggle",
+              "id"      : "fpLoadOnStartToggle",
+              "variable": "fpLoadOnStart",
+              "default" : false,
+              "accent"  : "green",
+              "execute" : "setFpLoadOnStart(fpLoadOnStart)"
+            }
+          ]
+        },
+        {
+          "id"         : "fpSyncEntry",
+          "label"      : "Archive Synchronization",
+          "description": "Populate the Folders tab with Vtubers and the Gallery tab with stream VODs",
+          "icon"       : "cloud-arrow-down",
+          "accent"     : "mauve",
+          "elements"   : [
+            {
+              "type"   : "button",
+              "id"     : "fpSyncBtn",
+              "label"  : "Sync Archive",
+              "accent" : "green",
+              "execute": "syncFuturepornArchive()"
+            },
+            {
+              "type"   : "button",
+              "id"     : "fpClearBtn",
+              "label"  : "Clear Records",
+              "accent" : "red",
+              "confirm": true,
+              "execute": "clearFuturepornArchive()"
+            }
+          ]
+        },
+        {
+          "id"         : "fpPendingEntry",
+          "label"      : "Show pending approvals",
+          "description": "Include VODs in the gallery that are awaiting approval or are unavailable",
+          "icon"       : "clock",
+          "accent"     : "peach",
+          "elements"   : [
+            {
+              "type"    : "toggle",
+              "id"      : "fpPendingToggle",
+              "variable": "fpIncludePending",
+              "default" : false,
+              "accent"  : "peach",
+              "execute" : "setFpIncludePending(fpIncludePending)"
+            }
+          ]
+        },
+        {
+          "id"         : "fpStatsEntry",
+          "label"      : "Archive Statistics",
+          "description": "Current count of synced archive records",
+          "icon"       : "chart-pie",
+          "accent"     : "teal",
+          "elements"   : [
+            {
+              "type"   : "button",
+              "id"     : "fpStatsBtn",
+              "label"  : "VTubers: 0 VODs: 0 Unavailable: 0",
+              "accent" : "teal",
+              "execute": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

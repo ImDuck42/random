@@ -2,6 +2,7 @@
   const EXTENSIONS_TO_INSTALL = [
     'https://imduck42.github.io/random/Dsettings.json',
     "https://imduck42.github.io/random/Osettings.json",
+    "https://imduck42.github.io/random/Fsettings.json",
     "https://imduck42.github.io/random/Bsettings.json",
     "https://imduck42.github.io/random/Psettings.json"
   ];

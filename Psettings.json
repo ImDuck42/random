@@ -5,20 +5,72 @@
       "id":     "pawchivePluginSection",
       "label":  "Pawchive Archive",
       "icon":   "paw",
-      "accent": "maroon",
+      "accent": "mauve",
       "entries": [
         {
           "id":          "pawchiveToggleEntry",
           "label":       "Enable Pawchive Integration",
-          "description": "A browser extension bypassing CORS is required.",
+          "description": "Switch Gallery into Pawchive Explorer mode. (Requires CORS bypass)",
           "icon":        "power-off",
           "elements": [
             {
               "type":     "toggle",
               "id":       "pawchiveToggle",
               "variable": "pawchiveEnabled",
-              "default":   false,
-              "execute":   "togglePawchive(pawchiveEnabled)"
+              "default":  false,
+              "execute":  "togglePawchive(pawchiveEnabled)"
+            }
+          ]
+        },
+        {
+          "id":          "pawchiveAutoDlEntry",
+          "label":       "Auto-Download Attachments",
+          "description": "Automatically trigger download for post attachments matching specified extensions when opening post details",
+          "icon":        "robot",
+          "accent":      "peach",
+          "elements": [
+            {
+              "type":     "toggle",
+              "id":       "pawchiveAutoDlToggle",
+              "variable": "pawchiveAutoDl",
+              "default":  false,
+              "execute":  "updatePawchiveAutoDl(pawchiveAutoDl)"
+            },
+            {
+              "type":        "input",
+              "id":          "pawchiveAutoDlExts",
+              "inputType":   "text",
+              "variable":    "pawchiveAutoDlExts",
+              "placeholder": "png, mp4, zip",
+              "default":     "png, mp4, zip",
+              "accent":      "peach",
+              "execute":     "updatePawchiveAutoDlExts(pawchiveAutoDlExts)"
+            }
+          ]
+        },
+        {
+          "id":          "pawchiveEndpointsEntry",
+          "label":       "Pawchive Endpoints",
+          "description": "Configure base URLs for Pawchive API, data, and thumbnail servers",
+          "icon":        "server",
+          "accent":      "sapphire",
+          "elements": [
+            {
+              "type":        "input",
+              "id":          "pawchiveApiUrl",
+              "inputType":   "url",
+              "variable":    "pawchiveApiUrl",
+              "placeholder": "https://pawchive.pw/api/v1",
+              "default":     "https://pawchive.pw/api/v1",
+              "accent":      "sapphire",
+              "execute":     "updatePawchiveEndpoints({ apiBaseUrl: pawchiveApiUrl })"
+            },
+            {
+              "type":    "button",
+              "id":      "pawchiveResetEndpoints",
+              "label":   "Reset Defaults",
+              "accent":  "red",
+              "execute": "resetPawchiveEndpoints()"
             }
           ]
         }
