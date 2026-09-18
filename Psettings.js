@@ -242,7 +242,7 @@
         grid-template-columns: var(--grid-columns, repeat(auto-fill, minmax(250px, 1fr))) !important;
         grid-auto-rows:        1px  !important;
         gap:                   20px !important;
-        width:                 100% !important;
+        width:                 auto !important;
       }
       .gallery-masonry:not(.pawchive-hide),
       #postModalMasonry.gallery-masonry:not(.pawchive-hide),
@@ -626,7 +626,6 @@
         width:          100%; 
         max-width:      1400px;
         height:         100%; 
-        max-height:     90vh; 
         background:     rgb(var(--ctp-mantle-rgb));
         border:         4px solid rgb(var(--ctp-surface1-rgb)); 
         border-radius:  20px; 
@@ -656,7 +655,8 @@
       }
       
       .modal-body { 
-        flex:       1; 
+        flex:       1;
+        min-height: 0 !important;
         padding:    30px 40px; 
         overflow-y: auto; 
         color:      rgb(var(--ctp-text-rgb)); 
@@ -976,17 +976,21 @@
         justify-content: center; 
         width:           100%; 
         height:          100%; 
-        padding:         40px; 
+        max-height:      100dvh;
+        padding:         24px; 
+        box-sizing:      border-box;
       }
       .lightbox-content img, 
       .lightbox-content video {
-        width:         100%; 
-        height:        100%; 
-        object-fit:    contain; 
-        background:    rgb(var(--ctp-mantle-rgb));
-        border:        4px solid rgb(var(--ctp-surface1-rgb)); 
-        border-radius: 16px; 
-        box-shadow:    12px 12px 0 rgba(0, 0, 0, 0.6);
+        max-width:        100%; 
+        max-height:       calc(100dvh - 48px) !important;
+        width:            auto !important; 
+        height:           auto !important; 
+        object-fit:       contain; 
+        background:       rgb(var(--ctp-mantle-rgb));
+        border:           4px solid rgb(var(--ctp-surface1-rgb)); 
+        border-radius:    16px; 
+        box-shadow:       0 10px 25px rgba(0, 0, 0, 0.6);
       }
 
       /* Toasts */
@@ -1340,7 +1344,7 @@
   // ==================================================================================================== //
   // CARD BUILDERS
   // ==================================================================================================== //
-  function buildMediaBlockHtml(fileData) {
+function buildMediaBlockHtml(fileData) {
     const sourceUrl = getMediaUrl(fileData.path)
     const thumbUrl  = getThumbUrl(fileData.path)
     const fileName  = fileData.name || fileData.path.split('/').pop()
@@ -1350,16 +1354,23 @@
     const accentName = getNextAccent()
     const isVideo    = EXT_VIDEO.test(fileName)
     const isImage    = EXT_IMAGE.test(fileName)
+    const isAnimated = EXT_ANIM.test(fileName)
 
     if (isImage) {
-      const animationAttribute = EXT_ANIM.test(fileName) ? `data-anim-src="${escapeHtml(sourceUrl)}"` : ''
+      // Animated media directly uses sourceUrl so it animates immediately in the post
+      const imageSrc = isAnimated ? sourceUrl : (thumbUrl || sourceUrl)
+
       return `
-        <div class="gallery-card" style="--accent: var(--ctp-${accentName}-rgb);" onclick="PawchivePlugin.openLightbox('${escapeHtml(sourceUrl)}', 'img', '${escapeHtml(thumbUrl)}')">
+        <div class="gallery-card" style="--accent: var(--ctp-${accentName}-rgb);" 
+             onclick="PawchivePlugin.openLightbox('${escapeHtml(sourceUrl)}', 'img', '${escapeHtml(thumbUrl)}')">
+          ${isAnimated ? `
+            <span class="card-tag" style="left:auto; right:10px;">
+              <span>GIF</span>
+            </span>` : ''}
           <img referrerpolicy="no-referrer" decoding="async"
-               src="${escapeHtml(thumbUrl || sourceUrl)}"
+               src="${escapeHtml(imageSrc)}"
                data-full="${escapeHtml(sourceUrl)}"
                alt="${escapeHtml(fileName)}"
-               ${animationAttribute}
                onload="PawchivePlugin.packGalleryCard(this.closest('.gallery-card'))"
                onerror="if(this.dataset.full && this.src !== this.dataset.full){this.src=this.dataset.full;}">
         </div>`
@@ -1367,11 +1378,16 @@
     
     if (isVideo) {
       return `
-        <div class="gallery-card" style="--accent: var(--ctp-${accentName}-rgb);" onclick="PawchivePlugin.openLightbox('${escapeHtml(sourceUrl)}', 'video')">
-          <video loop muted playsinline preload="none" referrerpolicy="no-referrer"
+        <div class="gallery-card" style="--accent: var(--ctp-${accentName}-rgb);">
+          <span class="card-tag" style="left:auto; right:10px; cursor:pointer; pointer-events:auto;" 
+                onclick="PawchivePlugin.openLightbox('${escapeHtml(sourceUrl)}', 'video')" title="Fullscreen Lightbox">
+            <span><i class="fa-solid fa-expand"></i></span>
+          </span>
+          <video controls loop playsinline preload="metadata" referrerpolicy="no-referrer"
                  poster="${escapeHtml(thumbUrl)}"
-                 data-anim-src="${escapeHtml(sourceUrl)}"
-                 onloadedmetadata="PawchivePlugin.packGalleryCard(this.closest('.gallery-card'))"></video>
+                 src="${escapeHtml(sourceUrl)}"
+                 onloadedmetadata="PawchivePlugin.packGalleryCard(this.closest('.gallery-card'))">
+          </video>
         </div>`
     }
     
