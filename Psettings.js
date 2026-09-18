@@ -1344,7 +1344,7 @@
   // ==================================================================================================== //
   // CARD BUILDERS
   // ==================================================================================================== //
-function buildMediaBlockHtml(fileData) {
+  function buildMediaBlockHtml(fileData) {
     const sourceUrl = getMediaUrl(fileData.path)
     const thumbUrl  = getThumbUrl(fileData.path)
     const fileName  = fileData.name || fileData.path.split('/').pop()
@@ -1357,7 +1357,6 @@ function buildMediaBlockHtml(fileData) {
     const isAnimated = EXT_ANIM.test(fileName)
 
     if (isImage) {
-      // Animated media directly uses sourceUrl so it animates immediately in the post
       const imageSrc = isAnimated ? sourceUrl : (thumbUrl || sourceUrl)
 
       return `
