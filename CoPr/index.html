@@ -3,82 +3,87 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CoPr — Counter Protocol Chat</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <title>CoPr Chat</title>
+    <meta name="description" content="A CountProtocol based Chatroom">
+    <meta name="theme-color" content="#ea580c">
+    
+    <link rel="icon"       type="image/png" href="./CoPr.png" sizes="any">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800;900&family=JetBrains+Mono:wght@700;800&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
 
-    <!-- Startup Permission & Terms Popup -->
+    <!-- Permission & Terms Popup -->
     <div id="termsModal" class="modal-overlay">
       <div class="modal-card">
+        
         <header class="modal-header">
           <div class="modal-icon">
             <i class="fa-solid fa-triangle-exclamation"></i>
           </div>
-          <h2>Protocol Terms</h2>
+          <h2>CoPr Chat Disclaimers</h2>
         </header>
 
         <section class="modal-body">
           <p>
-            <strong>Unmoderated Mesh:</strong>
-            Content is carried raw over numeric counter APIs without censorship or filtering.
+            <strong>Unmoderated:</strong>
+            Content is carried without censorship or filtering of any sort.
           </p>
           <p>
-            <strong>Channel Sequence Wiping:</strong>
-            Any user can clear or reset all room messages at any time using counter wipe calls.
+            <strong>Channel Wiping:</strong>
+            Any user can clear, reset all room messages, or delete a room as a whole at any time.
+          </p>
+          <p>
+            <strong>File Uploads:</strong>
+            All files are temporarily uploaded to litterbox.catbox.moe and will be sent as links valid for only 24 hours. Don't upload anything illegal or Catbox will ban your IP.
+          </p>
+          <p>
+            <strong>Underlying Server Software:</strong>
+            Now the weird part: the underlying server is countapi.mileshilliard.com.
+            <br>
+            All data is sent as pure numbers and is encoded to UNICODE numbers. Anyone can easily convert them back into plain text, although unlikely.
           </p>
           <p>
             <strong>Audio Notifications:</strong>
-            Clicking below grants permission to synthesize Web Audio chimes for mentions and alerts.
+            Clicking below grants permission to the Web Audio API for mentions and incoming messages.
           </p>
         </section>
 
         <button id="acceptTermsBtn" class="modal-btn" type="button">
-          <span>Enter & Enable Audio</span>
+          <span>Acknowledge & Allow Audio</span>
           <i class="fa-solid fa-arrow-right"></i>
         </button>
+        
       </div>
     </div>
 
-    <!-- Notification Toasts Stack -->
-    <div id="toastContainer" class="toast-stack" aria-live="polite"></div>
-
     <div class="chat-app">
 
-      <!-- Left Navigation Sidebar -->
+      <!-- Left Sidebar -->
       <aside class="sidebar">
 
-        <!-- Brand Header -->
+        <!-- Header -->
         <header class="sidebar-brand">
           <div class="brand-badge">
             <i class="fa-solid fa-cube"></i>
           </div>
           <div class="brand-info">
             <h1>CoPr Chat</h1>
-            <p>Decentralized Mesh</p>
+            <p>CountProtocol based</p>
           </div>
           <button id="toggleAudioBtn" class="mute-toggle active" type="button" title="Sound notifications">
             <i class="fa-solid fa-bell"></i>
           </button>
         </header>
 
-        <!-- Join Channel Strip -->
+        <!-- Join Channel -->
         <section class="sidebar-join-strip">
           <div class="join-input-group">
             <div class="input-field-wrap">
               <span class="hash-tag">#</span>
-              <input
-                id="channelNameInput"
-                type="text"
-                placeholder="channel-name"
-                spellcheck="false"
-                autocomplete="off"
-              >
+              <input id="channelNameInput" type="text" placeholder="channel-name" spellcheck="false" autocomplete="off">
             </div>
             <button id="connectChannelBtn" class="primary-btn" type="button">Join</button>
           </div>
@@ -86,11 +91,11 @@
           <label class="checkbox-label" for="publicDiscoveryToggle">
             <input id="publicDiscoveryToggle" type="checkbox">
             <span class="checkmark"></span>
-            <span>Publish to registry</span>
+            <span>Add to Public Channel-list</span>
           </label>
         </section>
 
-        <!-- Public Channels Section -->
+        <!-- Public Channels -->
         <section class="sidebar-channels-section">
           <div class="section-title-row">
             <h2>Public Channels</h2>
@@ -101,12 +106,7 @@
 
           <div class="channel-search-box">
             <i class="fa-solid fa-magnifying-glass"></i>
-            <input
-              id="searchChannelsInput"
-              type="text"
-              placeholder="Filter channels..."
-              autocomplete="off"
-            >
+            <input id="searchChannelsInput" type="text" placeholder="Search channels..." autocomplete="off">
           </div>
 
           <div id="discoveredRoomsContainer" class="channel-list">
@@ -117,34 +117,28 @@
           </div>
         </section>
 
-        <!-- Bottom Pinned User Dock -->
+        <!-- Bottom Dock -->
         <footer class="sidebar-user-dock">
           <div id="userAvatarBadge" class="avatar">ME</div>
           <div class="user-meta">
             <span class="dock-label">Your Handle</span>
             <div class="dock-handle-wrap">
-              <span class="at">@</span>
-              <input
-                id="userHandleInput"
-                type="text"
-                maxlength="20"
-                spellcheck="false"
-                placeholder="username"
-              >
+              <span class="at-sign">@</span>
+              <input id="userHandleInput" type="text" maxlength="20" spellcheck="false" placeholder="username">
             </div>
           </div>
         </footer>
 
       </aside>
 
-      <!-- Center Main Chat Surface -->
+      <!-- Main Chat -->
       <main class="main-chat">
 
-        <!-- Channel Topbar -->
+        <!-- Topbar -->
         <header class="chat-topbar">
           <div class="room-title-group">
             <div class="room-hash">#</div>
-            <h2 id="currentRoomHeader">idle</h2>
+            <h2 id="currentRoomHeader">This ain't no chat</h2>
           </div>
 
           <div class="topbar-actions">
@@ -158,11 +152,6 @@
               <span>Copy</span>
             </button>
 
-            <button id="clearRoomBtn" class="danger-btn" type="button" style="display: none;">
-              <i class="fa-solid fa-trash"></i>
-              <span>Wipe</span>
-            </button>
-
             <button id="toggleMembersBtn" class="secondary-btn" type="button" title="Toggle Member List">
               <i class="fa-solid fa-users"></i>
             </button>
@@ -173,27 +162,33 @@
           </div>
         </header>
 
-        <!-- Message History Feed -->
+        <!-- Message Feed -->
         <section id="messageStreamFeed" class="chat-feed">
           <div id="emptyStatePlaceholder" class="empty-feed-card">
             <div class="empty-icon">
               <i class="fa-solid fa-comments"></i>
             </div>
             <h3>Welcome to CoPr</h3>
-            <p>Join a channel on the left or enter a channel name above to begin chatting over counter APIs.</p>
+            <p>
+              If you see this, messages are currently being loaded or you have yet to join a channel.
+              <br><br>
+              You can enter a channel name above to begin chatting or join a public one.
+            </p>
           </div>
         </section>
 
-        <!-- Multiline Message Composer -->
+        <!-- Multiline Message -->
         <footer class="chat-bottom">
+          <div id="stagedFilesContainer" class="staged-files-tray" style="display: none;"></div>
           <form class="input-container" onsubmit="return false;">
-            <textarea
-              id="chatMessageInput"
-              rows="1"
-              placeholder="Select a channel to chat..."
-              autocomplete="off"
-              disabled
-            ></textarea>
+            <textarea id="chatMessageInput" rows="1" placeholder="Select a channel to start chatting..." autocomplete="off" disabled></textarea>
+            
+            <input id="fileAttachmentInput" type="file" multiple style="display: none;">
+            
+            <button id="attachFileBtn" class="attach-btn" type="button" disabled title="Attach files (24h)">
+              <i class="fa-solid fa-paperclip"></i>
+            </button>
+            
             <button id="sendMessageBtn" class="send-btn" type="button" disabled title="Send message (Enter)">
               <i class="fa-solid fa-paper-plane"></i>
             </button>
@@ -202,17 +197,17 @@
 
       </main>
 
-      <!-- Right Sidebar: Active Members Panel -->
+      <!-- Active Members -->
       <aside id="membersSidebar" class="members-sidebar">
         <header class="members-header">
-          <h2>Members</h2>
+          <h2>Now Active</h2>
           <span id="memberCountBadge" class="member-count-badge">0</span>
         </header>
 
         <div id="activeMembersList" class="members-list">
           <div class="empty-members">
             <i class="fa-solid fa-users-slash"></i>
-            <span>No active channel</span>
+            <span>Not in an active channel</span>
           </div>
         </div>
       </aside>
