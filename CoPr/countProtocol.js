@@ -2,111 +2,98 @@
  * countProtocol.js (CoPr -- pronounced "Copper")
  * CoPr messaging utility running on https://countapi.mileshilliard.com
  */
+// WEIIRD behaviour when one deletes a channel - commands do not affect each eg o n use /clear 1 ther other ones msg stays
+// - Both need releads to fix themselves
 
-// GO ADD A MASSIVE DECOMPRESSOR FOR DATA!!!
 
-// USE THIS FOR NOW
-const originalConsoleError = console.error
-console.error = (...errorArguments) => {
-  if (errorArguments.some((errorItem) => String(errorItem?.message || errorItem).includes('/get/'))) return
-  originalConsoleError.apply(console, errorArguments)
-}
+export const CoPrProtocol_Version = 'maybe 1.5 idk'
 
+// ========== DEFAULT CONFIGURATION ==========
 const DEFAULT_CONFIG = {
-  apiBaseEndpoint:   'https://countapi.mileshilliard.com/api/v1',
-  discoveryKeyLabel: 'copr_discovery_registry',
-  frameStartMarker:  '999001',
-  frameEndMarker:    '999002',
-  defaultPollDelay:  250,
-  lengthDigitsWidth: 6,
-  hashDigitsWidth:   6
+  apiBase:      'https://countapi.mileshilliard.com/api/v1',
+  discoveryKey: 'copr_registry',
+  seedValue:    0x436f5072, // Needs manual editing, not in teh constructor
+  apiPollRate:  250,        // 4 per second || https://github.com/syntaxerror019/countapi/blob/main/api/index.py#L151
+  fetchRange:   25
 }
 
-export const stringToNumeric = (rawInputText) => {
-  const textEncoder = new TextEncoder()
-  const byteStream  = textEncoder.encode(String(rawInputText))
-  let numericOutput = ''
+// ========== Mulberry32 SCRAMBLER ==========
+const scrambleBytes = (bytes) => {
+  let seed = DEFAULT_CONFIG.seedValue
+  const result = new Uint8Array(bytes.length)
   
-  for (let byteIndex = 0; byteIndex < byteStream.length; byteIndex++) {
-    numericOutput += String(byteStream[byteIndex]).padStart(3, '0')
+  for (let index = 0; index < bytes.length; index++) {
+    seed          = (seed + 0x6d2b79f5) | 0
+    let temporary = Math.imul(seed ^ (seed >>> 15), 1 | seed)
+    temporary     = (temporary     + Math.imul(temporary ^ (temporary >>> 7), 61 | temporary)) ^ temporary
+    const mask    = (temporary     ^ (temporary >>> 14)) & 0xff
+    result[index] = bytes[index]   ^ mask
   }
-  return numericOutput
+  return result
 }
 
-export const numericToString = (pureNumericText) => {
-  const cleanNumericText = String(pureNumericText).trim()
-  const totalBytesLength = Math.floor(cleanNumericText.length / 3)
-  const byteBufferArray  = new Uint8Array(totalBytesLength)
-  
-  for (let byteIndex = 0; byteIndex < totalBytesLength; byteIndex++) {
-    const byteOffset           = byteIndex * 3
-    const parsedByteValue      = parseInt(cleanNumericText.substring(byteOffset, byteOffset + 3), 10)
-    byteBufferArray[byteIndex] = isNaN(parsedByteValue) ? 63 : (parsedByteValue % 256)
+// ========== NUMERIC <--> BYTES CONVERSION ==========
+export const bytesToNumeric = (input) => {
+  if (!input || input.length === 0) return '0'
+  const bytes = typeof input === 'string' ? new TextEncoder().encode(input) : input
+  let packed  = 1n
+  for (let index = 0; index < bytes.length; index++) {
+    packed = (packed << 8n) | BigInt(bytes[index])
   }
-  return new TextDecoder('utf-8', { fatal: false }).decode(byteBufferArray)
+  return packed.toString(10)
 }
 
-export const computeNumericChecksum = (numericPayloadText, hashWidth = 6) => {
-  let computedHash = 5381
-  for (let charIndex = 0; charIndex < numericPayloadText.length; charIndex++) {
-    computedHash = ((computedHash * 33) ^ numericPayloadText.charCodeAt(charIndex)) >>> 0
-  }
-  return String(computedHash % 1000000).padStart(hashWidth, '0')
-}
-
-export const encodeProtocolFrame = (rawMessagePayload, config = DEFAULT_CONFIG) => {
-  const numericPayloadText   = stringToNumeric(rawMessagePayload)
-  const payloadDigitsLength  = String(numericPayloadText.length).padStart(config.lengthDigitsWidth, '0')
-  const validationHashDigits = computeNumericChecksum(numericPayloadText, config.hashDigitsWidth)
-  
-  return (
-    config.frameStartMarker +
-    payloadDigitsLength     +
-    numericPayloadText      +
-    validationHashDigits    +
-    config.frameEndMarker
-  )
-}
-
-export const decodeProtocolFrame = (rawNumericFrame, config = DEFAULT_CONFIG) => {
-  if (!rawNumericFrame || !rawNumericFrame.startsWith(config.frameStartMarker)) return null
+export const numericToBytes = (numericPayload) => {
+  if (!numericPayload || numericPayload === '0') return new Uint8Array(0)
   try {
-    const lengthStart   = config.frameStartMarker.length
-    const lengthEnd     = lengthStart + config.lengthDigitsWidth
-    const payloadLength = parseInt(rawNumericFrame.substring(lengthStart, lengthEnd), 10)
-
-    const payloadStart = lengthEnd
-    const payloadEnd   = payloadStart + payloadLength
-    const hashStart    = payloadEnd
-    const hashEnd      = hashStart    + config.hashDigitsWidth
-    const markerEnd    = hashEnd      + config.frameEndMarker.length
-
-    if (rawNumericFrame.substring(hashEnd, markerEnd) !== config.frameEndMarker) return null
-
-    const payloadDigits = rawNumericFrame.substring(payloadStart, payloadEnd)
-    const expectedHash  = rawNumericFrame.substring(hashStart,    hashEnd)
-    const hashIsValid   = (expectedHash === computeNumericChecksum(payloadDigits, config.hashDigitsWidth))
-
-    return {
-      payloadText: numericToString(payloadDigits),
-      isValid:     hashIsValid,
-      isCorrupted: !hashIsValid
+    let packed = BigInt(numericPayload)
+    const byteBuffer = []
+    while (packed > 1n) {
+      byteBuffer.push(Number(packed & 0xffn))
+      packed >>= 8n
     }
+    return new Uint8Array(byteBuffer.reverse())
   } catch {
-    return null
+    return new Uint8Array(0)
   }
 }
 
+// ========== COMPRESSION <--> DECOMPRESSION ==========
+export const compressMessage = async (rawInputText) => {
+  if (!rawInputText) return '0'
+  const textStream  = new Blob([String(rawInputText)]).stream().pipeThrough(new CompressionStream('deflate-raw'))
+  const streamBytes = new Uint8Array(await new Response(textStream).arrayBuffer())
+  return bytesToNumeric(scrambleBytes(streamBytes))
+}
+
+export const decompressMessage = async (numericPayload) => {
+  const bytes = numericToBytes(numericPayload)
+  if (bytes.length === 0) return ''
+  try {
+    const byteStream = new Blob([scrambleBytes(bytes)]).stream().pipeThrough(new DecompressionStream('deflate-raw'))
+    return await new Response(byteStream).text()
+  } catch {
+    return ''
+  }
+}
+
+// ========== CoPrProtocol CLASS ==========
 export class CoPrProtocol {
   constructor(protocolOptions = {}) {
     this.config          = { ...DEFAULT_CONFIG, ...protocolOptions }
     this.activeListeners = new Map()
+    this.nextRequestTime = 0
   }
 
   // ===== UTILITIES =====
   async dispatchApiRequest(actionEndpoint, queryParams = '') {
+    const now            = Date.now()
+    const scheduledTime  = Math.max(now, this.nextRequestTime)
+    this.nextRequestTime = scheduledTime + 110
+    if (scheduledTime > now) await new Promise((resolve) => setTimeout(resolve, scheduledTime - now))
+
     try {
-      const fullEndpointUrl = `${this.config.apiBaseEndpoint}/${actionEndpoint}${queryParams}`
+      const fullEndpointUrl = `${this.config.apiBase}/${actionEndpoint}${queryParams}`
       const fetchResponse   = await fetch(fullEndpointUrl, { cache: 'no-store' })
       if (!fetchResponse.ok) return null
       return await fetchResponse.text()
@@ -123,19 +110,23 @@ export class CoPrProtocol {
 
   // ===== KEY RESOLVERS =====
   resolveChannelIndexKey(targetChannel) {
-    return stringToNumeric(`copr_idx_${targetChannel}`)
+    return bytesToNumeric(`copr_channel_${targetChannel}`)
   }
 
   resolveMessageKey(targetChannel, sequenceIndex) {
-    return stringToNumeric(`copr_msg_${targetChannel}_${sequenceIndex}`)
+    return bytesToNumeric(`copr_message_${targetChannel}_${sequenceIndex}`)
   }
 
   resolveDiscoveryKey() {
-    return stringToNumeric(this.config.discoveryKeyLabel)
+    return bytesToNumeric(this.config.discoveryKey)
   }
 
   resolveDiscoverySlotKey(slotIndex) {
-    return stringToNumeric(`copr_disco_slot_${slotIndex}`)
+    return bytesToNumeric(`copr_registry_${slotIndex}`)
+  }
+
+  resolveDiscoverySlotPointerKey(targetChannel) {
+    return bytesToNumeric(`copr_registry_pointer_${targetChannel}`)
   }
 
   // ===== COUNTER OPERATIONS =====
@@ -158,25 +149,25 @@ export class CoPrProtocol {
 
   // ===== MESSAGING LOGIC =====
   async sendMessage(targetChannel, messagePayload) {
-    const encodedFrameData = encodeProtocolFrame(messagePayload, this.config)
+    const encodedPayload   = await compressMessage(messagePayload)
     const channelIndexKey  = this.resolveChannelIndexKey(targetChannel)
     const assignedSequence = await this.hitCounter(channelIndexKey)
     
     if (assignedSequence === null || assignedSequence <= 0) {
-      throw new Error('Failed to acquire sequence index from counter API.')
+      throw new Error('Failed to acquire sequence index from counter API')
     }
 
     const messageKey = this.resolveMessageKey(targetChannel, assignedSequence)
-    const wasSuccess = await this.setRawCounter(messageKey, encodedFrameData)
+    const wasSuccess = await this.setRawCounter(messageKey, encodedPayload)
     
     if (!wasSuccess) {
       throw new Error(`Failed to store message at sequence ${assignedSequence}`)
     }
 
-    return { sequence: assignedSequence, frame: encodedFrameData }
+    return { sequence: assignedSequence, payload: messagePayload }
   }
 
-  async fetchChannelHistory(targetChannel, fromSequence = null, toSequence = null) {
+  async fetchChannelHistory(targetChannel, fromSequence = null, toSequence = null, limit = null) {
     const channelIndexKey   = this.resolveChannelIndexKey(targetChannel)
     const rawLatestSequence = await this.fetchRawCounter(channelIndexKey)
     if (rawLatestSequence === null) return []
@@ -184,96 +175,108 @@ export class CoPrProtocol {
     const latestSequence = toSequence !== null ? toSequence : (parseInt(rawLatestSequence, 10) || 0)
     if (latestSequence <= 0) return []
 
-    const startSequence = fromSequence !== null ? Math.max(1, fromSequence) : Math.max(1, latestSequence - 35)
-    if (startSequence > latestSequence) return []
+    const targetCount = limit || this.config.fetchRange
+    const minSequence = fromSequence !== null ? Math.max(1, fromSequence) : 1
+    const collected   = []
+    let   currentEnd  = latestSequence
 
-    const fetchPromises = []
-    
-    for (let currentSequence = startSequence; currentSequence <= latestSequence; currentSequence++) {
-      const messageKey = this.resolveMessageKey(targetChannel, currentSequence)
-      fetchPromises.push(
-        this.fetchRawCounter(messageKey).then((rawFrame) => ({ sequence: currentSequence, rawFrame }))
-      )
+    while (currentEnd >= minSequence && collected.length < targetCount) {
+      const needed        = targetCount - collected.length
+      const currentStart  = Math.max(minSequence, currentEnd - needed + 1)
+      const fetchPromises = []
+
+      for (let seq = currentStart; seq <= currentEnd; seq++) {
+        const messageKey = this.resolveMessageKey(targetChannel, seq)
+        fetchPromises.push(
+          this.fetchRawCounter(messageKey).then((rawFrame) => ({ sequence: seq, rawFrame }))
+        )
+      }
+
+      const batch = await Promise.all(fetchPromises)
+      const valid = (await Promise.all(
+        batch
+          .filter((item) => item.rawFrame)
+          .map(async ({ sequence, rawFrame }) => {
+            const payloadText = await decompressMessage(rawFrame)
+            return payloadText ? {
+              channel:   targetChannel,
+              sequence:  sequence,
+              payload:   payloadText,
+              timestamp: Date.now()
+            } : null
+          })
+      )).filter(Boolean)
+
+      collected.unshift(...valid)
+      currentEnd = currentStart - 1
     }
 
-    const fetchedResults = await Promise.all(fetchPromises)
-    
-    return fetchedResults
-      .sort((itemA, itemB) => itemA.sequence - itemB.sequence)
-      .map(({ sequence, rawFrame }) => {
-        if (!rawFrame) return null
-        const decodedFrame = decodeProtocolFrame(rawFrame, this.config)
-        if (!decodedFrame) return null
-        
-        return {
-          channel:     targetChannel,
-          sequence:    sequence,
-          payload:     decodedFrame.payloadText,
-          isValid:     decodedFrame.isValid,
-          isCorrupted: decodedFrame.isCorrupted,
-          timestamp:   Date.now()
-        }
-      })
-      .filter(Boolean)
+    return collected.slice(-targetCount)
   }
 
   listenToChannel(targetChannel, onMessageCallback, customPollDelay = null) {
     const channelIndexKey = this.resolveChannelIndexKey(targetChannel)
-    const delayDuration   = customPollDelay || this.config.defaultPollDelay
+    const delayDuration   = customPollDelay || this.config.apiPollRate
     let   localSequence   = null
+    let   isPolling       = false
 
     const intervalHandle = setInterval(async () => {
-      const rawCurrentSequence = await this.fetchRawCounter(channelIndexKey)
+      if (isPolling) return
+      isPolling = true
 
-      if (rawCurrentSequence === null) {
-        if (localSequence === null) await this.setRawCounter(channelIndexKey, '0')
-        return
-      }
+      try {
+        const rawCurrentSequence = await this.fetchRawCounter(channelIndexKey)
 
-      const currentSequence = parseInt(rawCurrentSequence, 10) || 0
-      if (localSequence === null) {
-        localSequence = currentSequence
-        return
-      }
-
-      if (currentSequence < localSequence) {
-        localSequence = currentSequence
-        onMessageCallback({ isResetState: true })
-        return
-      }
-
-      if (currentSequence > localSequence) {
-        const startSequence = localSequence + 1
-        const endSequence   = currentSequence
-        const fetchPromises = []
-
-        for (let currentSeq = startSequence; currentSeq <= endSequence; currentSeq++) {
-          const messageKey = this.resolveMessageKey(targetChannel, currentSeq)
-          fetchPromises.push(
-            this.fetchRawCounter(messageKey).then((rawFrame) => ({ sequence: currentSeq, rawFrame }))
-          )
+        if (rawCurrentSequence === null) {
+          if (localSequence === null) await this.setRawCounter(channelIndexKey, '0')
+          return
         }
 
-        const fetchedResults = await Promise.all(fetchPromises)
-        fetchedResults.sort((itemA, itemB) => itemA.sequence - itemB.sequence)
+        const currentSequence = parseInt(rawCurrentSequence, 10) || 0
+        if (localSequence === null) {
+          localSequence = currentSequence
+          return
+        }
 
-        for (const { sequence, rawFrame } of fetchedResults) {
-          if (rawFrame) {
-            const decodedFrame = decodeProtocolFrame(rawFrame, this.config)
-            if (decodedFrame) {
+        if (currentSequence < localSequence) {
+          localSequence = currentSequence
+          onMessageCallback({ isResetState: true })
+          return
+        }
+
+        if (currentSequence > localSequence) {
+          const startSequence = localSequence + 1
+          const endSequence   = currentSequence
+          const fetchPromises = []
+
+          for (let currentSeq = startSequence; currentSeq <= endSequence; currentSeq++) {
+            const messageKey = this.resolveMessageKey(targetChannel, currentSeq)
+            fetchPromises.push(
+              this.fetchRawCounter(messageKey).then((rawFrame) => ({ sequence: currentSeq, rawFrame }))
+            )
+          }
+
+          const fetchedResults = await Promise.all(fetchPromises)
+          fetchedResults.sort((itemA, itemB) => itemA.sequence - itemB.sequence)
+
+          for (const { sequence, rawFrame } of fetchedResults) {
+            if (!rawFrame) break
+
+            const payloadText = await decompressMessage(rawFrame)
+            if (payloadText) {
               onMessageCallback({
                 isResetState: false,
                 channel:      targetChannel,
                 sequence:     sequence,
-                payload:      decodedFrame.payloadText,
-                isValid:      decodedFrame.isValid,
-                isCorrupted:  decodedFrame.isCorrupted,
+                payload:      payloadText,
                 timestamp:    Date.now()
               })
             }
+            localSequence = sequence
           }
-          localSequence = sequence
         }
+      } finally {
+        isPolling = false
       }
     }, delayDuration)
 
@@ -296,44 +299,28 @@ export class CoPrProtocol {
     if (!slotIndex) return false
     
     const slotKey = this.resolveDiscoverySlotKey(slotIndex)
-    return await this.setRawCounter(slotKey, encodeProtocolFrame(targetChannel, this.config))
+    const ptrKey  = this.resolveDiscoverySlotPointerKey(targetChannel)
+
+    const isSlotStored = await this.setRawCounter(slotKey, bytesToNumeric(targetChannel))
+    if (isSlotStored) {
+      await this.setRawCounter(ptrKey, String(slotIndex))
+    }
+    return isSlotStored
   }
 
   async unregisterChannel(targetChannel) {
-    const discoveryKey = this.resolveDiscoveryKey()
-    const rawTotal     = await this.fetchRawCounter(discoveryKey)
-    const totalSlots   = parseInt(rawTotal, 10) || 0
-    if (totalSlots <= 0) return true
+    const ptrKey    = this.resolveDiscoverySlotPointerKey(targetChannel)
+    const rawSlot   = await this.fetchRawCounter(ptrKey)
+    const slotIndex = parseInt(rawSlot, 10) || 0
+    if (slotIndex <= 0) return false
 
-    const fetchPromises = []
-    
-    for (let currentSlot = 1; currentSlot <= totalSlots; currentSlot++) {
-      const slotKey = this.resolveDiscoverySlotKey(currentSlot)
-      fetchPromises.push(
-        this.fetchRawCounter(slotKey).then((rawFrame) => ({ slotKey, rawFrame }))
-      )
-    }
-
-    const fetchedResults = await Promise.all(fetchPromises)
-    const wipePromises   = []
-
-    fetchedResults.forEach(({ slotKey, rawFrame }) => {
-      if (rawFrame) {
-        const decodedFrame = decodeProtocolFrame(rawFrame, this.config)
-        if (decodedFrame?.payloadText?.trim() === targetChannel.trim()) {
-          wipePromises.push(this.setRawCounter(slotKey, '0'))
-        }
-      }
-    })
-
-    if (wipePromises.length > 0) {
-      await Promise.all(wipePromises)
-      return true
-    }
-    return false
+    const slotKey = this.resolveDiscoverySlotKey(slotIndex)
+    await this.setRawCounter(slotKey, '0')
+    await this.setRawCounter(ptrKey,  '0')
+    return true
   }
 
-  async discoverChannels() {
+  async discoverChannels(limit = null) {
     const discoveryKey = this.resolveDiscoveryKey()
     const rawTotal     = await this.fetchRawCounter(discoveryKey)
 
@@ -345,28 +332,34 @@ export class CoPrProtocol {
     const totalSlots = parseInt(rawTotal, 10)
     if (isNaN(totalSlots) || totalSlots <= 0) return []
 
-    const startSlot     = Math.max(1, totalSlots - 25)
-    const fetchPromises = []
-    
-    for (let currentSlot = startSlot; currentSlot <= totalSlots; currentSlot++) {
-      const slotKey = this.resolveDiscoverySlotKey(currentSlot)
-      fetchPromises.push(this.fetchRawCounter(slotKey))
-    }
+    const targetCount   = limit || this.config.fetchRange
+    const discoveredSet = new Set()
+    let   currentEnd    = totalSlots
 
-    const fetchedResults = await Promise.all(fetchPromises)
-    const discoveredList = []
+    while (currentEnd >= 1 && discoveredSet.size < targetCount) {
+      const needed        = targetCount - discoveredSet.size
+      const currentStart  = Math.max(1, currentEnd - needed + 1)
+      const fetchPromises = []
 
-    fetchedResults.forEach((rawFrame) => {
-      if (rawFrame) {
-        const decodedFrame = decodeProtocolFrame(rawFrame, this.config)
-        if (decodedFrame && decodedFrame.isValid && decodedFrame.payloadText.trim()) {
-          discoveredList.push(decodedFrame.payloadText.trim())
+      for (let slot = currentStart; slot <= currentEnd; slot++) {
+        const slotKey = this.resolveDiscoverySlotKey(slot)
+        fetchPromises.push(this.fetchRawCounter(slotKey))
+      }
+
+      const batch = await Promise.all(fetchPromises)
+      for (let index = batch.length - 1; index >= 0; index--) {
+        const rawFrame = batch[index]
+        if (rawFrame && rawFrame !== '0') {
+          const channelName = new TextDecoder('utf-8', { fatal: false }).decode(numericToBytes(rawFrame)).trim()
+          if (channelName) discoveredSet.add(channelName)
         }
       }
-    })
+      currentEnd = currentStart - 1
+    }
 
-    return Array.from(new Set(discoveredList))
+    return Array.from(discoveredSet)
   }
 }
 
+// ========== EXPORT CoPrProtocol ==========
 export default CoPrProtocol
