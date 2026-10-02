@@ -235,6 +235,10 @@ body {
   }
 }
 
+@keyframes channelMarquee {
+  to { transform: translateX(-50%); }
+}
+
 .sidebar {
   width:          320px;
   background:     var(--color-background-sidebar);
@@ -510,6 +514,7 @@ body {
         display:       flex;
         align-items:   center;
         gap:           10px;
+        min-width:     0;
         padding:       9px 12px;
         border-radius: var(--radius-size-9);
         background:    var(--color-background-card);
@@ -525,6 +530,23 @@ body {
         i {
           color:     var(--color-copper-base);
           font-size: 1rem;
+          flex-shrink: 0;
+        }
+
+        .channel-name {
+          flex:       1;
+          min-width:  0;
+          overflow:   hidden;
+          white-space: nowrap;
+        }
+
+        .channel-name-track {
+          display: inline-flex;
+          width:   max-content;
+        }
+
+        .channel-name-copy {
+          padding-right: 2rem;
         }
 
         &:hover {
@@ -537,6 +559,10 @@ body {
           background:   var(--color-copper-alpha);
           border-color: var(--color-copper-base);
           color:        var(--color-copper-bright);
+        }
+
+        &.has-overflow .channel-name-track {
+          animation: channelMarquee 10s linear infinite;
         }
       }
     }

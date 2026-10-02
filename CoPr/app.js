@@ -678,8 +678,7 @@ const joinChannel = async (channelName) => {
     renderMessageCard({ ...cachedItem, silent: true })
   })
 
-  const latestRawCounter = await protocolClient.fetchRawCounter(protocolClient.resolveChannelIndexKey(activeChannel))
-  const latestServerSeq  = parseInt(latestRawCounter, 10) || 0
+  const latestServerSeq  = await protocolClient.getChannelSequence(activeChannel)
   audioWatermarkSequence = latestServerSeq
 
   if (latestServerSeq > highestSequence) {
@@ -858,32 +857,23 @@ const handleClearCommand = async (countToClear) => {
   if (!activeChannel) return
   
   const targetChannel = activeChannel
-  const latestRaw     = await protocolClient.fetchRawCounter(protocolClient.resolveChannelIndexKey(targetChannel))
-  const maxSequence   = parseInt(latestRaw, 10) || 0
+  const maxSequence   = await protocolClient.getChannelSequence(targetChannel)
   const channelCache  = channelHistoryCache.get(targetChannel) || []
   const wipeCount     = parseInt(countToClear, 10)
 
   if (!wipeCount || wipeCount >= channelCache.length) {
-    const wipePromises = Array.from({ length: maxSequence }, (_, index) => {
-      return protocolClient.setRawCounter(protocolClient.resolveMessageKey(targetChannel, index + 1), '0')
-    })
-    
-    await Promise.all(wipePromises)
+    const allSequences = Array.from({ length: maxSequence }, (_, index) => index + 1)
+    await protocolClient.deleteMessages(targetChannel, allSequences)
     await protocolClient.sendMessage(targetChannel, `[${getCurrentUser()}]: ${signalClearPrefix}all`).catch(() => {})
     
     channelHistoryCache.delete(targetChannel)
     return resetFeedState()
   }
 
-  const removedMessages = channelCache.slice(-wipeCount).filter((message) => message.sequence)
-  
-  const wipePromises = removedMessages.map((message) => {
-    return protocolClient.setRawCounter(protocolClient.resolveMessageKey(targetChannel, message.sequence), '0')
-  })
-  await Promise.all(wipePromises)
-  
+  const removedMessages  = channelCache.slice(-wipeCount).filter((message) => message.sequence)
   const removedSequences = removedMessages.map((message) => message.sequence)
   
+  await protocolClient.deleteMessages(targetChannel, removedSequences)
   await protocolClient.sendMessage(targetChannel, `[${getCurrentUser()}]: ${signalClearPrefix}${removedSequences.join(',')}`).catch(() => {})
   removeMessagesBySequence(removedSequences)
 }
@@ -892,16 +882,9 @@ const handleDeleteCommand = async () => {
   if (!activeChannel) return
   
   const targetChannel = activeChannel
-  const latestRaw     = await protocolClient.fetchRawCounter(protocolClient.resolveChannelIndexKey(targetChannel))
-  const maxSequence   = parseInt(latestRaw, 10) || 0
 
-  const wipePromises = Array.from({ length: maxSequence }, (_, index) => {
-    return protocolClient.setRawCounter(protocolClient.resolveMessageKey(targetChannel, index + 1), '0')
-  })
-  
-  await Promise.all(wipePromises)
   await protocolClient.sendMessage(targetChannel, `[${getCurrentUser()}]: ${signalDelete}`).catch(() => {})
-  await protocolClient.unregisterChannel(targetChannel)
+  await protocolClient.destroyChannel(targetChannel)
 
   channelHistoryCache.delete(targetChannel)
   channelMembersCache.delete(targetChannel)
@@ -1101,17 +1084,40 @@ const renderChannels = (channelList) => {
     channelButton.className    = `channel-item ${channelName === activeChannel ? 'active' : ''}`
     channelButton.dataset.room = channelName
     
-    channelButton.innerHTML = `
-      <i class="fa-solid fa-hashtag"></i>
-      <span>${channelName}</span>
-    `
+    channelButton.innerHTML = '<i class="fa-solid fa-hashtag"></i>'
+
+    const nameViewport     = document.createElement('span')
+    nameViewport.className = 'channel-name'
+    const nameTrack        = document.createElement('span')
+    nameTrack.className    = 'channel-name-track'
+
+    for (let copyIndex = 0; copyIndex < 2; copyIndex++) {
+      const nameCopy       = document.createElement('span')
+      nameCopy.className   = 'channel-name-copy'
+      nameCopy.textContent = channelName
+      nameTrack.appendChild(nameCopy)
+    }
+
+    nameViewport.appendChild(nameTrack)
+    channelButton.appendChild(nameViewport)
     
     channelButton.onclick = () => joinChannel(channelName)
     fragment.appendChild(channelButton)
   })
   
   discoveredRoomsContainer.appendChild(fragment)
+  updateChannelMarquees()
 }
+
+const updateChannelMarquees = () => {
+  discoveredRoomsContainer.querySelectorAll('.channel-item').forEach((channelButton) => {
+    const nameViewport = channelButton.querySelector('.channel-name')
+    const firstCopy   = channelButton.querySelector('.channel-name-copy')
+    channelButton.classList.toggle('has-overflow', firstCopy.scrollWidth > nameViewport.clientWidth)
+  })
+}
+
+window.addEventListener('resize', updateChannelMarquees)
 
 const scanChannels = async () => {
   const refreshIcon = refreshDiscoveryBtn.querySelector('i')
@@ -1128,7 +1134,7 @@ const scanChannels = async () => {
 }
 
 messageStreamFeed.addEventListener('scroll', () => {
-  if (messageStreamFeed.scrollTop <= 60) {
+  if (messageStreamFeed.scrollTop <= 50) {
     loadOlderMessages()
   }
 })
@@ -1192,6 +1198,8 @@ connectChannelBtn.addEventListener('click', async () => {
 
 channelNameInput.addEventListener('keydown', (keyboardEvent) => {
   if (keyboardEvent.key === 'Enter') {
+    keyboardEvent.preventDefault()
+    keyboardEvent.stopPropagation()
     connectChannelBtn.click()
   }
 })
@@ -1233,5 +1241,5 @@ window.addEventListener('beforeunload', () => {
   }
 })
 
-setInterval(scanChannels, 30000)
+setInterval(scanChannels, 60000)
 scanChannels()

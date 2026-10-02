@@ -1,33 +1,57 @@
 /**
  * countProtocol.js (CoPr -- pronounced "Copper")
  * CoPr messaging utility running on https://countapi.mileshilliard.com
+ * /
+ * QUICK START:
+ *  import { CoPrProtocol, CoPrProtocol_Version } from './countProtocol.js'
+ *
+ *  const copr = new CoPrProtocol({
+ *    clientName: 'my-app-name', // Namespace key to avoid collisions
+ *    seedValue:  0x436f5072     // Optional 32-bit obfuscation seed
+ *  })
+ *
+ *  // Listen for incoming messages (returns unsubscribe callback)
+ *  const stop = copr.listenToChannel('general', ({ sequence, payload, isValid }) => {
+ *    console.log(`[#${sequence}] ${payload}`)
+ *  })
+ *
+ *  // Send a message
+ *  await copr.sendMessage('general', 'Hello world!')
+ *
+ * PROTOCOL METHODS:
+ *  - copr.sendMessage(channel, text)
+ *  - copr.listenToChannel(channel, callback, pollDelay?)
+ *  - copr.fetchChannelHistory(channel, fromSeq?, toSeq?, limit?)
+ *  - copr.getChannelSequence(channel)
+ *  - copr.deleteMessages(channel, sequence | [sequence, ...])
+ *  - copr.clearChannelHistory(channel)
+ *  - copr.destroyChannel(channel)
+ *  - copr.registerChannel(channel)
+ *  - copr.discoverChannels(limit?)
+ *  - copr.unregisterChannel(channel)
  */
-// WEIIRD behaviour when one deletes a channel - commands do not affect each eg o n use /clear 1 ther other ones msg stays
-// - Both need releads to fix themselves
-
-
-export const CoPrProtocol_Version = 'maybe 1.5 idk'
+export const CoPrProtocol_Version = 'maybe 1.6, idk'
 
 // ========== DEFAULT CONFIGURATION ==========
 const DEFAULT_CONFIG = {
-  apiBase:      'https://countapi.mileshilliard.com/api/v1',
-  discoveryKey: 'copr_registry',
-  seedValue:    0x436f5072, // Needs manual editing, not in teh constructor
-  apiPollRate:  250,        // 4 per second || https://github.com/syntaxerror019/countapi/blob/main/api/index.py#L151
-  fetchRange:   25
+  apiBase:     'https://countapi.mileshilliard.com/api/v1',
+  clientName:  'CoPr-Chat', // The default is 'CoPr-Chat', same named clients WILL merge
+  seedValue:   0x436f5072,  // The default is 'CoPr' in hex
+  apiPollRate: 333,         // 3 per second, bigger than average RT || https://github.com/syntaxerror019/countapi/blob/main/api/index.py#L151 -> max 10req/s
+  fetchRange:  25           // Default max messages to fetch in one request is 25
 }
 
 // ========== Mulberry32 SCRAMBLER ==========
-const scrambleBytes = (bytes) => {
-  let seed = DEFAULT_CONFIG.seedValue
-  const result = new Uint8Array(bytes.length)
+const scrambleBytes = (bytes, seed = DEFAULT_CONFIG.seedValue) => {
+  let currentSeed = seed
+  const result    = new Uint8Array(bytes.length)
   
   for (let index = 0; index < bytes.length; index++) {
-    seed          = (seed + 0x6d2b79f5) | 0
-    let temporary = Math.imul(seed ^ (seed >>> 15), 1 | seed)
-    temporary     = (temporary     + Math.imul(temporary ^ (temporary >>> 7), 61 | temporary)) ^ temporary
-    const mask    = (temporary     ^ (temporary >>> 14)) & 0xff
-    result[index] = bytes[index]   ^ mask
+    currentSeed   = (currentSeed + 0x6d2b79f5) | 0
+    let temporary = Math.imul(currentSeed ^ (currentSeed >>> 15), 1 | currentSeed)
+    temporary     = (temporary            + Math.imul(temporary ^ (temporary >>> 7), 61 | temporary)) ^ temporary
+    const mask    = (temporary            ^ (temporary >>> 14)) & 0xff
+    result[index] = bytes[index]          ^ mask
   }
   return result
 }
@@ -59,18 +83,18 @@ export const numericToBytes = (numericPayload) => {
 }
 
 // ========== COMPRESSION <--> DECOMPRESSION ==========
-export const compressMessage = async (rawInputText) => {
+export const compressMessage = async (rawInputText, seed = DEFAULT_CONFIG.seedValue) => {
   if (!rawInputText) return '0'
   const textStream  = new Blob([String(rawInputText)]).stream().pipeThrough(new CompressionStream('deflate-raw'))
   const streamBytes = new Uint8Array(await new Response(textStream).arrayBuffer())
-  return bytesToNumeric(scrambleBytes(streamBytes))
+  return bytesToNumeric(scrambleBytes(streamBytes, seed))
 }
 
-export const decompressMessage = async (numericPayload) => {
+export const decompressMessage = async (numericPayload, seed = DEFAULT_CONFIG.seedValue) => {
   const bytes = numericToBytes(numericPayload)
   if (bytes.length === 0) return ''
   try {
-    const byteStream = new Blob([scrambleBytes(bytes)]).stream().pipeThrough(new DecompressionStream('deflate-raw'))
+    const byteStream = new Blob([scrambleBytes(bytes, seed)]).stream().pipeThrough(new DecompressionStream('deflate-raw'))
     return await new Response(byteStream).text()
   } catch {
     return ''
@@ -109,24 +133,28 @@ export class CoPrProtocol {
   }
 
   // ===== KEY RESOLVERS =====
+  resolveKey(...keyParts) {
+    return bytesToNumeric(['copr', this.config.clientName, ...keyParts].join('_'))
+  }
+
   resolveChannelIndexKey(targetChannel) {
-    return bytesToNumeric(`copr_channel_${targetChannel}`)
+    return this.resolveKey('channel', targetChannel)
   }
 
   resolveMessageKey(targetChannel, sequenceIndex) {
-    return bytesToNumeric(`copr_message_${targetChannel}_${sequenceIndex}`)
+    return this.resolveKey('message', targetChannel, sequenceIndex)
   }
 
   resolveDiscoveryKey() {
-    return bytesToNumeric(this.config.discoveryKey)
+    return this.resolveKey('registry')
   }
 
   resolveDiscoverySlotKey(slotIndex) {
-    return bytesToNumeric(`copr_registry_${slotIndex}`)
+    return this.resolveKey('registry', slotIndex)
   }
 
   resolveDiscoverySlotPointerKey(targetChannel) {
-    return bytesToNumeric(`copr_registry_pointer_${targetChannel}`)
+    return this.resolveKey('registry_pointer', targetChannel)
   }
 
   // ===== COUNTER OPERATIONS =====
@@ -147,9 +175,39 @@ export class CoPrProtocol {
     return responseText !== null
   }
 
+  async getChannelSequence(targetChannel) {
+    const channelIndexKey = this.resolveChannelIndexKey(targetChannel)
+    const rawSequence     = await this.fetchRawCounter(channelIndexKey)
+    return parseInt(rawSequence, 10) || 0
+  }
+
+  // ===== INTERNAL HELPERS =====
+  async decodeMessageFrame(targetChannel, sequenceIndex, rawFrame) {
+    const payloadText = await decompressMessage(rawFrame, this.config.seedValue)
+    const isValid     = Boolean(payloadText)
+    return {
+      channel:   targetChannel,
+      sequence:  sequenceIndex,
+      payload:   payloadText || `<<[Shits broken]>>\n${rawFrame}`,
+      isValid:   isValid,
+      timestamp: Date.now()
+    }
+  }
+
+  async fetchMessageRange(targetChannel, startSequence, endSequence) {
+    const fetchPromises = []
+    for (let currentSequence = startSequence; currentSequence <= endSequence; currentSequence++) {
+      const messageKey = this.resolveMessageKey(targetChannel, currentSequence)
+      fetchPromises.push(
+        this.fetchRawCounter(messageKey).then((rawFrame) => ({ sequence: currentSequence, rawFrame }))
+      )
+    }
+    return Promise.all(fetchPromises)
+  }
+
   // ===== MESSAGING LOGIC =====
   async sendMessage(targetChannel, messagePayload) {
-    const encodedPayload   = await compressMessage(messagePayload)
+    const encodedPayload   = await compressMessage(messagePayload, this.config.seedValue)
     const channelIndexKey  = this.resolveChannelIndexKey(targetChannel)
     const assignedSequence = await this.hitCounter(channelIndexKey)
     
@@ -181,30 +239,14 @@ export class CoPrProtocol {
     let   currentEnd  = latestSequence
 
     while (currentEnd >= minSequence && collected.length < targetCount) {
-      const needed        = targetCount - collected.length
-      const currentStart  = Math.max(minSequence, currentEnd - needed + 1)
-      const fetchPromises = []
+      const needed       = targetCount - collected.length
+      const currentStart = Math.max(minSequence, currentEnd - needed + 1)
+      const batch        = await this.fetchMessageRange(targetChannel, currentStart, currentEnd)
 
-      for (let seq = currentStart; seq <= currentEnd; seq++) {
-        const messageKey = this.resolveMessageKey(targetChannel, seq)
-        fetchPromises.push(
-          this.fetchRawCounter(messageKey).then((rawFrame) => ({ sequence: seq, rawFrame }))
-        )
-      }
-
-      const batch = await Promise.all(fetchPromises)
       const valid = (await Promise.all(
         batch
-          .filter((item) => item.rawFrame)
-          .map(async ({ sequence, rawFrame }) => {
-            const payloadText = await decompressMessage(rawFrame)
-            return payloadText ? {
-              channel:   targetChannel,
-              sequence:  sequence,
-              payload:   payloadText,
-              timestamp: Date.now()
-            } : null
-          })
+          .filter((item) => item.rawFrame && item.rawFrame !== '0')
+          .map(({ sequence, rawFrame }) => this.decodeMessageFrame(targetChannel, sequence, rawFrame))
       )).filter(Boolean)
 
       collected.unshift(...valid)
@@ -215,6 +257,10 @@ export class CoPrProtocol {
   }
 
   listenToChannel(targetChannel, onMessageCallback, customPollDelay = null) {
+    if (this.activeListeners.has(targetChannel)) {
+      clearInterval(this.activeListeners.get(targetChannel))
+    }
+
     const channelIndexKey = this.resolveChannelIndexKey(targetChannel)
     const delayDuration   = customPollDelay || this.config.apiPollRate
     let   localSequence   = null
@@ -228,7 +274,6 @@ export class CoPrProtocol {
         const rawCurrentSequence = await this.fetchRawCounter(channelIndexKey)
 
         if (rawCurrentSequence === null) {
-          if (localSequence === null) await this.setRawCounter(channelIndexKey, '0')
           return
         }
 
@@ -245,33 +290,24 @@ export class CoPrProtocol {
         }
 
         if (currentSequence > localSequence) {
-          const startSequence = localSequence + 1
-          const endSequence   = currentSequence
-          const fetchPromises = []
-
-          for (let currentSeq = startSequence; currentSeq <= endSequence; currentSeq++) {
-            const messageKey = this.resolveMessageKey(targetChannel, currentSeq)
-            fetchPromises.push(
-              this.fetchRawCounter(messageKey).then((rawFrame) => ({ sequence: currentSeq, rawFrame }))
-            )
-          }
-
-          const fetchedResults = await Promise.all(fetchPromises)
+          const startSequence  = localSequence + 1
+          const endSequence    = currentSequence
+          const fetchedResults = await this.fetchMessageRange(targetChannel, startSequence, endSequence)
+          
           fetchedResults.sort((itemA, itemB) => itemA.sequence - itemB.sequence)
 
           for (const { sequence, rawFrame } of fetchedResults) {
             if (!rawFrame) break
-
-            const payloadText = await decompressMessage(rawFrame)
-            if (payloadText) {
-              onMessageCallback({
-                isResetState: false,
-                channel:      targetChannel,
-                sequence:     sequence,
-                payload:      payloadText,
-                timestamp:    Date.now()
-              })
+            if (rawFrame === '0') {
+              localSequence = sequence
+              continue
             }
+
+            const messageData = await this.decodeMessageFrame(targetChannel, sequence, rawFrame)
+            onMessageCallback({
+              isResetState: false,
+              ...messageData
+            })
             localSequence = sequence
           }
         }
@@ -287,9 +323,30 @@ export class CoPrProtocol {
     }
   }
 
+  async deleteMessages(targetChannel, sequenceList) {
+    const sequences     = Array.isArray(sequenceList) ? sequenceList : [sequenceList]
+    const fetchPromises = sequences.map((sequence) => {
+      const messageKey = this.resolveMessageKey(targetChannel, sequence)
+      return this.setRawCounter(messageKey, '0')
+    })
+    const results = await Promise.all(fetchPromises)
+    return results.every(Boolean)
+  }
+
   async clearChannelHistory(targetChannel) {
     const channelIndexKey = this.resolveChannelIndexKey(targetChannel)
     return await this.setRawCounter(channelIndexKey, '0')
+  }
+
+  async destroyChannel(targetChannel) {
+    const maxSequence = await this.getChannelSequence(targetChannel)
+    if (maxSequence > 0) {
+      const allSequences = Array.from({ length: maxSequence }, (noOneNeedsMe, index) => index + 1)
+      await this.deleteMessages(targetChannel, allSequences)
+    }
+    await this.clearChannelHistory(targetChannel)
+    await this.unregisterChannel(targetChannel)
+    return true
   }
 
   // ===== DISCOVERY LOGIC =====
@@ -325,7 +382,6 @@ export class CoPrProtocol {
     const rawTotal     = await this.fetchRawCounter(discoveryKey)
 
     if (rawTotal === null) {
-      await this.setRawCounter(discoveryKey, '0')
       return []
     }
 
