@@ -1058,8 +1058,10 @@ const dispatchMessage = async () => {
       
       channelHistoryCache.get(activeChannel).push(messageObject)
     }
-  } catch {
+  } catch (error) {
+    console.error('Failed to send message:', error.message)
     optimisticCard.style.borderColor = '#ef4444'
+    optimisticCard.title             = error.message
     optimisticCard.classList.add('corrupt-message')
   }
 }
@@ -1112,8 +1114,10 @@ const renderChannels = (channelList) => {
 const updateChannelMarquees = () => {
   discoveredRoomsContainer.querySelectorAll('.channel-item').forEach((channelButton) => {
     const nameViewport = channelButton.querySelector('.channel-name')
-    const firstCopy   = channelButton.querySelector('.channel-name-copy')
-    channelButton.classList.toggle('has-overflow', firstCopy.scrollWidth > nameViewport.clientWidth)
+    const firstCopy    = channelButton.querySelector('.channel-name-copy')
+    const copySpacing  = parseFloat(getComputedStyle(firstCopy).paddingRight) || 0
+    const textWidth    = firstCopy.scrollWidth - copySpacing
+    channelButton.classList.toggle('has-overflow', textWidth > nameViewport.clientWidth)
   })
 }
 
@@ -1162,9 +1166,16 @@ const refreshProfileAvatar = () => {
 }
 
 userHandleInput.value = `copr${Math.floor(Math.random() * 899 + 100)}`
+let previousHandle    = getCurrentUser()
 refreshProfileAvatar()
 
 userHandleInput.addEventListener('input', () => {
+  const currentHandle = getCurrentUser()
+  if (currentHandle !== previousHandle) {
+    currentMembersMap.delete(previousHandle)
+    previousHandle = currentHandle
+  }
+
   refreshProfileAvatar()
   renderMembersList()
 })

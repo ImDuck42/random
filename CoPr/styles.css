@@ -549,6 +549,10 @@ body {
           padding-right: 2rem;
         }
 
+        .channel-name-copy + .channel-name-copy {
+          display: none;
+        }
+
         &:hover {
           background:   var(--color-background-hover);
           border-color: var(--color-copper-base);
@@ -563,6 +567,10 @@ body {
 
         &.has-overflow .channel-name-track {
           animation: channelMarquee 10s linear infinite;
+        }
+
+        &.has-overflow .channel-name-copy + .channel-name-copy {
+          display: inline;
         }
       }
     }
