@@ -2,24 +2,24 @@
 
 
 WhiteSur-Theme:
-git clone https://github.com/vinceliuice/WhiteSur-gtk-theme.git --depth=1
-./install.sh -l -c dark -s nord --round
-./tweaks.sh -F -c dark -s nord
+git clone https://github.com/vinceliuice/WhiteSur-gtk-theme.git
+./install.sh -l -c dark -o normal -c dark -s nord --round
+./tweaks.sh -d -F -c dark -s nord
 sudo flatpak override --filesystem=xdg-config/gtk-3.0 && sudo flatpak override --filesystem=xdg-config/gtk-4.0
 
 GDM-Theme:
-git clone https://github.com/vinceliuice/WhiteSur-gtk-theme.git --depth=1
-sudo ./tweaks.sh -c dark -g -nb -b ''
+git clone https://github.com/vinceliuice/WhiteSur-gtk-theme.git
+sudo ./tweaks.sh -g -nb -b ''
 
 Remove GDM Distro Logo:
 gsettings set org.gnome.login-screen logo ''
 
 Icon-Theme:
-git clone https://github.com/MolassesLover/Nordzy-icon.git --depth=1
+git clone https://github.com/MolassesLover/Nordzy-icon.git
 ./install.sh -t default -c dark
 
 Grub2-Theme:
-git clone https://github.com/vinceliuice/grub2-themes.git --depth=1
+git clone https://github.com/vinceliuice/grub2-themes.git
 sudo ./install.sh -t vimix -i white -s 2k -b
 
 Cursor:Theme:
